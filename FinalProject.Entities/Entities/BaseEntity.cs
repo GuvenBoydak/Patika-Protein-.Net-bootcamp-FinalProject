@@ -16,10 +16,6 @@
 
         public DateTime? DeletedDate { get; set; }
 
-        public int CreatedById { get; set; }
-
-        public string CreatedBy { get; set; }
-
         public DataStatus Status { get; set; }
 
     }

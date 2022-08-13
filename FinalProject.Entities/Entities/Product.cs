@@ -34,6 +34,9 @@ namespace FinalProject.Entities
 
         public int? OfferID { get; set; }
 
+        public int AppUserID { get; set; }
+
+
         //Relational Properties
 
         public virtual Category Category { get; set; }
@@ -43,6 +46,8 @@ namespace FinalProject.Entities
         public virtual Color Color { get; set; }
 
         public virtual Offer Offer { get; set; }
+
+        public virtual AppUser AppUser { get; set; }
 
 
     }

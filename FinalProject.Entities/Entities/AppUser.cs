@@ -38,5 +38,10 @@
         public DateTime LastActivty { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        //Relational Properties
+        public virtual List<Product> Products { get; set; }
+
+        public virtual List<Offer> Offers { get; set; }
     }
 }
