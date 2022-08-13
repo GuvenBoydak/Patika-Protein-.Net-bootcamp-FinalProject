@@ -27,8 +27,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable()
                 .WithColumn("CategoryID").AsInt32().NotNullable()
                 .WithColumn("BrandID").AsInt32().Nullable()
@@ -44,8 +42,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Offer
@@ -57,8 +53,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Color
@@ -68,8 +62,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Brand
@@ -79,8 +71,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //AppUser
@@ -102,8 +92,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("CreatedBy").AsString().Nullable()
-                .WithColumn("CreatedById").AsInt32().Nullable()
                 .WithColumn("LastActivty").AsDateTime().NotNullable()
                 .WithColumn("Status").AsInt32().NotNullable();
             #endregion
@@ -129,6 +117,16 @@ namespace FinalProject.DataAccess
             Create.ForeignKey("FK_Product_Offer")
                 .FromTable("Products").ForeignColumn("OfferID")
                 .ToTable("Offers").PrimaryColumn("ID");
+
+            //Product - AppUser Relational
+            Create.ForeignKey("FK_Product_AppUser")
+                .FromTable("Products").ForeignColumn("AppUserID")
+                .ToTable("AppUsers").PrimaryColumn("ID");
+
+            //Offer - AppUser Relational
+            Create.ForeignKey("Fk_Offer_AppUser")
+                .FromTable("Offers").ForeignColumn("AppUserID")
+                .ToTable("AppUsers").PrimaryColumn("ID");
             #endregion
         }
     }

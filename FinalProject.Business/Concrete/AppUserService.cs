@@ -5,13 +5,14 @@ using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
-    public class AppUserService : GenericRepository<AppUser>, IAppUserService
+    public class AppUserService : GenericService<AppUser>, IAppUserService
     {
         private readonly IAppUserRepository _userRepository;
         private readonly ITokenHelper _tokenHelper;
 
-        public AppUserService(IDapperContext dapperContext, ITokenHelper tokenHelper) : base(dapperContext)
+        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(repository)
         {
+            _userRepository = userRepository;
             _tokenHelper = tokenHelper;
         }
 
