@@ -1,4 +1,5 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
+using FinalProject.Entities;
 
 namespace FinalProject.DTO
 {

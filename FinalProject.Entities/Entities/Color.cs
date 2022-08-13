@@ -1,4 +1,6 @@
-﻿namespace FinalProject.Entities
+﻿using FinalProject.Base;
+
+namespace FinalProject.Entities
 {
     public class Color:BaseEntity
     {

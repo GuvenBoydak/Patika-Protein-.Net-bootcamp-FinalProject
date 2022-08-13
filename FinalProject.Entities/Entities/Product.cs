@@ -1,4 +1,6 @@
-﻿namespace FinalProject.Entities
+﻿using FinalProject.Base;
+
+namespace FinalProject.Entities
 {
     public class Product:BaseEntity
     {
@@ -32,9 +34,6 @@
 
         public int? OfferID { get; set; }
 
-        public int AppUserID { get; set; }
-
-
         //Relational Properties
 
         public virtual Category Category { get; set; }
@@ -44,8 +43,6 @@
         public virtual Color Color { get; set; }
 
         public virtual Offer Offer { get; set; }
-
-        public virtual AppUser AppUser  { get; set; }
 
 
     }
