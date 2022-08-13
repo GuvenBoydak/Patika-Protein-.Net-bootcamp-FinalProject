@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FinalProject.Base;
 using FinalProject.Entities;
 using System.Data;
 using System.Reflection;

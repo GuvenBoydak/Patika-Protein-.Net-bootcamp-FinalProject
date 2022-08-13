@@ -94,6 +94,7 @@ namespace FinalProject.DataAccess
                 .WithColumn("IsLock").AsBoolean().Nullable()
                 .WithColumn("ActivationCode").AsGuid().NotNullable()
                 .WithColumn("Active").AsBoolean().NotNullable()
+                .WithColumn("EmailStatus").AsInt16().Nullable()
                 .WithColumn("FirstName").AsString(50).Nullable()
                 .WithColumn("LastName").AsString(50).Nullable()
                 .WithColumn("DateOfBirth").AsDateTime().Nullable()
@@ -128,16 +129,6 @@ namespace FinalProject.DataAccess
             Create.ForeignKey("FK_Product_Offer")
                 .FromTable("Products").ForeignColumn("OfferID")
                 .ToTable("Offers").PrimaryColumn("ID");
-
-            //Product - AppUser Relational
-            Create.ForeignKey("FK_Product_AppUser")
-                .FromTable("Products").ForeignColumn("AppUserID")
-                .ToTable("AppUsers").PrimaryColumn("ID");
-
-            //Offer - AppUser Relational
-            Create.ForeignKey("Fk_Offer_AppUser")
-                .FromTable("Offers").ForeignColumn("AppUserID")
-                .ToTable("AppUsers").PrimaryColumn("ID");
             #endregion
         }
     }
