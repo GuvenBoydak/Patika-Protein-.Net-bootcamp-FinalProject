@@ -1,6 +1,7 @@
 ﻿using FinalProject.Base;
 using FinalProject.DataAccess;
 using FinalProject.DTO;
+using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
@@ -16,7 +17,7 @@ namespace FinalProject.Business
 
         public AccessToken CreateAccessToken(AppUser entity)
         {
-            AccessToken accessToken = _tokenHelper.CreateToken(entity);
+            AccessToken accessToken = _tokenHelper.CreateToken(entity.UserName,entity.ID);
             return accessToken;
         }
 

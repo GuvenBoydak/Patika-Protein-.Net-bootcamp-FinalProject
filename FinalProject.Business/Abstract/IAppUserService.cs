@@ -1,5 +1,6 @@
 ﻿using FinalProject.Base;
 using FinalProject.DTO;
+using FinalProject.Entities;
 
 namespace FinalProject.Business
 {

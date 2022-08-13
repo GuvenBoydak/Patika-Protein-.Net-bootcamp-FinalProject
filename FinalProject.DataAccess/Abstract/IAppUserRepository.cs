@@ -1,4 +1,4 @@
-﻿using FinalProject.Base;
+﻿using FinalProject.Entities;
 
 namespace FinalProject.DataAccess
 {
