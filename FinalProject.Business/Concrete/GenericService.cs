@@ -27,19 +27,6 @@ namespace FinalProject.Business
             }      
         }
 
-        public void Delete(int id)
-        {
-            try
-            {
-                _repository.Delete(id);
-            }
-            catch (Exception e)
-            {
-
-                throw new Exception($"Delete_Error {typeof(T).Name}  => {e.Message}");
-            }
-
-        }
 
         public async Task<List<T>> GetActiveAsync()
         {
@@ -87,19 +74,6 @@ namespace FinalProject.Business
             catch (Exception e)
             {
                 throw new Exception($"GetPassive_Error {typeof(T).Name}  => {e.Message}");
-            }
-        }
-
-        public void Update(T entity)
-        {
-            try
-            {
-                _repository.Update(entity);
-            }
-            catch (Exception e)
-            {
-
-                throw new Exception($"Update_Error {typeof(T).Name}  =>  {e.Message}");
             }
         }
     }

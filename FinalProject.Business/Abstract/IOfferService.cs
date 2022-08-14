@@ -4,7 +4,9 @@ namespace FinalProject.Business
 {
     public interface IOfferService : IBaseService<Offer>
     {
+        Task UpdateAsync(Offer entity);
 
+        void Delete(int id);
     }
 
 }

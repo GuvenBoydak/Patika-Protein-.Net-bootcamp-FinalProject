@@ -4,7 +4,9 @@ namespace FinalProject.Business
 {
     public interface ICategoryService : IBaseService<Category>
     {
+        Task UpdateAsync(Category entity);
 
+        void Delete(int id);
     }
 
 }

@@ -5,8 +5,38 @@ namespace FinalProject.Business
 {
     public class CategoryService : GenericService<Category>, ICategoryService
     {
-        public CategoryService(IRepository<Category> repository) : base(repository)
+        private readonly ICategoryRepository _categoryRepository;
+
+        public CategoryService(IRepository<Category> repository, ICategoryRepository categoryRepository) : base(repository)
         {
+            _categoryRepository = categoryRepository;
+        }
+
+
+        public void Delete(int id)
+        {
+            try
+            {
+                _categoryRepository.Delete(id);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"Delete_Error {typeof(Category).Name} =>  {e.Message}");
+            }
+        }
+
+        public async Task UpdateAsync(Category entity)
+        {
+            try
+            {
+                await _categoryRepository.UpdateAsync(entity);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"Update_Error {typeof(Category).Name} =>  {e.Message}");
+            }
         }
     }
 

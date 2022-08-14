@@ -6,7 +6,7 @@ namespace FinalProject.Business
 {
     public interface IAppUserService : IBaseService<AppUser>
     {
-        Task<AppUser> RegisterAsync(AppUserRegisterRequiredDto requiredEntity,AppUserRegisterOptionalDto optionalEntity);
+        Task<AppUser> RegisterAsync(AppUserRegisterDto registerDto);
 
         Task<AppUser> LoginAsync(AppUserLoginDto entity);
 
@@ -15,6 +15,10 @@ namespace FinalProject.Business
         AccessToken CreateAccessToken(AppUser entity);
 
         Task UpdatePasswordAsync(int id, AppUserPasswordUpdateDto entity);
+
+        Task UpdateAsync(AppUser entity);
+
+        void Delete(int id);
     }
 
 }

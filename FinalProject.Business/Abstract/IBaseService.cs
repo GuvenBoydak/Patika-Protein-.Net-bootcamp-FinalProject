@@ -1,5 +1,4 @@
-﻿using FinalProject.Base;
-using FinalProject.Entities;
+﻿using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
@@ -14,10 +13,6 @@ namespace FinalProject.Business
         Task<T> GetByIDAsync(int id);
 
         void Add(T entity);
-
-        void Update(T entity);
-
-        void Delete(int id);
     }
 
 }

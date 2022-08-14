@@ -18,13 +18,26 @@ namespace FinalProject.Business
 
         public AccessToken CreateAccessToken(AppUser entity)
         {
-            AccessToken accessToken = _tokenHelper.CreateToken(entity.UserName,entity.ID);
+            AccessToken accessToken = _tokenHelper.CreateToken(entity.UserName, entity.ID);
             return accessToken;
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                _userRepository.Delete(id);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"Delete_Error {typeof(AppUser).Name} =>  {e.Message}");
+            }
         }
 
         public async Task<AppUser> GetByEmailAsync(string email)
         {
-            AppUser appUser =await _userRepository.GetByEmailAsync(email);
+            AppUser appUser = await _userRepository.GetByEmailAsync(email);
             return appUser;
         }
 
@@ -36,63 +49,73 @@ namespace FinalProject.Business
                 throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) User Not Found");
 
             appUser.LastActivty = DateTime.UtcNow;
-            _userRepository.Update(appUser);
+            await UpdateAsync(appUser);
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.Password, appUser.PasswordHash, appUser.PasswordSalt))
             {
-                appUser.IncorrectEntry ++; //Şifre yanlış girildiyse 1 atırıyoruz.
+                appUser.IncorrectEntry++; //Şifre yanlış girildiyse 1 atırıyoruz.
 
                 if (appUser.IncorrectEntry == 3) appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
 
-                _userRepository.Update(appUser);
+                await UpdateAsync(appUser);
                 throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");
             }
 
             return appUser;
         }
 
-        public async Task<AppUser> RegisterAsync(AppUserRegisterRequiredDto requiredEntity, AppUserRegisterOptionalDto optionalEntity)
+        public async Task<AppUser> RegisterAsync(AppUserRegisterDto registerDto)
         {
-            AppUser appUser = await GetByEmailAsync(requiredEntity.Email);
+            AppUser appUser = await GetByEmailAsync(registerDto.Email);
             //Girilen Email'i databasede varmı Kontrol ediyoruz.
-            if (appUser.Email == requiredEntity.Email)
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({requiredEntity.Email}) Email Already Exists");
+            if (appUser !=null)
+                throw new InvalidOperationException($"{typeof(AppUser).Name}({registerDto.Email}) Email Already Exists");
 
             //PasswordHash ve PasswordSalt oluşturuyoruz.
             byte[] passwordHash, passwordSalt;
-            HashingHelper.CreatePasswordHash(requiredEntity.Password, out passwordHash, out passwordSalt);
+            HashingHelper.CreatePasswordHash(registerDto.Password, out passwordHash, out passwordSalt);
 
-            appUser.UserName = requiredEntity.UserName;
-            appUser.Email = requiredEntity.Email;
-            appUser.PasswordHash = passwordHash;
-            appUser.PasswordSalt= passwordSalt;
-            appUser.LastActivty= DateTime.UtcNow;
-
-            //AppUserRegisterOptionalDto ya girilen degerlri boşlukları silip kontrol ediyoruz. Girilen deger varsa appUser a atıyoruz.
-            if (optionalEntity.FirstName.Trim() != null || optionalEntity.LastName.Trim() != null || optionalEntity.PhoneNumber.Trim() != null || optionalEntity.DateOfBirth != null)
+            AppUser user = new AppUser()
             {
-                appUser.PhoneNumber = optionalEntity.PhoneNumber;
-                appUser.FirstName=optionalEntity.FirstName;
-                appUser.LastName = optionalEntity.LastName;
-                appUser.DateOfBirth = optionalEntity.DateOfBirth.Value;
-            }
+                UserName = registerDto.UserName,
+                Email = registerDto.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                DateOfBirth = registerDto.DateOfBirth.Value,
+                PhoneNumber = registerDto.PhoneNumber,
+            };
 
             try
             {
-                _userRepository.Add(appUser);
+                _userRepository.Add(user);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new Exception($"Register_Error {typeof(AppUser).Name}");
+                throw new Exception($"Register_Error {typeof(AppUser).Name} =>  {e.Message}");
             }
-            return appUser;
+            return user;
+        }
+
+        public async Task UpdateAsync(AppUser entity)
+        {
+            try
+            {
+                await _userRepository.UpdateAsync(entity);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Update_Error {typeof(AppUser).Name} =>  {e.Message}");
+
+            }
         }
 
         public async Task UpdatePasswordAsync(int id, AppUserPasswordUpdateDto entity)
-        {         
-            AppUser appUser =await _userRepository.GetByIDAsync(id);
-            if(appUser==null) //Kulanıcıyı kontrol edıyoruz
+        {
+            AppUser appUser = await _userRepository.GetByIDAsync(id);
+            if (appUser == null) //Kulanıcıyı kontrol edıyoruz
                 throw new InvalidOperationException($"{typeof(AppUser).Name}({id}) User Not Found");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
@@ -106,7 +129,7 @@ namespace FinalProject.Business
             appUser.PasswordHash = passwordHash;
             appUser.PasswordSalt = passwordSalt;
 
-            _userRepository.Update(appUser); //Yeni Şifreyle kullanıyı güncelliyoruz.
+            await UpdateAsync(appUser); //Yeni Şifreyle kullanıyı güncelliyoruz.
         }
     }
 }
