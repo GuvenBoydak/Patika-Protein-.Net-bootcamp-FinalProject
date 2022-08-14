@@ -13,10 +13,5 @@ namespace FinalProject.DataAccess
         Task<T> GetByIDAsync(int id);
 
         void Add(T entity);
-
-        void Update(T entity);
-
-        void Delete(int id);
-  
     }
 }

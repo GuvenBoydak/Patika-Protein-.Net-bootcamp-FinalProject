@@ -9,6 +9,7 @@ namespace FinalProject.DataAccess
     {
         protected IDapperContext _dbContext;
         private string _tableName;
+        private string _columns;
 
         public GenericRepository(IDapperContext dapperContext)
         {
@@ -59,15 +60,6 @@ namespace FinalProject.DataAccess
             });
         }
 
-        public async void Delete(int id)
-        {
-            T deletedEntity = await GetByIDAsync(id);
-            deletedEntity.DeletedDate = DateTime.UtcNow;
-            deletedEntity.Status = DataStatus.Deleted;
-
-            Update(deletedEntity);
-        }
-
         public async Task<List<T>> GetActiveAsync()
         {
             string query = $"select * from \"{GetTableName(_tableName)}\" where \"Status\" != '2' ";
@@ -81,7 +73,7 @@ namespace FinalProject.DataAccess
 
         public async Task<List<T>> GetAllAsync()
         {
-            string query = $"select * from {GetTableName(_tableName)}";
+            string query = $"select * from  \"{GetTableName(_tableName)}\"";
 
             using (IDbConnection con = _dbContext.GetConnection())
             {
@@ -109,36 +101,6 @@ namespace FinalProject.DataAccess
             {
                 IEnumerable<T> result = await con.QueryAsync<T>(query);
                 return result.ToList();
-            }
-        }
-
-        public void Update(T entity)
-        {
-            //SoftDelete için 
-            if (entity.DeletedDate != null)
-            {
-                IEnumerable<string> columns = GetColumns();
-                string stringOfColumns = string.Join(", ", columns.Select(e => $" \"{e}\" = @{e}"));
-                string query = $"update \"{GetTableName(_tableName)}\" set {stringOfColumns}, \"DeletedDate\"=@DeletedDate  where  \"ID\" = @ID";
-
-                _dbContext.Execute(async (con) =>
-                {
-                    await con.ExecuteAsync(query, entity);
-                });
-            }
-            else //Update İçin
-            {              
-                entity.UpdatedDate = DateTime.UtcNow;
-                entity.Status = DataStatus.Updated;
-
-                IEnumerable<string> columns = GetColumns();
-                string stringOfColumns = string.Join(", ", columns.Select(e => $" \"{e}\" = @{e}"));
-                string query = $"update \"{GetTableName(_tableName)}\" set {stringOfColumns}, \"UpdatedDate\"=@UpdatedDate  where  \"ID\" = @ID";
-
-                _dbContext.Execute(async (con) =>
-                {
-                    await con.ExecuteAsync(query, entity);
-                });
             }
         }
     }
