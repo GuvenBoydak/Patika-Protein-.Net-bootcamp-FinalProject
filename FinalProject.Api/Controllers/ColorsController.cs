@@ -74,11 +74,11 @@ namespace FinalProject.Api
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] ColorUpdateDto colorUpdateDto)
+        public async Task<IActionResult> Update([FromBody] ColorUpdateDto colorUpdateDto)
         {
             Color color = _mapper.Map<Color>(colorUpdateDto);
             
-            _colorService.Update(color);
+           await  _colorService.UpdateAsync(color);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Günceleme işlemi Başarılı"));
         }

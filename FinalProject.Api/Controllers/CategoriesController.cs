@@ -75,10 +75,10 @@ namespace FinalProject.Api
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody]CategoryUpdateDto categoryUpdateDto)
+        public async Task<IActionResult> Update([FromBody]CategoryUpdateDto categoryUpdateDto)
         {
             Category category = _mapper.Map<Category>(categoryUpdateDto);
-            _categoryService.Update(category);
+          await  _categoryService.UpdateAsync(category);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Güncelleme Başarılı"));
         }

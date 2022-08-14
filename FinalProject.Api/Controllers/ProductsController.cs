@@ -72,11 +72,11 @@ namespace FinalProject.Api
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody]ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> Update([FromBody]ProductUpdateDto productUpdateDto)
         {
             Product product = _mapper.Map<Product>(productUpdateDto);
 
-            _productService.Update(product);
+            await _productService.UpdateAsync(product);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Güncelleme İşlemi başarılı"));
         }

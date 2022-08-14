@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using FinalProject.Api;
 using FinalProject.Api.Middleware;
+using FinalProject.Base;
 using FinalProject.Business;
 using FinalProject.DataAccess;
 using FluentMigrator.Runner;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,9 @@ builder.Services.AddScoped<IDapperContext, DapperContext>();
 builder.Services.AddScoped<IProductRepository, DpProductRespository>();
 builder.Services.AddScoped<ICategoryRepository, DpCategoryRespository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAppUserRepository, DpAppUserRepository>();
+builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<ITokenHelper, JWTHelper>();
 
 
 
@@ -40,6 +46,26 @@ var mapperConfig = new MapperConfiguration(cfg =>
     cfg.AddProfile(new MapProfile());
 });
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
+
+
+
+//jwt 
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = tokenOptions.Issuer,
+                        ValidAudience = tokenOptions.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+                    };
+                });
 
 
 // Add services to the container.
@@ -81,6 +107,8 @@ app.UseHttpsRedirection();
 
 //Exceptionları handler etigimiz middleware
 app.UseCustomExeption();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
