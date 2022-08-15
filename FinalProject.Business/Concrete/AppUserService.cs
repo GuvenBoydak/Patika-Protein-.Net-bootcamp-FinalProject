@@ -48,8 +48,8 @@ namespace FinalProject.Business
             if (appUser == null)
                 throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) User Not Found");
 
-            appUser.LastActivty = DateTime.UtcNow;
-            await UpdateAsync(appUser);
+            //appUser.LastActivty = DateTime.UtcNow;
+            //await UpdateAsync(appUser);
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.Password, appUser.PasswordHash, appUser.PasswordSalt))
@@ -61,7 +61,6 @@ namespace FinalProject.Business
                 await UpdateAsync(appUser);
                 throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");
             }
-
             return appUser;
         }
 

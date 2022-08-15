@@ -13,8 +13,6 @@ namespace FinalProject.Business
             RuleFor(x => x.FirstName).MaximumLength(50).WithMessage("Kulanıcı ismi en fazla 50 karakter olmalıdır.").Matches("^[a-zA-ZiİçÇşŞğĞÜüÖö]*$").WithMessage("Sadece Harf Giriniz.");
             RuleFor(x => x.LastName).MaximumLength(50).WithMessage("Kulanıcı soyismi en fazla 50 karakter olmalıdır.").Matches("^[a-zA-ZiİçÇşŞğĞÜüÖö]*$").WithMessage("Sadece Harf Giriniz.");
             RuleFor(x => x.PhoneNumber).MaximumLength(15).WithMessage("Telefon Numarası en fazla 15 karakter olmalıdır.").Matches("^[a-zA-ZiİçÇşŞğĞÜüÖö]*$").WithMessage("Sadece Harf Giriniz.").Matches("^[0-9]+$").WithMessage("Sadece Rakam Giriniz");
-            RuleFor(x => x.DateOfBirth).NotEmpty().WithMessage("Doğum tarihi Boş Geçilemez").Must(x => x.Value.Year > 1900).WithMessage("Doğum tarihini 1900'dan büyük giriniz.").Must(x => x.Value.Year < 2015).WithMessage("Doğum tarihini 2015'dan Küçük giriniz.");
-
         }
     }
 }
