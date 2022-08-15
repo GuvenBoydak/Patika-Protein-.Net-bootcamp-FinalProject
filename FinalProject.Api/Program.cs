@@ -6,6 +6,8 @@ using FinalProject.Business;
 using FinalProject.DataAccess;
 using FluentMigrator.Runner;
 using FluentValidation.AspNetCore;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,6 +26,26 @@ builder.Services.AddFluentMigratorCore()
             .WithMigrationsIn(typeof(InitialMigration).Assembly));
 
 
+//Hangfire services. PosgreSQL
+builder.Services.AddHangfire(configuration => configuration
+   .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+   .UseSimpleAssemblyNameTypeSerializer()
+   .UseRecommendedSerializerSettings()
+   .UsePostgreSqlStorage(builder.Configuration.GetSection("HangfirePostreSql").Value, new PostgreSqlStorageOptions
+   {
+       TransactionSynchronisationTimeout = TimeSpan.FromMinutes(5),
+       InvisibilityTimeout = TimeSpan.FromMinutes(5),
+       QueuePollInterval = TimeSpan.FromMinutes(5),
+   }));
+
+builder.Services.AddHangfireServer();
+
+
+
+
+
+
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IBaseService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IDapperContext, DapperContext>();
@@ -33,6 +55,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAppUserRepository, DpAppUserRepository>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<ITokenHelper, JWTHelper>();
+builder.Services.AddScoped<IFireAndForgetJob, FireAndForgetJob>();
 
 
 
@@ -79,7 +102,6 @@ WebApplication app = builder.Build();
 
 
 
-
 //fluent migration 
 try
 {
@@ -87,10 +109,8 @@ try
     {
         //Instantiate the runner
         IMigrationRunner runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-
         //Execute the migrations
         runner.MigrateUp();
-
         Console.WriteLine("Migration has successfully executed.");
     }
 }
@@ -115,6 +135,10 @@ app.UseCustomExeption();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+//Hangfire
+app.UseHangfireDashboard();
+BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
 
 app.MapControllers();
 

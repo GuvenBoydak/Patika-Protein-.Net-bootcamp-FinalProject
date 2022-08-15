@@ -1,5 +1,5 @@
-﻿using FinalProject.Entities;
-using FinalProject.RabbitMqConsumer;
+﻿using FinalProject.Business;
+using FinalProject.Entities;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 
 //Consumar tarafında tüketecegimiz mesaj kurugunu burada tekrar declare ediyoruz ve bir connection ve kanal açıyoruz.
+
 
 //Appsettings.json dosyasını okuyoruz.
 IConfiguration config = new ConfigurationBuilder()
@@ -35,16 +36,17 @@ consumer.Received += async (s, e) =>
     string serializData = Encoding.UTF8.GetString(e.Body.Span);
     AppUser appUser = JsonSerializer.Deserialize<AppUser>(serializData);
 
+    string subject = "Aktivasyon işlemlemi";
+    string body = "Kayıt için lütfen aktivasyon linkine tıklayınız.\n   https://localhost:7137/api/appusers/" + appUser.ActivationCode + " ";
+
     try
     {
-        await EmailSender.SendAsync(appUser);
+        await EmailSender.SendAsync(appUser,subject,body);
     }
     catch (Exception)
     {
-
-        Console.WriteLine("Mesaj Gönderilemedi");
+        Console.WriteLine("RabitMq tarafıdan Mesaj Gönderilemedi");
     }
-
 };
 
 Console.Read();

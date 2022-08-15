@@ -6,6 +6,7 @@ using FinalProject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
 namespace FinalProject.Api
 {
     [Route("api/[controller]")]
@@ -15,11 +16,13 @@ namespace FinalProject.Api
 
         private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
+        private readonly IFireAndForgetJob _fireAndForgetJob;
 
-        public AppUsersController(IAppUserService appUserService, IMapper mapper)
+        public AppUsersController(IAppUserService appUserService, IMapper mapper, IFireAndForgetJob fireAndForgetJob)
         {
             _appUserService = appUserService;
             _mapper = mapper;
+            _fireAndForgetJob = fireAndForgetJob;
         }
 
 
@@ -73,6 +76,8 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
+            ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
+
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token olışturuldu"));
         }
 
@@ -84,7 +89,7 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
-            ProducerService.Producer(appUser);
+            await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }

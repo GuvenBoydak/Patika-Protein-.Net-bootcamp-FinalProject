@@ -2,7 +2,7 @@
 {
     public enum EmailStatus
     {
-        Succes=1,
+        Success=1,
         InProgress=2,
         Failed=3,
 
