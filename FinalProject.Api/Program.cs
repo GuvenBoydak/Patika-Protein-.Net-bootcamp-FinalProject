@@ -36,6 +36,7 @@ builder.Services.AddScoped<ITokenHelper, JWTHelper>();
 
 
 
+
 //Default FluentValidation Filterini devre dışı bırakıp kendi yazdıgımız ValidatorFilterAttribute u ekliyoruz.
 builder.Services.AddControllers(option => option.Filters.Add<ValidatorFilterAttribute>()).AddFluentValidation(x => 
 x.RegisterValidatorsFromAssemblyContaining(typeof(ProductAddDtoValidator)));
@@ -75,6 +76,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
+
+
+
 
 //fluent migration 
 try

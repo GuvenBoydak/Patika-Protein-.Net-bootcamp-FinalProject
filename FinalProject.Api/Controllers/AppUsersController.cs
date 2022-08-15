@@ -84,6 +84,8 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
+            ProducerService.Producer(appUser);
+
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }
 
