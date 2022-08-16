@@ -17,9 +17,9 @@ namespace FinalProject.Entities
 
 
         //Relational Properties
-
+        [DapperIgnore]
         public virtual List<Product> Products { get; set; }
-
+        [DapperIgnore]
         public virtual AppUser AppUser { get; set; }
 
 

@@ -7,7 +7,7 @@ namespace FinalProject.Entities
         public string Name { get; set; }
 
         //Relational Properties
-
+        [DapperIgnore]
         public virtual List<Product> Products { get; set; }
     }
 }

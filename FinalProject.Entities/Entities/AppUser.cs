@@ -40,8 +40,9 @@
         public string PhoneNumber { get; set; }
 
         //Relational Properties
+        [DapperIgnore]
         public virtual List<Product> Products { get; set; }
-
+        [DapperIgnore]
         public virtual List<Offer> Offers { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FinalProject.Base;
+﻿
+
 
 namespace FinalProject.Entities
 {
@@ -12,7 +13,7 @@ namespace FinalProject.Entities
 
         public string Name { get; set; }
 
-        public int UnitInStock { get; set; }
+        public int UnitsInStock { get; set; }
 
         public decimal UnitPrice { get; set; }
 
@@ -38,15 +39,15 @@ namespace FinalProject.Entities
 
 
         //Relational Properties
-
+        [DapperIgnore]
         public virtual Category Category { get; set; }
-
+        [DapperIgnore]
         public virtual Brand Brand { get; set; }
-
+        [DapperIgnore]
         public virtual Color Color { get; set; }
-
+        [DapperIgnore]
         public virtual Offer Offer { get; set; }
-
+        [DapperIgnore]
         public virtual AppUser AppUser { get; set; }
 
 
