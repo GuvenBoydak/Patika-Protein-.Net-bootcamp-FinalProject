@@ -9,11 +9,13 @@ namespace FinalProject.Business
     {
         private readonly IAppUserRepository _userRepository;
         private readonly ITokenHelper _tokenHelper;
+        private readonly IDelayedJob _delayedJob;
 
-        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(repository)
+        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper, IDelayedJob delayedJob) : base(repository)
         {
             _userRepository = userRepository;
             _tokenHelper = tokenHelper;
+            _delayedJob = delayedJob;
         }
 
         public AccessToken CreateAccessToken(AppUser entity)
@@ -31,7 +33,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Delete_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Delete_Error {typeof(AppUser).Name} =>  {e.Message}");
             }
         }
 
@@ -48,25 +50,31 @@ namespace FinalProject.Business
             if (appUser == null)
                 throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) User Not Found");
 
-            //appUser.LastActivty = DateTime.UtcNow;
-            //await UpdateAsync(appUser);
-
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.Password, appUser.PasswordHash, appUser.PasswordSalt))
             {
                 appUser.IncorrectEntry++; //Şifre yanlış girildiyse 1 atırıyoruz.
 
-                if (appUser.IncorrectEntry == 3) appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
-
+                if (appUser.IncorrectEntry == 3)
+                {
+                    appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
+                    _delayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
+                }
                 await UpdateAsync(appUser);
                 throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");
             }
+
+            appUser.IncorrectEntry= 0;//Kullanıcı başarılı giriş yaptı ise IncorrectEntry sıfırlıyoruz.
+            appUser.LastActivty = DateTime.UtcNow;
+            await UpdateAsync(appUser);
+
             return appUser;
         }
 
         public async Task<AppUser> RegisterAsync(AppUserRegisterDto registerDto)
         {
             AppUser appUser = await GetByEmailAsync(registerDto.Email);
+
             //Girilen Email'i databasede varmı Kontrol ediyoruz.
             if (appUser !=null)
                 throw new InvalidOperationException($"{typeof(AppUser).Name}({registerDto.Email}) Email Already Exists");
@@ -93,7 +101,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"Register_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Register_Error {typeof(AppUser).Name} =>  {e.Message}");
             }
             return user;
         }
@@ -106,7 +114,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"Update_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Update_Error {typeof(AppUser).Name} =>  {e.Message}");
 
             }
         }

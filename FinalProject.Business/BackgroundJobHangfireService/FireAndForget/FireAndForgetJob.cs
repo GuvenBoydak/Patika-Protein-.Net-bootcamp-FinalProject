@@ -4,7 +4,7 @@ using Hangfire;
 namespace FinalProject.Business
 {
 
-    public  class FireAndForgetJob:IFireAndForgetJob
+    public class FireAndForgetJob:IFireAndForgetJob
     {
         private  readonly IAppUserService _user;
 
@@ -28,7 +28,7 @@ namespace FinalProject.Business
             catch (Exception)
             {
 
-                throw new Exception("Mail Gönderme Başarısız");
+                throw new Exception("Hoş geldiniz Maili Gönderimi Başarısız");
             }
 
             //Mail göndermede hata yoksa Status u success e cekiyoruz.
