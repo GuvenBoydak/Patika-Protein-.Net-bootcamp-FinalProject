@@ -7,7 +7,7 @@ namespace FinalProject.Entities
     {
         public Product()
         {
-            IsOfferable = false;
+            IsOfferable = true;
             IsSold = false;
         }
 
@@ -33,22 +33,20 @@ namespace FinalProject.Entities
 
         public int? ColorID { get; set; }
 
-        public int? OfferID { get; set; }
-
         public int AppUserID { get; set; }
 
 
         //Relational Properties
         [DapperIgnore]
-        public virtual Category Category { get; set; }
+        public  Category Category { get; set; }
         [DapperIgnore]
-        public virtual Brand Brand { get; set; }
+        public Brand Brand { get; set; }
         [DapperIgnore]
-        public virtual Color Color { get; set; }
+        public  Color Color { get; set; }
         [DapperIgnore]
-        public virtual Offer Offer { get; set; }
+        public  List<Offer> Offers { get; set; }
         [DapperIgnore]
-        public virtual AppUser AppUser { get; set; }
+        public  AppUser AppUser { get; set; }
 
 
     }

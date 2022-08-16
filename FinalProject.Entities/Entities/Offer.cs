@@ -15,12 +15,13 @@ namespace FinalProject.Entities
         
         public int AppUserID { get; set; }
 
+        public int ProductID { get; set; }
 
         //Relational Properties
         [DapperIgnore]
-        public virtual List<Product> Products { get; set; }
+        public  Product Product { get; set; }
         [DapperIgnore]
-        public virtual AppUser AppUser { get; set; }
+        public  AppUser AppUser { get; set; }
 
 
     }

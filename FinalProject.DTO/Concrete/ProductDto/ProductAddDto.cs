@@ -22,6 +22,5 @@ namespace FinalProject.DTO
 
         public int? ColorID { get; set; }
 
-        public int? OfferID { get; set; }
     }
 }
