@@ -28,6 +28,8 @@ namespace FinalProject.DataAccess
                 updateToOffer.Price = entity.Price == default ? entity.Price : updateToOffer.Price;
                 updateToOffer.IsApproved = entity.IsApproved == default ? entity.IsApproved : updateToOffer.IsApproved;
                 updateToOffer.AppUserID = entity.AppUserID == default ? entity.AppUserID : updateToOffer.AppUserID;
+                updateToOffer.ProductID = entity.ProductID == default ? entity.ProductID : updateToOffer.ProductID;
+
 
                 string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute(async (con) =>
@@ -42,6 +44,7 @@ namespace FinalProject.DataAccess
                 updateToOffer.Price = entity.Price == default ? entity.Price : updateToOffer.Price;
                 updateToOffer.IsApproved = entity.IsApproved == default ? entity.IsApproved : updateToOffer.IsApproved;
                 updateToOffer.AppUserID = entity.AppUserID == default ? entity.AppUserID : updateToOffer.AppUserID;
+                updateToOffer.ProductID = entity.ProductID == default ? entity.ProductID : updateToOffer.ProductID;
 
                 string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute(async (con) =>

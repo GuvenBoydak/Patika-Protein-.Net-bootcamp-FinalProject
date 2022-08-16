@@ -76,7 +76,7 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
-            ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
+            //ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token olışturuldu"));
         }

@@ -12,12 +12,14 @@ namespace FinalProject.Api
     public class OffersController : CustomBaseController
     {
         private readonly IOfferService _offerService;
+        private readonly IProductService _productService;
         private readonly IMapper _mapper;
 
-        public OffersController(IOfferService offerService, IMapper mapper)
+        public OffersController(IOfferService offerService, IMapper mapper, IProductService productService)
         {
             _offerService = offerService;
             _mapper = mapper;
+            _productService = productService;
         }
 
         [HttpGet("GetAll")]
@@ -62,9 +64,13 @@ namespace FinalProject.Api
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody]OfferAddDto offerAddDto)
+        public async Task<IActionResult> Add([FromBody]OfferAddDto offerAddDto)
         {
-            Offer offer=_mapper.Map<Offer>(offerAddDto);
+            Product product = await _productService.GetByIDAsync(offerAddDto.ProductID);
+            if (product.IsOfferable == false)
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Bu Ürünün bir teklifi var teklif verilemiyor."));
+
+            Offer offer =_mapper.Map<Offer>(offerAddDto);
 
             _offerService.Add(offer);
 

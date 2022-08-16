@@ -28,7 +28,7 @@ namespace FinalProject.DataAccess
                 updateToProduct.DeletedDate = entity.DeletedDate;
                 CheckDefaultValues(updateToProduct, entity);
 
-                string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"OfferID\"=@OfferID, \"AppUserID\"=@AppUserID, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where  \"ID\"=@ID";
+                string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"AppUserID\"=@AppUserID, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where  \"ID\"=@ID";
 
                 _dbContext.Execute(async (con) =>
                 {
@@ -41,7 +41,7 @@ namespace FinalProject.DataAccess
                 updateToProduct.UpdatedDate = DateTime.UtcNow;
                 CheckDefaultValues(updateToProduct, entity);
 
-                string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"OfferID\"=@OfferID, \"AppUserID\"=@AppUserID, \"UpdatedDate\"=@UpdatedDate, \"Status\"=@Status where  \"ID\"=@ID";
+                string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"AppUserID\"=@AppUserID, \"UpdatedDate\"=@UpdatedDate, \"Status\"=@Status where  \"ID\"=@ID";
 
                 _dbContext.Execute(async (con) =>
                 {
@@ -64,7 +64,7 @@ namespace FinalProject.DataAccess
             updateToProduct.CategoryID = product.CategoryID == default ? product.CategoryID : updateToProduct.CategoryID;
             updateToProduct.BrandID = product.BrandID == default ? product.BrandID : updateToProduct.BrandID;
             updateToProduct.ColorID = product.ColorID == default ? product.ColorID : updateToProduct.ColorID;
-            updateToProduct.OfferID = product.OfferID == default ? product.OfferID : updateToProduct.OfferID;
+          
             updateToProduct.AppUserID = product.AppUserID == default ? product.AppUserID : updateToProduct.AppUserID;
         }
     }

@@ -31,7 +31,6 @@ namespace FinalProject.DataAccess
                 .WithColumn("CategoryID").AsInt32().NotNullable()
                 .WithColumn("BrandID").AsInt32().Nullable()
                 .WithColumn("ColorID").AsInt32().Nullable()
-                .WithColumn("OfferID").AsInt32().Nullable()
                 .WithColumn("AppUserID").AsInt32().NotNullable();
 
             //Category
@@ -50,6 +49,7 @@ namespace FinalProject.DataAccess
                 .WithColumn("Price").AsDecimal().NotNullable()
                 .WithColumn("AppUserID").AsInt32().NotNullable()
                 .WithColumn("IsApproved").AsBoolean().Nullable()
+                .WithColumn("ProductID").AsInt32().NotNullable()
                 .WithColumn("CreatedDate").AsDateTime().NotNullable()
                 .WithColumn("UpdatedDate").AsDateTime().Nullable()
                 .WithColumn("DeletedDate").AsDateTime().Nullable()
@@ -113,10 +113,10 @@ namespace FinalProject.DataAccess
                 .FromTable("Products").ForeignColumn("ColorID")
                 .ToTable("Colors").PrimaryColumn("ID");
 
-            //Product - Offer Relational 
-            Create.ForeignKey("FK_Product_Offer")
-                .FromTable("Products").ForeignColumn("OfferID")
-                .ToTable("Offers").PrimaryColumn("ID");
+            //Offer - Product Relational 
+            Create.ForeignKey("FK_Offer_Product")
+                .FromTable("Offers").ForeignColumn("ProductID")
+                .ToTable("Products").PrimaryColumn("ID");
 
             //Product - AppUser Relational
             Create.ForeignKey("FK_Product_AppUser")
