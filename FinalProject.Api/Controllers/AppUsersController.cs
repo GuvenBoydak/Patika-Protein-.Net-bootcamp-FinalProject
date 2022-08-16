@@ -68,6 +68,17 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<AppUserDto>.Success(200, appUserDto, $"{id} numaralı Kullanıcı Listelendi"));
         }
 
+        [HttpGet]
+        [Route("GetByOffers/{id}")]
+        public async Task<IActionResult> GetByOffers(int id)
+        {
+            List<AppUser> appUsers = await _appUserService.GetByOffers(id);
+
+            List<AppUserListDto> appUserListDtos = _mapper.Map<List<AppUser>, List<AppUserListDto>>(appUsers);
+
+            return CreateActionResult(CustomResponseDto<List<AppUserListDto>>.Success(200, appUserListDtos, "Kulanıcı teklifleri Listelendi"));
+        }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody]AppUserRegisterDto registerDto)

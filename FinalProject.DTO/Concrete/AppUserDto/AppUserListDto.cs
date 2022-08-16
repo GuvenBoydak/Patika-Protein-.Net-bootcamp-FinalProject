@@ -1,4 +1,6 @@
-﻿namespace FinalProject.DTO
+﻿using FinalProject.Entities;
+
+namespace FinalProject.DTO
 {
     public class AppUserListDto : BaseDto
     {
@@ -10,12 +12,6 @@
 
         public byte[] PasswordHash { get; set; }
 
-        public short IncorrectEntry { get; set; }
-
-        public bool IsLock { get; set; }
-
-        public bool Active { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -25,5 +21,7 @@
         public DateTime LastActivty { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public List<Offer> Offers { get; set; }
     }
 }

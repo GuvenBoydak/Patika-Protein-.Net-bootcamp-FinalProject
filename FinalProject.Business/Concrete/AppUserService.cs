@@ -41,6 +41,11 @@ namespace FinalProject.Business
             return appUser;
         }
 
+        public async Task<List<AppUser>> GetByOffers(int id)
+        {
+           return await _userRepository.GetByOffers(id);
+        }
+
         public async Task<AppUser> LoginAsync(AppUserLoginDto entity)
         {
             AppUser appUser = await GetByEmailAsync(entity.Email);

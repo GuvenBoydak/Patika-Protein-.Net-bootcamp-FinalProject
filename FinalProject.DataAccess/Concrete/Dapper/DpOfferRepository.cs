@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using FinalProject.Entities;
+using System.Data;
 
 namespace FinalProject.DataAccess
 {
@@ -16,6 +17,15 @@ namespace FinalProject.DataAccess
             deleteToOffer.Status = DataStatus.Deleted;
 
             await UpdateAsync(deleteToOffer);
+        }
+
+        public async Task<List<Offer>> GetByAppUserIDAsync(int id)
+        {
+            using (IDbConnection con = _dbContext.GetConnection())
+            {
+                IEnumerable<Offer> result = await con.QueryAsync<Offer>("select * from \"Offers\" where \"AppUserID\" = @id", new { id = id });
+                return result.ToList();
+            }
         }
 
         public async Task UpdateAsync(Offer entity)

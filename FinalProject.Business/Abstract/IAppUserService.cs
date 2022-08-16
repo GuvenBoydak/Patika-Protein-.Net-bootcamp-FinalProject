@@ -19,6 +19,8 @@ namespace FinalProject.Business
         Task UpdateAsync(AppUser entity);
 
         void Delete(int id);
+
+        Task<List<AppUser>> GetByOffers(int id);
     }
 
 }

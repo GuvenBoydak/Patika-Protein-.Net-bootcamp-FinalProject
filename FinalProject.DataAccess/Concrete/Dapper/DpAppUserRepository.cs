@@ -28,6 +28,19 @@ namespace FinalProject.DataAccess
             }
         }
 
+        public async Task<List<AppUser>> GetByOffers(int id)
+        {
+            using (IDbConnection con=_dbContext.GetConnection())
+            {
+                IEnumerable<AppUser> result = await con.QueryAsync<AppUser>("select * from \"AppUsers\" where \"ID\"=@id", new {id=id});
+                foreach (var item in result)
+                {
+                    item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"AppUserID\"=@id ", new { id = id }).ToList();
+                }
+                return result.ToList();
+            }
+        }
+
         public async Task UpdateAsync(AppUser appUser)
         {
             AppUser userToUpdate = await GetByIDAsync(appUser.ID);

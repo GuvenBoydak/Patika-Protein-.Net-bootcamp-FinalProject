@@ -62,6 +62,16 @@ namespace FinalProject.Api
 
             return CreateActionResult(CustomResponseDto<OfferDto>.Success(200, offerDto, $"{id} numaralı teklif Listelendi"));
         }
+        [HttpGet]
+        [Route("GetByAppUserID/{id}")]
+        public async Task<IActionResult> GetByAppUserID(int id)
+        {
+            List<Offer> offers = await _offerService.GetByAppUserIDAsync(id);
+
+            List<OfferListDto> offerListDtos = _mapper.Map<List<Offer>, List<OfferListDto>>(offers);
+
+            return CreateActionResult(CustomResponseDto<List<OfferListDto>>.Success(200,offerListDtos,"Kulanıcının Teklifleri Listelendi."));
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]OfferAddDto offerAddDto)
@@ -94,5 +104,7 @@ namespace FinalProject.Api
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Silme İşlemi Başarılı"));
         }
+
+
     }
 }

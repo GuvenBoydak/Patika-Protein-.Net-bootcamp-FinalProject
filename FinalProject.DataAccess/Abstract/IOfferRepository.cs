@@ -7,5 +7,7 @@ namespace FinalProject.DataAccess
         void Delete(int id);
 
         Task UpdateAsync(Offer entity);
+
+        Task<List<Offer>> GetByAppUserIDAsync(int id);
     }
 }

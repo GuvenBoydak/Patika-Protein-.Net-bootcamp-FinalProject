@@ -25,6 +25,19 @@ namespace FinalProject.Business
             }
         }
 
+        public async Task<List<Offer>> GetByAppUserIDAsync(int id)
+        {
+            try
+            {
+              return  await _offerRepository.GetByAppUserIDAsync(id);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"GetByAppUserID_Error {typeof(Offer).Name} =>  {e.Message}");
+            }
+        }
+
         public async Task UpdateAsync(Offer entity)
         {
             try
