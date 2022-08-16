@@ -9,13 +9,11 @@ namespace FinalProject.Business
     {
         private readonly IAppUserRepository _userRepository;
         private readonly ITokenHelper _tokenHelper;
-        private readonly IDelayedJob _delayedJob;
 
-        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper, IDelayedJob delayedJob) : base(repository)
+        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(repository)
         {
             _userRepository = userRepository;
             _tokenHelper = tokenHelper;
-            _delayedJob = delayedJob;
         }
 
         public AccessToken CreateAccessToken(AppUser entity)
@@ -58,7 +56,7 @@ namespace FinalProject.Business
                 if (appUser.IncorrectEntry == 3)
                 {
                     appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
-                    _delayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
+                    DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
                 }
                 await UpdateAsync(appUser);
                 throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");

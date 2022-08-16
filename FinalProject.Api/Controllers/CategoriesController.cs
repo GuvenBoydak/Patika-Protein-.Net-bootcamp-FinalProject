@@ -29,7 +29,7 @@ namespace FinalProject.Api
         {
             List<Category> categories = await _categoryService.GetActiveAsync();
 
-            List<CategoryListDto> categoryListDtos = _mapper.Map<List<CategoryListDto>>(categories);
+            List<CategoryListDto> categoryListDtos = _mapper.Map<List<Category>, List<CategoryListDto>>(categories);
 
             return CreateActionResult(CustomResponseDto<List<CategoryListDto>>.Success(200, categoryListDtos, "Active Categoryler listelendi"));
         }
@@ -39,52 +39,63 @@ namespace FinalProject.Api
         {
             List<Category> categories = await _categoryService.GetAllAsync();
 
-            List<CategoryListDto> categoryListDtos = _mapper.Map<List<CategoryListDto>>(categories);
+            List<CategoryListDto> categoryListDtos = _mapper.Map<List<Category>, List<CategoryListDto>>(categories);
 
             return CreateActionResult(CustomResponseDto<List<CategoryListDto>>.Success(200, categoryListDtos, "Tüm Categoryler listelendi"));
         }
 
         [HttpGet("GetPasive")]
-        public async Task<IActionResult> GetPasiveAsync()
+        public async Task<IActionResult> GetPasive()
         {
             List<Category> categories = await _categoryService.GetPassiveAsync();
 
-            List<CategoryListDto> categoryListDtos = _mapper.Map<List<CategoryListDto>>(categories);
+            List<CategoryListDto> categoryListDtos = _mapper.Map<List<Category>, List<CategoryListDto>>(categories);
 
             return CreateActionResult(CustomResponseDto<List<CategoryListDto>>.Success(200, categoryListDtos, "Pasive Categoryler listelendi"));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             Category category = await _categoryService.GetByIDAsync(id);
 
-            CategoryDto categoryDto = _mapper.Map<CategoryDto>(category);
+            CategoryDto categoryDto = _mapper.Map<Category, CategoryDto>(category);
 
             return CreateActionResult(CustomResponseDto<CategoryDto>.Success(200, categoryDto, $"{id} numaralı Category Listlendi."));
+        }
+
+        [HttpGet]
+        [Route("GetCategoryWithProducts/{id}")]
+        public async Task<IActionResult> GetCategoryWithProducts([FromRoute] int id)
+        {
+            Category category = await _categoryService.GetCategoryWithProductsAsync(id);
+
+            CategoryDto categoryDto = _mapper.Map<Category, CategoryDto>(category);
+
+            return CreateActionResult(CustomResponseDto<CategoryDto>.Success(200,categoryDto, $"{id} numaralı Category ve Productlar Listlendi."));
         }
 
         [HttpPost]
         public IActionResult Add([FromBody] CategoryAddDto categoryAddDto)
         {
-            Category category = _mapper.Map<Category>(categoryAddDto);
+            Category category = _mapper.Map<CategoryAddDto, Category>(categoryAddDto);
 
             _categoryService.Add(category);
 
-            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(200,"Ekleme işlem başarılı"));
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(200, "Ekleme işlem başarılı"));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody]CategoryUpdateDto categoryUpdateDto)
+        public async Task<IActionResult> Update([FromBody] CategoryUpdateDto categoryUpdateDto)
         {
-            Category category = _mapper.Map<Category>(categoryUpdateDto);
-          await  _categoryService.UpdateAsync(category);
+            Category category = _mapper.Map<CategoryUpdateDto, Category>(categoryUpdateDto);
+            await _categoryService.UpdateAsync(category);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Güncelleme Başarılı"));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute]int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             _categoryService.Delete(id);
 

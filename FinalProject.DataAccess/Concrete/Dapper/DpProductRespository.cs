@@ -54,7 +54,7 @@ namespace FinalProject.DataAccess
         private void CheckDefaultValues(Product updateToProduct, Product product)
         {
             updateToProduct.Name = product.Name == default ? product.Name : updateToProduct.Name;
-            updateToProduct.UnitInStock = product.UnitInStock == default ? product.UnitInStock : updateToProduct.UnitInStock;
+            updateToProduct.UnitsInStock = product.UnitsInStock == default ? product.UnitsInStock : updateToProduct.UnitsInStock;
             updateToProduct.UnitPrice = product.UnitPrice == default ? product.UnitPrice : updateToProduct.UnitPrice;
             updateToProduct.ImageUrl = product.ImageUrl == default ? product.ImageUrl : updateToProduct.ImageUrl;
             updateToProduct.Description = product.Description == default ? product.Description : updateToProduct.Description;

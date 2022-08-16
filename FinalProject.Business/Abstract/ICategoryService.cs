@@ -7,6 +7,8 @@ namespace FinalProject.Business
         Task UpdateAsync(Category entity);
 
         void Delete(int id);
+
+        Task<Category> GetCategoryWithProductsAsync(int id);
     }
 
 }

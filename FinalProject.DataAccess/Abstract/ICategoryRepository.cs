@@ -7,5 +7,7 @@ namespace FinalProject.DataAccess
         void Delete(int id);
 
         Task UpdateAsync(Category entity);
+
+        Task<Category> GetCategoryWithProductsAsync(int id);
     }
 }

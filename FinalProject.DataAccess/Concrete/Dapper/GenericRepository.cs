@@ -9,7 +9,6 @@ namespace FinalProject.DataAccess
     {
         protected IDapperContext _dbContext;
         private string _tableName;
-        private string _columns;
 
         public GenericRepository(IDapperContext dapperContext)
         {
@@ -36,8 +35,9 @@ namespace FinalProject.DataAccess
             return typeof(T)
                     .GetProperties()
                     .Where(e => e.Name != "ID"
-                    && !e.PropertyType.GetTypeInfo().IsGenericType)
-                    .Select(e => e.Name);
+                    && !e.PropertyType.GetTypeInfo().IsGenericType
+                && !Attribute.IsDefined(e, typeof(DapperIgnoreAttribute)))
+                .Select(e => e.Name);
         }
 
         public void Add(T entity)
@@ -95,7 +95,7 @@ namespace FinalProject.DataAccess
         public async Task<List<T>> GetPassiveAsync()
         {
             //Silinmiş veriler
-            string query = $"select * from \"{GetTableName(_tableName)}\" where \"Status\" == '2' ";
+            string query = $"select * from \"{GetTableName(_tableName)}\" where \"Status\" = '2' ";
 
             using (IDbConnection con = _dbContext.GetConnection())
             {

@@ -69,7 +69,7 @@ namespace FinalProject.Api
 
         [Authorize]
         [HttpPost]
-        public IActionResult Add([FromForm(Name = "Image")] IFormFile file,/*[FromForm]*/ ProductAddDto productAddDto)//Postman de çalişiyor 
+        public IActionResult Add([FromForm(Name = "Image")] IFormFile file,/* [FromForm] */ProductAddDto productAddDto)//Postman de çalişiyor 
         {
             if(file==null)//Girelen resim vamrı bakıyoruz.
                 throw new Exception("REsim kısmı boş geçilemez");

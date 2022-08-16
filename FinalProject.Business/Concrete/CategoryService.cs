@@ -26,6 +26,19 @@ namespace FinalProject.Business
             }
         }
 
+        public async Task<Category> GetCategoryWithProductsAsync(int id)
+        {
+            try
+            {
+               return await _categoryRepository.GetCategoryWithProductsAsync(id);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"Get_Category_Error {typeof(Category).Name} =>  {e.Message}");
+            }
+        }
+
         public async Task UpdateAsync(Category entity)
         {
             try
