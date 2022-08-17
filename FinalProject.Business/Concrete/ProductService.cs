@@ -25,6 +25,11 @@ namespace FinalProject.Business
             }
         }
 
+        public async Task<List<Product>> GetByAppUserProductsWithOffers(int id)
+        {
+            return await _productRepository.GetByAppUserProductsWithOffers(id);
+        }
+
         public async Task UpdateAsync(Product entity)
         {
             try

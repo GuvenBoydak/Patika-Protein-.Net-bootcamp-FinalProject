@@ -9,6 +9,10 @@ namespace FinalProject.Business
         void Delete(int id);
 
         Task<List<Offer>> GetByAppUserIDAsync(int id);
+
+        Task OfferApproval(Offer offer);
+
+        Task BuyProduct(Offer offer);
     }
 
 }

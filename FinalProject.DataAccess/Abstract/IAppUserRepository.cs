@@ -11,5 +11,5 @@ namespace FinalProject.DataAccess
         Task UpdateAsync(AppUser appUser);
 
         Task<List<AppUser>> GetByOffers(int id);
-    }
+   }
 }

@@ -28,6 +28,15 @@ namespace FinalProject.DataAccess
             }
         }
 
+        public async Task<List<Offer>> GetByOffersProductIDAsync(int id)
+        {
+            using (IDbConnection con=_dbContext.GetConnection())
+            {
+                IEnumerable<Offer> offers = await con.QueryAsync<Offer>("select * from  \"Offers\" where \"ProductID\" = @id", new { id = id });
+                return offers.ToList();
+            }
+        }
+
         public async Task UpdateAsync(Offer entity)
         {
             Offer updateToOffer = await GetByIDAsync(entity.ID);
@@ -51,10 +60,10 @@ namespace FinalProject.DataAccess
             {
                 updateToOffer.Status = DataStatus.Updated;
                 updateToOffer.UpdatedDate = DateTime.UtcNow;
-                updateToOffer.Price = entity.Price == default ? entity.Price : updateToOffer.Price;
-                updateToOffer.IsApproved = entity.IsApproved == default ? entity.IsApproved : updateToOffer.IsApproved;
-                updateToOffer.AppUserID = entity.AppUserID == default ? entity.AppUserID : updateToOffer.AppUserID;
-                updateToOffer.ProductID = entity.ProductID == default ? entity.ProductID : updateToOffer.ProductID;
+                updateToOffer.Price = entity.Price == default ? updateToOffer.Price : entity.Price;
+                updateToOffer.IsApproved = entity.IsApproved == default ? updateToOffer.IsApproved : entity.IsApproved;
+                updateToOffer.AppUserID = entity.AppUserID == default ? updateToOffer.AppUserID : entity.AppUserID;
+                updateToOffer.ProductID = entity.ProductID == default ? updateToOffer.ProductID : entity.ProductID;
 
                 string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute(async (con) =>

@@ -6,10 +6,28 @@ namespace FinalProject.Business
     public class OfferService : GenericRepository<Offer>, IOfferService
     {
         private readonly IOfferRepository _offerRepository;
+        private readonly IProductService _productService;
 
-        public OfferService(IDapperContext dapperContext, IOfferRepository offerRepository) : base(dapperContext)
+        public OfferService(IDapperContext dapperContext, IOfferRepository offerRepository, IProductService productService) : base(dapperContext)
         {
             _offerRepository = offerRepository;
+            _productService = productService;
+        }
+
+        public async Task BuyProduct(Offer offer)//Ürün Satın alma 
+        {
+            Product product = await _productService.GetByIDAsync(offer.ProductID);
+            product.UnitPrice = offer.Price;
+            product.IsSold=true;
+            product.IsOfferable = false;
+            product.AppUserID=offer.AppUserID;
+            await _productService.UpdateAsync(product);
+
+            List<Offer> offers = await _offerRepository.GetByOffersProductIDAsync(offer.ProductID);//İlgili üründeki tüm Offerları siliyoruz.
+            foreach (Offer item in offers)
+            {
+                Delete(item.ID);
+            }
         }
 
         public void Delete(int id)
@@ -21,7 +39,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Delete_Error {typeof(Offer).Name} =>  {e.Message}");
+                throw new Exception($"Delete_Error  =>  {e.Message}");
             }
         }
 
@@ -34,7 +52,27 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"GetByAppUserID_Error {typeof(Offer).Name} =>  {e.Message}");
+                throw new Exception($"GetByAppUserID_Error  =>  {e.Message}");
+            }
+        }
+
+        //Teklif Onaylandıysa ilgili Ürünün bilgilerini güncelliyoruz.
+        public async Task OfferApproval(Offer offer)
+        {
+            if (offer.IsApproved == true)
+                await UpdateAsync(offer);
+
+          Product product=  await _productService.GetByIDAsync(offer.ProductID);
+            product.IsSold= true;
+            product.IsOfferable = false;
+            product.AppUserID=offer.AppUserID;
+            product.UnitPrice = offer.Price;
+            await _productService.UpdateAsync(product);
+
+            List<Offer> offers =await _offerRepository.GetByOffersProductIDAsync(offer.ProductID);//İlgili üründeki tüm Offerları siliyoruz.
+            foreach (Offer item in offers)
+            {
+                Delete(item.ID);
             }
         }
 
@@ -47,7 +85,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Update_Error {typeof(Offer).Name} =>  {e.Message}");
+                throw new Exception($"Update_Error  =>  {e.Message}");
             }
         }
     }

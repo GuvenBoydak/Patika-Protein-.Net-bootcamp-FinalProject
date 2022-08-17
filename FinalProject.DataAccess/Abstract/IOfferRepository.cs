@@ -9,5 +9,7 @@ namespace FinalProject.DataAccess
         Task UpdateAsync(Offer entity);
 
         Task<List<Offer>> GetByAppUserIDAsync(int id);
+
+        Task<List<Offer>> GetByOffersProductIDAsync(int id);
     }
 }

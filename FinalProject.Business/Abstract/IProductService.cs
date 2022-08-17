@@ -7,6 +7,8 @@ namespace FinalProject.Business
         Task UpdateAsync(Product entity);
 
         void Delete(int id);
-    }
 
+        Task<List<Product>> GetByAppUserProductsWithOffers(int id);
+
+    }
 }

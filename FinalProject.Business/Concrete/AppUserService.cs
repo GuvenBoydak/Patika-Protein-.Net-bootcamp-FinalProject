@@ -50,8 +50,10 @@ namespace FinalProject.Business
         {
             AppUser appUser = await GetByEmailAsync(entity.Email);
 
-            if (appUser == null)
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) User Not Found");
+            if (appUser == null )
+                throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) Kullanıcı Bulunamadı");
+            else if(appUser.IncorrectEntry == 3 && appUser.IsLock==true)
+                    throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) Hesabınız Askıya alındı");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.Password, appUser.PasswordHash, appUser.PasswordSalt))
@@ -61,13 +63,14 @@ namespace FinalProject.Business
                 if (appUser.IncorrectEntry == 3)
                 {
                     appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
-                    DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
+                    DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.               
+                    throw new InvalidOperationException($"{typeof(AppUser).Name} Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
                 }
                 await UpdateAsync(appUser);
-                throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");
+                throw new InvalidOperationException($"{typeof(AppUser).Name} Paralonanız Yanlış");
             }
 
-            appUser.IncorrectEntry= 0;//Kullanıcı başarılı giriş yaptı ise IncorrectEntry sıfırlıyoruz.
+            appUser.IncorrectEntry= 1;//Kullanıcı başarılı giriş yaptı ise IncorrectEntry Güncelliyoruz.
             appUser.LastActivty = DateTime.UtcNow;
             await UpdateAsync(appUser);
 
@@ -80,7 +83,7 @@ namespace FinalProject.Business
 
             //Girilen Email'i databasede varmı Kontrol ediyoruz.
             if (appUser !=null)
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({registerDto.Email}) Email Already Exists");
+                throw new InvalidOperationException($"{typeof(AppUser).Name}({registerDto.Email}) Bu Email zaten Kayıtlı");
 
             //PasswordHash ve PasswordSalt oluşturuyoruz.
             byte[] passwordHash, passwordSalt;
@@ -126,11 +129,11 @@ namespace FinalProject.Business
         {
             AppUser appUser = await _userRepository.GetByIDAsync(id);
             if (appUser == null) //Kulanıcıyı kontrol edıyoruz
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({id}) User Not Found");
+                throw new InvalidOperationException($"{typeof(AppUser).Name}({id}) Kullanıcı Bulunamadı");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.OldPassword, appUser.PasswordHash, appUser.PasswordSalt))
-                throw new InvalidOperationException($"{typeof(AppUser).Name} User Password Does Not Match ");
+                throw new InvalidOperationException($"{typeof(AppUser).Name} Parolanız Yanlış");
 
             //Yeni PasswordHash ve PasswordSalt oluşturuyoruz.
             byte[] passwordHash, passwordSalt;

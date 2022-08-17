@@ -33,10 +33,11 @@ namespace FinalProject.DataAccess
             using (IDbConnection con=_dbContext.GetConnection())
             {
                 IEnumerable<AppUser> result = await con.QueryAsync<AppUser>("select * from \"AppUsers\" where \"ID\"=@id", new {id=id});
-                foreach (var item in result)
+                foreach (AppUser item in result)
                 {
                     item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"AppUserID\"=@id ", new { id = id }).ToList();
                 }
+
                 return result.ToList();
             }
         }
@@ -74,6 +75,7 @@ namespace FinalProject.DataAccess
         //Parametreden gelen deger ie databasedeki degerleri karşılaştırıp degişiklige ugrayanları Güncelliyoruz.
         private void CheckDefaultValues(AppUser userToUpdate,AppUser appUser)
         {
+
             userToUpdate.UserName = appUser.UserName == default ? userToUpdate.UserName : appUser.UserName;
             userToUpdate.Email = appUser.Email == default ? userToUpdate.Email : appUser.Email;
             userToUpdate.PasswordHash = appUser.PasswordHash == default ? userToUpdate.PasswordHash : appUser.PasswordHash;
