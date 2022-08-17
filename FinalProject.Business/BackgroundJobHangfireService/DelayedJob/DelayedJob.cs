@@ -4,20 +4,12 @@ using Hangfire;
 namespace FinalProject.Business
 {
     
-    public class DelayedJob:IDelayedJob
+    public static class DelayedJob
     {
-        private readonly IDelayedJob _delayedJob;
-
-        public DelayedJob(IDelayedJob delayedJob)
-        {
-            _delayedJob = delayedJob;
-        }
-
-
         /// <summary>
         /// Tetiklendikten 3 sanıye sonra çalışan BackgroundJob.
         /// </summary>
-        public void SendMailJob(AppUser appUser)
+        public static void SendMailJob(AppUser appUser)
         {
             string subject = "Hesap İşlemleri";
             string body = "Parolanız 3 kez yanlış girilmiştir ve Hesabınız askıya alınmıştır.";
