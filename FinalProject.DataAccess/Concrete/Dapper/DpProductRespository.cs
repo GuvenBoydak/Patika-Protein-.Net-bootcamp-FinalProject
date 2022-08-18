@@ -23,10 +23,10 @@ namespace FinalProject.DataAccess
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                IEnumerable<Product> result = await con.QueryAsync<Product>("select * from \"Products\"  where \"Products\".\"AppUserID\"=@id", new { id = id });
+                IEnumerable<Product> result = await con.QueryAsync<Product>("select * from \"Products\"  where \"Products\".\"AppUserID\"=@id and \"Products\".\"Status\" != 2", new { id = id });
                 foreach (Product item in result)
                 {
-                    item.Offers = con.Query<Offer>("select * from \"Offers\" inner join \"Products\" on \"Offers\".\"ProductID\"= \"Products\".\"ID\"  where \"Products\".\"ID\"=@id", new { id = item.ID }).ToList();
+                    item.Offers = con.Query<Offer>("select * from \"Offers\" inner join \"Products\" on \"Offers\".\"ProductID\"= \"Products\".\"ID\"  where \"Products\".\"ID\"=@id and \"Offers\".\"Status\" != 2", new { id = item.ID }).ToList();
                 }
 
                 return result.ToList();
@@ -45,9 +45,9 @@ namespace FinalProject.DataAccess
 
                 string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"AppUserID\"=@AppUserID, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where  \"ID\"=@ID";
 
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute((con) =>
                 {
-                    await con.ExecuteAsync(query, updateToProduct);
+                    con.ExecuteAsync(query, updateToProduct);
                 });
             }
             else
@@ -73,7 +73,7 @@ namespace FinalProject.DataAccess
             updateToProduct.UnitPrice = product.UnitPrice == default ? updateToProduct.UnitPrice : product.UnitPrice;
             updateToProduct.ImageUrl = product.ImageUrl == default ? updateToProduct.ImageUrl : product.ImageUrl;
             updateToProduct.Description = product.Description == default ? updateToProduct.Description : product.Description;
-            updateToProduct.IsOfferable = product.IsOfferable == default ? updateToProduct.IsOfferable : product.IsOfferable;
+            updateToProduct.IsOfferable = product.IsOfferable == true ? updateToProduct.IsOfferable : product.IsOfferable;
             updateToProduct.IsSold = product.IsSold == default ? updateToProduct.IsSold : product.IsSold;
             updateToProduct.UsageStatus = product.UsageStatus == default ? updateToProduct.UsageStatus : product.UsageStatus;
             updateToProduct.CategoryID = product.CategoryID == default ? updateToProduct.CategoryID : product.CategoryID;

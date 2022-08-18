@@ -20,14 +20,18 @@ namespace FinalProject.DataAccess
             await UpdateAsync(deletedCategory);
         }
 
+        /// <summary>
+        /// ilgili kategorideki ürünlerin listesi
+        /// </summary>
+        /// <param name="id">kategori id bilgisi</param>
         public async Task<Category> GetCategoryWithProductsAsync(int id)
         {
             using (IDbConnection con=_dbContext.GetConnection())
             {
                 //id ye karşılık gelen category alıyoruz.
-                Category result = await con.QueryFirstOrDefaultAsync<Category>("select * from \"Categories\" where \"ID\" =@id", new { id = id });                   
-                //buldugumuz categorynin products larına categoryId si id eşlesenleri alıyoruz.
-                result.Products =  con.Query<Product>("select * from \"Products\" where \"CategoryID\" =@id", new {id=id}).ToList();
+                Category result = await con.QueryFirstOrDefaultAsync<Category>("select * from \"Categories\" where \"ID\" =@id and \"Categories\".\"Status\" != 2", new { id = id });                   
+                //categorynin productlarına categoryId'si ID ile eşlesenleri alıyoruz.
+                result.Products =  con.Query<Product>("select * from \"Products\" where \"CategoryID\" =@id and \"Products\".\"Status\" != 2", new {id=id}).ToList();
                 return result;
             }
         }

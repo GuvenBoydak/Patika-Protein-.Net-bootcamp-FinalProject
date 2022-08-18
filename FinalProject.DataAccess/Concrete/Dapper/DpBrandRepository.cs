@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using FinalProject.Entities;
-using System.Data;
 
 namespace FinalProject.DataAccess
 {

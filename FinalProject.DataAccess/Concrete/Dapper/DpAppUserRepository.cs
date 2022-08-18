@@ -19,23 +19,43 @@ namespace FinalProject.DataAccess
             await UpdateAsync(deleteToAppUser);
         }
 
+        /// <summary>
+        /// ilgili Aktivasyon kodlu kullanıcı
+        /// </summary>
+        /// <param name="code">Aktivasyon kod bilgisi</param>
+        public async Task<AppUser> GetByActivationCode(Guid code)
+        {
+            using (IDbConnection con = _dbContext.GetConnection())
+            {
+                return await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"ActivationCode\" = @ActivationCode and \"AppUsers\".\"Status\" != 2", new { ActivationCode = code });
+            }
+        }
+
+        /// <summary>
+        /// ilgili Email'li kullanıcı bilgisi
+        /// </summary>
+        /// <param name="email">kullanıcı Email bilgisi</param>
         public async Task<AppUser> GetByEmailAsync(string email)
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                AppUser result = await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"Email\" = @email", new {email=email});
+                AppUser result = await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"Email\" = @email and \"AppUsers\".\"Status\" != 2", new {email=email});
                 return result;
             }
         }
 
+        /// <summary>
+        /// İlgili kullanıcı teklifleri
+        /// </summary>
+        /// <param name="id">kullanıcı id bilgisi</param>
         public async Task<List<AppUser>> GetByOffers(int id)
         {
             using (IDbConnection con=_dbContext.GetConnection())
             {
-                IEnumerable<AppUser> result = await con.QueryAsync<AppUser>("select * from \"AppUsers\" where \"ID\"=@id", new {id=id});
+                IEnumerable<AppUser> result = await con.QueryAsync<AppUser>("select * from \"AppUsers\" where \"ID\"=@id and \"AppUsers\".\"Status\" != 2", new {id=id});
                 foreach (AppUser item in result)
                 {
-                    item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"AppUserID\"=@id ", new { id = id }).ToList();
+                    item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"AppUserID\"=@id and \"Offers\".\"Status\" != 2", new { id = id }).ToList();
                 }
 
                 return result.ToList();
@@ -53,9 +73,9 @@ namespace FinalProject.DataAccess
                 CheckDefaultValues(userToUpdate,appUser);
 
                 string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"EmailStatus\"=@EmailStatus,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"DateOfBirth\"=@DateOfBirth,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID ";
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute((con) =>
                 {
-                    await con.ExecuteAsync(query, userToUpdate);
+                     con.Execute(query, userToUpdate);
                 });
             }
             else
@@ -65,9 +85,9 @@ namespace FinalProject.DataAccess
                 CheckDefaultValues(userToUpdate,appUser);
 
                 string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"EmailStatus\"=@EmailStatus,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"DateOfBirth\"=@DateOfBirth,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID ";
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, userToUpdate);
+                     con.Execute(query, userToUpdate);
                 });
             }
         }

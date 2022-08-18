@@ -54,9 +54,9 @@ namespace FinalProject.DataAccess
             string query = $"insert into \"{GetTableName(_tableName)}\" ({stringOfColumns}) values ({stringOfParameters})";
 
             //Execute metoduna arguman olarak Action<NpgsqlConnection> isteyen metoda NpgsqlConnection tipinde con baglantı nesnesini veriyoruz. 
-            _dbContext.Execute(async (con) =>
+            _dbContext.Execute((con) =>
             {
-                await con.ExecuteAsync(query, entity);
+               con.ExecuteAsync(query, entity);
             });
         }
 
@@ -84,7 +84,7 @@ namespace FinalProject.DataAccess
 
         public async Task<T> GetByIDAsync(int id)
         {
-            string query = $"select * from \"{GetTableName(_tableName)}\" where \"ID\" = @id ";
+            string query = $"select * from \"{GetTableName(_tableName)}\" where \"ID\" = @id and \"{GetTableName(_tableName)}\".\"Status\" != 2 ";
 
             using (IDbConnection con = _dbContext.GetConnection())
             {

@@ -4,7 +4,7 @@ namespace FinalProject.DataAccess
 {
     public interface IOfferRepository : IRepository<Offer>
     {
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
         Task UpdateAsync(Offer entity);
 

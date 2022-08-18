@@ -10,7 +10,7 @@ namespace FinalProject.DataAccess
         {
         }
 
-        public async void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             Offer deleteToOffer=await GetByIDAsync(id);
             deleteToOffer.DeletedDate = DateTime.UtcNow;
@@ -18,21 +18,28 @@ namespace FinalProject.DataAccess
 
             await UpdateAsync(deleteToOffer);
         }
-
+        /// <summary>
+        /// İlgili id li kulanıcının teklifleri
+        /// </summary>
+        /// <param name="id">kulanıcı id bilgisi</param>
         public async Task<List<Offer>> GetByAppUserIDAsync(int id)
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                IEnumerable<Offer> result = await con.QueryAsync<Offer>("select * from \"Offers\" where \"AppUserID\" = @id", new { id = id });
+                IEnumerable<Offer> result = await con.QueryAsync<Offer>("select * from \"Offers\" where \"AppUserID\" = @id and \"Offers\".\"Status\" != 2", new { id = id });
                 return result.ToList();
             }
         }
 
+        /// <summary>
+        /// İlgli id li ürünlerin teklifleri
+        /// </summary>
+        /// <param name="id">ürün id bilgisi</param>
         public async Task<List<Offer>> GetByOffersProductIDAsync(int id)
         {
             using (IDbConnection con=_dbContext.GetConnection())
             {
-                IEnumerable<Offer> offers = await con.QueryAsync<Offer>("select * from  \"Offers\" where \"ProductID\" = @id", new { id = id });
+                IEnumerable<Offer> offers = await con.QueryAsync<Offer>("select * from  \"Offers\" where \"ProductID\" = @id and \"Offers\".\"Status\" != 2", new { id = id });
                 return offers.ToList();
             }
         }
@@ -50,7 +57,7 @@ namespace FinalProject.DataAccess
                 updateToOffer.ProductID = entity.ProductID == default ? entity.ProductID : updateToOffer.ProductID;
 
 
-                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
+                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUserID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute(async (con) =>
                 {
                     await con.ExecuteAsync(query, updateToOffer);
