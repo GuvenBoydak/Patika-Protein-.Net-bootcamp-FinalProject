@@ -12,6 +12,7 @@ namespace FinalProject.Business
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategoryListDto>().ReverseMap();
             CreateMap<Category, CategoryUpdateDto>().ReverseMap();
+            CreateMap<Category, CategoryWithProductsDto>().ReverseMap();
 
             CreateMap<Product, ProductUpdateDto>().ReverseMap();
             CreateMap<Product, ProductAddDto>().ReverseMap();
@@ -39,6 +40,7 @@ namespace FinalProject.Business
             CreateMap<AppUser, AppUserListDto>().ReverseMap();
             CreateMap<AppUser, AppUserDto>().ReverseMap();
             CreateMap<AppUser, AppUserUpdateDto>().ReverseMap();
+            CreateMap<AppUser, AppUserWithOffersDto>().ReverseMap();
 
         }
     }
