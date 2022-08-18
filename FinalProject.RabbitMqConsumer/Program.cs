@@ -26,9 +26,6 @@ channel.QueueDeclare("email_queue", false, false, false);
 //Kuyruktaki mesajları yakalayacak bir event oluşturuyoruz.
 EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
 
-//BasicConsume ile consumer tarafından yakaladıgımız mesaları tüketiyoruz.
-channel.BasicConsume("email_queue", false, consumer);
-
 //consumer.Received ile kuyruga gelen mesajı tüketigimiz event oluşturuyoruz.
 consumer.Received += async (s, e) =>
 {
@@ -37,16 +34,20 @@ consumer.Received += async (s, e) =>
     AppUser appUser = JsonSerializer.Deserialize<AppUser>(serializData);
 
     string subject = "Aktivasyon işlemlemi";
-    string body = "Kayıt için lütfen aktivasyon linkine tıklayınız.\n   https://localhost:7137/api/appusers/" + appUser.ActivationCode + " ";
+    string body = "Kayıt için lütfen aktivasyon linkine tıklayınız.\n   https://localhost:7137/api/appusers/activation/" + appUser.ActivationCode + " ";
 
     try
     {
-        await EmailSender.SendAsync(appUser,subject,body);
+        await EmailSender.SendAsync(appUser, subject, body);
     }
     catch (Exception)
     {
         Console.WriteLine("RabitMq tarafıdan Mesaj Gönderilemedi");
     }
+
 };
+
+//BasicConsume ile consumer tarafından yakaladıgımız mesaları tüketiyoruz.
+channel.BasicConsume("email_queue", true, consumer);
 
 Console.Read();
