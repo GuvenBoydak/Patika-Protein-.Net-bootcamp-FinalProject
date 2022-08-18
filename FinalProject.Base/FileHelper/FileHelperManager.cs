@@ -12,9 +12,7 @@ namespace FinalProject.Base
             string extension = Path.GetExtension(file.FileName); //Dosya uzantısını alıyoruz.
             string imageName = Guid.NewGuid().ToString() + extension; //Guid oluşrutup dosya uzantısı ile beraber veriyoruz.
 
-            long size= file.Length;//Dosya boyutunu buluyoruz.
-            if (size >= 409600) 
-                throw new Exception("Dosya boyutu 400kb geçmekte");
+            CheckFileSize(file);//Dosya boyutunu kontrol ediyoruz.
 
             CheckFileExtensionExists(extension);//Dosya Uzantısı konrol edilir.
 
@@ -42,6 +40,8 @@ namespace FinalProject.Base
             if (File.Exists(filePath))//Aynı isimli dosya varmı diye kontrol ediyoruz.
                 File.Delete(filePath);
 
+            CheckFileSize(file);//Dosya boyutunu kontrol ediyoruz.
+
             Add(file, root);
         }
 
@@ -51,6 +51,14 @@ namespace FinalProject.Base
             if (extension != ".jpeg" && extension != ".png" && extension != ".jpg")
                 throw new Exception("Resim Uzantısı Yanlış");
         }
+
+        private static void CheckFileSize(IFormFile file)
+        {
+            long size = file.Length;//Dosya boyutunu buluyoruz.
+            if (size >= 409600)
+                throw new Exception("Dosya boyutu 400kb geçmekte");
+        }
+
     }
 
 }
