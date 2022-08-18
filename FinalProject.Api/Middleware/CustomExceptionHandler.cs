@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
-namespace FinalProject.Api.Middleware
+namespace FinalProject.Api
 {
     public static class CustomExceptionHandler
     {

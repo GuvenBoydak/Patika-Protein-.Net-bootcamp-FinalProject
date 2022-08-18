@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace FinalProject.Api.Service
+namespace FinalProject.Api
 {
     public class ExtensionSwaggerFileOperationFilter : IOperationFilter
     {
