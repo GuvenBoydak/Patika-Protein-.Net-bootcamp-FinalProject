@@ -21,6 +21,8 @@ namespace FinalProject.Business
         void Delete(int id);
 
         Task<List<AppUser>> GetByOffers(int id);
+
+        Task<AppUser> GetByActivationCode(Guid code);
     }
 
 }

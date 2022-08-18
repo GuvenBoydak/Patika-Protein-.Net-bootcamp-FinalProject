@@ -10,18 +10,26 @@ namespace FinalProject.Business
         private readonly IAppUserRepository _userRepository;
         private readonly ITokenHelper _tokenHelper;
 
-        public AppUserService(IRepository<AppUser> repository, IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(repository)
+        public AppUserService( IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(userRepository)
         {
             _userRepository = userRepository;
             _tokenHelper = tokenHelper;
         }
 
+        /// <summary>
+        /// Token Oluşturma işlemi
+        /// </summary>
+        /// <param name="entity">Kullanıcı bilgisi</param>
         public AccessToken CreateAccessToken(AppUser entity)
         {
             AccessToken accessToken = _tokenHelper.CreateToken(entity.UserName, entity.ID);
             return accessToken;
         }
 
+        /// <summary>
+        /// Silme işlemi
+        /// </summary>
+        /// <param name="id">Silinicek id bilgisi</param>
         public void Delete(int id)
         {
             try
@@ -31,59 +39,84 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new InvalidOperationException($"Delete_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Delete_Error  =>  {e.Message}");
             }
         }
 
+        /// <summary>
+        /// İlgili activasyon kodlu Kullanıcıyı Bilgisi.
+        /// </summary>
+        /// <param name="code">kullanıcı aktivasyon kodu bilgisi</param>
+        public async Task<AppUser> GetByActivationCode(Guid code)
+        {
+            return  await _userRepository.GetByActivationCode(code);
+        }
+
+        /// <summary>
+        /// İlgili Emaili olan Kullanıcıyı Bilgisi
+        /// </summary>
+        /// <param name="email">Kullanıcı email bilgisi</param>
         public async Task<AppUser> GetByEmailAsync(string email)
         {
             AppUser appUser = await _userRepository.GetByEmailAsync(email);
             return appUser;
         }
 
+        /// <summary>
+        /// Kullanıcının yaptıgı teklif Listesi
+        /// </summary>
+        /// <param name="id">Kullanıcı id'si Giriyoruz</param>
         public async Task<List<AppUser>> GetByOffers(int id)
         {
-           return await _userRepository.GetByOffers(id);
+            return await _userRepository.GetByOffers(id);
         }
 
+        /// <summary>
+        /// Giriş işlemleri
+        /// </summary>
+        /// <param name="entity">Kulanıcı giriş bilgileri</param>
         public async Task<AppUser> LoginAsync(AppUserLoginDto entity)
         {
             AppUser appUser = await GetByEmailAsync(entity.Email);
 
-            if (appUser == null )
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) Kullanıcı Bulunamadı");
-            else if(appUser.IncorrectEntry == 3 && appUser.IsLock==true)
-                    throw new InvalidOperationException($"{typeof(AppUser).Name}({entity.Email}) Hesabınız Askıya alındı");
+            if (appUser == null)
+                throw new InvalidOperationException($"({entity.Email}) Kullanıcı Bulunamadı");
+            else if (appUser.IncorrectEntry == 3 && appUser.IsLock == true)
+                throw new InvalidOperationException($"({entity.Email}) Hesabınız Askıya alındı");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.Password, appUser.PasswordHash, appUser.PasswordSalt))
             {
                 appUser.IncorrectEntry++; //Şifre yanlış girildiyse 1 atırıyoruz.
 
-                if (appUser.IncorrectEntry == 3)
+                if (appUser.IncorrectEntry == 4)
                 {
                     appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
                     DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.               
-                    throw new InvalidOperationException($"{typeof(AppUser).Name} Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
+                    throw new InvalidOperationException($" Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
                 }
                 await UpdateAsync(appUser);
-                throw new InvalidOperationException($"{typeof(AppUser).Name} Paralonanız Yanlış");
+                throw new InvalidOperationException($" Paralonanız Yanlış");
             }
 
-            appUser.IncorrectEntry= 1;//Kullanıcı başarılı giriş yaptı ise IncorrectEntry Güncelliyoruz.
+            appUser.IncorrectEntry = 1;//Kullanıcı başarılı giriş yaptı ise IncorrectEntry Güncelliyoruz.
             appUser.LastActivty = DateTime.UtcNow;
             await UpdateAsync(appUser);
 
             return appUser;
         }
 
+        /// <summary>
+        /// Kayıt Olma İşlemi
+        /// </summary>
+        /// <param name="registerDto">Kayıt olucak kullanıcı bilgileri</param>
         public async Task<AppUser> RegisterAsync(AppUserRegisterDto registerDto)
         {
             AppUser appUser = await GetByEmailAsync(registerDto.Email);
 
             //Girilen Email'i databasede varmı Kontrol ediyoruz.
-            if (appUser !=null)
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({registerDto.Email}) Bu Email zaten Kayıtlı");
+            if (appUser != null)
+                throw new InvalidOperationException($"({registerDto.Email}) Bu Email zaten Kayıtlı");
 
             //PasswordHash ve PasswordSalt oluşturuyoruz.
             byte[] passwordHash, passwordSalt;
@@ -107,11 +140,15 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException($"Register_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Register_Error  =>  {e.Message}");
             }
             return user;
         }
 
+        /// <summary>
+        /// Güncelleme işlemleri.
+        /// </summary>
+        /// <param name="entity">Güncellenecek Kullanıcı</param>
         public async Task UpdateAsync(AppUser entity)
         {
             try
@@ -120,20 +157,25 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException($"Update_Error {typeof(AppUser).Name} =>  {e.Message}");
+                throw new InvalidOperationException($"Update_Error  =>  {e.Message}");
 
             }
         }
 
+        /// <summary>
+        /// Password günceleme işlemleri
+        /// </summary>
+        /// <param name="id">Güncellenicek kullanıcı id</param>
+        /// <param name="entity">Yeni Şifre bilgileri</param>
         public async Task UpdatePasswordAsync(int id, AppUserPasswordUpdateDto entity)
         {
             AppUser appUser = await _userRepository.GetByIDAsync(id);
             if (appUser == null) //Kulanıcıyı kontrol edıyoruz
-                throw new InvalidOperationException($"{typeof(AppUser).Name}({id}) Kullanıcı Bulunamadı");
+                throw new InvalidOperationException($"({id}) Kullanıcı Bulunamadı");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
             if (!HashingHelper.VerifyPasswordHash(entity.OldPassword, appUser.PasswordHash, appUser.PasswordSalt))
-                throw new InvalidOperationException($"{typeof(AppUser).Name} Parolanız Yanlış");
+                throw new InvalidOperationException($" Parolanız Yanlış");
 
             //Yeni PasswordHash ve PasswordSalt oluşturuyoruz.
             byte[] passwordHash, passwordSalt;

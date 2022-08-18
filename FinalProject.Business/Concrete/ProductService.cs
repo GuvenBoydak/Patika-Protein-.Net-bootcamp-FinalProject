@@ -3,11 +3,11 @@ using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
-    public class ProductService : GenericRepository<Product>, IProductService
+    public class ProductService : GenericService<Product>, IProductService
     {
         private readonly IProductRepository _productRepository;
 
-        public ProductService(IDapperContext dapperContext, IProductRepository productRepository) : base(dapperContext)
+        public ProductService(IProductRepository productRepository) : base(productRepository)
         {
             _productRepository = productRepository;
         }
@@ -21,10 +21,14 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Delete_Error {typeof(Product).Name} =>  {e.Message}");
+                throw new Exception($"Delete_Error  =>  {e.Message}");
             }
         }
 
+        /// <summary>
+        /// Kulanıcının ürünlerinin tekliflerinin listesi
+        /// </summary>
+        /// <param name="id">kullanıcı id bilsigi</param>
         public async Task<List<Product>> GetByAppUserProductsWithOffers(int id)
         {
             return await _productRepository.GetByAppUserProductsWithOffers(id);
@@ -39,7 +43,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Update_Error {typeof(Product).Name} =>  {e.Message}");
+                throw new Exception($"Update_Error  =>  {e.Message}");
             }
         }
     }

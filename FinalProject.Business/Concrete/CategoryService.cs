@@ -7,7 +7,7 @@ namespace FinalProject.Business
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(IRepository<Category> repository, ICategoryRepository categoryRepository) : base(repository)
+        public CategoryService(ICategoryRepository categoryRepository) : base(categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
@@ -21,11 +21,14 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Delete_Error {typeof(Category).Name} =>  {e.Message}");
+                throw new Exception($"Delete_Error  =>  {e.Message}");
             }
         }
 
+        /// <summary>
+        /// Kategoriye göre ürün listesi
+        /// </summary>
+        /// <param name="id">Kategori id bilgisi</param>
         public async Task<Category> GetCategoryWithProductsAsync(int id)
         {
             try
@@ -34,8 +37,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Get_Category_Error {typeof(Category).Name} =>  {e.Message}");
+                throw new Exception($"Get_Category_Error  =>  {e.Message}");
             }
         }
 
@@ -43,12 +45,11 @@ namespace FinalProject.Business
         {
             try
             {
-                await _categoryRepository.UpdateAsync(entity);
+               await _categoryRepository.UpdateAsync(entity);
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Update_Error {typeof(Category).Name} =>  {e.Message}");
+                throw new Exception($"Update_Error  =>  {e.Message}");
             }
         }
     }

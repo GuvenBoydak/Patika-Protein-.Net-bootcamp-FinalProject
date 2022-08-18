@@ -3,11 +3,11 @@ using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
-    public class ColorService : GenericRepository<Color>, IColorRepository
+    public class ColorService : GenericService<Color>, IColorRepository
     {
         private readonly IColorRepository _colorRepository;
 
-        public ColorService(IDapperContext dapperContext, IColorRepository colorRepository) : base(dapperContext)
+        public ColorService( IColorRepository colorRepository) : base(colorRepository)
         {
             _colorRepository = colorRepository;
         }
@@ -20,8 +20,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Delete_Error {typeof(Color).Name} =>  {e.Message}");
+                throw new Exception($"Delete_Error  =>  {e.Message}");
             }
         }
 
@@ -33,8 +32,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-
-                throw new Exception($"Update_Error {typeof(Color).Name} =>  {e.Message}");
+                throw new Exception($"Update_Error  =>  {e.Message}");
             }
         }
     }

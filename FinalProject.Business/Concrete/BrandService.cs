@@ -3,11 +3,11 @@ using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
-    public class BrandService : GenericRepository<Brand>, IBrandService
+    public class BrandService : GenericService<Brand>, IBrandService
     {
         private readonly IBrandRepository _brandRepository;
 
-        public BrandService(IDapperContext dapperContext, IBrandRepository brandRepository) : base(dapperContext)
+        public BrandService(IBrandRepository brandRepository) : base(brandRepository)
         {
             _brandRepository = brandRepository;
         }
@@ -21,7 +21,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Delete_Error {typeof(Brand).Name} =>  {e.Message}");
+                throw new Exception($"Delete_Error  =>  {e.Message}");
             }
         }
 
@@ -34,7 +34,7 @@ namespace FinalProject.Business
             catch (Exception e)
             {
 
-                throw new Exception($"Update_Error {typeof(Brand).Name} =>  {e.Message}");
+                throw new Exception($"Update_Error  =>  {e.Message}");
             }
         }
     }

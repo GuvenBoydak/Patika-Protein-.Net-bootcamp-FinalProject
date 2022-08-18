@@ -6,7 +6,7 @@ namespace FinalProject.Business
     {
         Task UpdateAsync(Offer entity);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
         Task<List<Offer>> GetByAppUserIDAsync(int id);
 

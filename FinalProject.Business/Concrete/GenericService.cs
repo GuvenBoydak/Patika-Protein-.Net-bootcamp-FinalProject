@@ -23,7 +23,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"Save_Error {typeof(T).Name}  => {e.Message}");
+                throw new Exception($"Save_Error   => {e.Message}");
             }      
         }
 
@@ -36,7 +36,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"GetActive_Error {typeof(T).Name}  => {e.Message}");
+                throw new Exception($"GetActive_Error   => {e.Message}");
             } 
         }
 
@@ -48,21 +48,20 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"GetAll_Error {typeof(T).Name}  => {e.Message}");
+                throw new Exception($"GetAll_Error   => {e.Message}");
             }
 
         }
 
         public async Task<T> GetByIDAsync(int id)
         {
-            try
-            {
-                return await _repository.GetByIDAsync(id);
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"GetByID_Error {typeof(T).Name}  => {e.Message}");
-            }
+
+              T entity = await _repository.GetByIDAsync(id);
+
+                if(entity==null)
+                    throw new Exception($"İlgili kayıt bulunamadı. ({id})");
+
+                return entity;
         }
 
         public async Task<List<T>> GetPassiveAsync()
@@ -73,7 +72,7 @@ namespace FinalProject.Business
             }
             catch (Exception e)
             {
-                throw new Exception($"GetPassive_Error {typeof(T).Name}  => {e.Message}");
+                throw new Exception($"GetPassive_Error   => {e.Message}");
             }
         }
     }
