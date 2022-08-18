@@ -1,8 +1,6 @@
-﻿using FinalProject.Entities;
-
-namespace FinalProject.DTO
+﻿namespace FinalProject.DTO
 {
-    public class CategoryDto:BaseDto
+    public class CategoryWithProductsDto:BaseDto
     {
         public int ID { get; set; }
 
@@ -10,5 +8,6 @@ namespace FinalProject.DTO
 
         public string Description { get; set; }
 
+        public List<ProductDto> Products { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FinalProject.DTO
 {
-    public class AppUserListDto : BaseDto
+    public class AppUserWithOffersDto : BaseDto
     {
         public int ID { get; set; }
 
@@ -21,5 +21,7 @@ namespace FinalProject.DTO
         public DateTime LastActivty { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public List<OfferDto> Offers { get; set; }
     }
 }

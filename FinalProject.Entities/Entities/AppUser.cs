@@ -33,7 +33,7 @@
 
         public string LastName { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public DateTime LastActivty { get; set; }
 
