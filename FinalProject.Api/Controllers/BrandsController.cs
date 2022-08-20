@@ -6,9 +6,12 @@ using FinalProject.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.Security.Claims;
 
 namespace FinalProject.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BrandsController : CustomBaseController
@@ -65,7 +68,9 @@ namespace FinalProject.Api.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]BrandAddDto brandAddDto)
         {
-            Brand brand=_mapper.Map<Brand>(brandAddDto);
+            Log.Information($"{User.Identity?.Name}: Add a Brand  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
+            Brand brand =_mapper.Map<Brand>(brandAddDto);
 
             _brandService.Add(brand);
 
@@ -75,6 +80,9 @@ namespace FinalProject.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody]BrandUpdateDto brandUpdateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Update a Brand  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
+
             Brand brand = _mapper.Map<Brand>(brandUpdateDto);
 
             await _brandService.UpdateAsync(brand);
@@ -82,7 +90,7 @@ namespace FinalProject.Api.Controllers
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Güncelleme işlemi Başarılı"));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
         {
             _brandService.Delete(id);

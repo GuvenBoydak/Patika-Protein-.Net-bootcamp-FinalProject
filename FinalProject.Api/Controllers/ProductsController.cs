@@ -5,10 +5,12 @@ using FinalProject.DTO;
 using FinalProject.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Security.Claims;
 
 namespace FinalProject.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : CustomBaseController
@@ -50,7 +52,7 @@ namespace FinalProject.Api
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
-            List<Product> products = await _productService.GetActiveAsync();
+            List<Product> products = await _productService.GetAllAsync();
 
             List<ProductListDto> productListDtos = _mapper.Map<List<ProductListDto>>(products);
 
@@ -67,18 +69,20 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<ProductDto>.Success(200, productDto, $"{id} numarali ürün listelendi"));
         }
 
-        [Authorize]
+        
         [HttpPost]
-        public IActionResult Add([FromForm(Name = "Image")] IFormFile file,/* [FromForm] */ProductAddDto productAddDto)//Postman de çalişiyor 
+        public IActionResult Add([FromForm] ProductAddDto productAddDto)
         {
-            if(file==null)//Girelen resim vamrı bakıyoruz.
-                throw new Exception("REsim kısmı boş geçilemez");
+            Log.Information($"{User.Identity?.Name}: Add a Product  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
+            if (productAddDto.File==null)//Girelen resim vamrı bakıyoruz.
+                throw new Exception("Resim kısmı boş geçilemez");
 
             Product product = _mapper.Map<Product>(productAddDto);
 
             product.AppUserID = int.Parse((User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value);//Kullanıcı claimlerinden Id sini aldık.
 
-            product.ImageUrl = _fileHelper.Add(file,_configuration.GetSection("ImageUrl").Value);//Resim ekleme işlemi
+            product.ImageUrl = _fileHelper.Add(productAddDto.File, _configuration.GetSection("ImageUrl").Value);//Resim ekleme işlemi
 
             _productService.Add(product);
 
@@ -87,16 +91,23 @@ namespace FinalProject.Api
 
 
         [HttpPut]
-        public async Task<IActionResult> Update(/*[FromForm]*/ProductUpdateDto productUpdateDto,[FromForm(Name = "Image")] IFormFile file)//Postman de Çalişiyor.
+        public async Task<IActionResult> UpdateAsync([FromForm]ProductUpdateDto productUpdateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Update a Product  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             Product product = _mapper.Map<Product>(productUpdateDto);
 
-            if (productUpdateDto.ImageUrl != null)//Gonderilen mmodellin ImageUrl boş degilse resim günceliyoruz.
-                _fileHelper.Update(file, _configuration.GetSection("ImageUrl").Value + product.ImageUrl, _configuration.GetSection("ImageUrl").Value);
+            product.AppUserID = int.Parse((User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value);//Kullanıcı claimlerinden Id sini aldık.
+
+            if (productUpdateDto.File != null)//parametreden gelen File boş degilse resim günceliyoruz.
+            {
+                product.ImageUrl = _fileHelper.Update(productUpdateDto.File, _configuration.GetSection("ImageUrl").Value + product.ImageUrl, _configuration.GetSection("ImageUrl").Value);
+                throw new Exception("Güncellenecek resim bulunamadı");
+            }
 
             await _productService.UpdateAsync(product);
 
-            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Güncelleme İşlemi başarılı"));
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Güncelleme İşlemi başarılı"));
         }
 
 

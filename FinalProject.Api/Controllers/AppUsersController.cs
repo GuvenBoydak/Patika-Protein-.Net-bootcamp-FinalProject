@@ -3,12 +3,15 @@ using FinalProject.Base;
 using FinalProject.Business;
 using FinalProject.DTO;
 using FinalProject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Security.Claims;
 
 
 namespace FinalProject.Api
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AppUsersController : CustomBaseController
@@ -25,9 +28,9 @@ namespace FinalProject.Api
             _fireAndForgetJob = fireAndForgetJob;
         }
 
-
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             List<AppUser> appUsers = await _appUserService.GetAllAsync();
 
@@ -36,9 +39,10 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<AppUserListDto>>.Success(200,appUserListDtos,"Tüm Kulanıcılar Listelendi"));
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetActive")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActiveAsync()
         {
             List<AppUser> appUsers = await _appUserService.GetActiveAsync();
 
@@ -47,9 +51,10 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<AppUserListDto>>.Success(200, appUserListDtos, "Active Kulanıcılar Listelendi"));
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetPassive")]
-        public async Task<IActionResult> GetPassive()
+        public async Task<IActionResult> GetPassiveAsync()
         {
             List<AppUser> appUsers = await _appUserService.GetPassiveAsync();
 
@@ -58,8 +63,9 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<AppUserListDto>>.Success(200, appUserListDtos, "Passive Kulanıcılar Listelendi"));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByID([FromRoute] int id)
+        public async Task<IActionResult> GetByIDAsync([FromRoute] int id)
         {
             AppUser appUser = await _appUserService.GetByIDAsync(id);
 
@@ -68,21 +74,13 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<AppUserDto>.Success(200, appUserDto, $"{id} numaralı Kullanıcı Listelendi"));
         }
 
-        [HttpGet]
-        [Route("GetByOffers/{id}")]
-        public async Task<IActionResult> GetByOffers(int id)
-        {
-            List<AppUser> appUsers = await _appUserService.GetByOffers(id);
-
-            List<AppUserListDto> appUserListDtos = _mapper.Map<List<AppUser>, List<AppUserListDto>>(appUsers);
-
-            return CreateActionResult(CustomResponseDto<List<AppUserListDto>>.Success(200, appUserListDtos, "Kulanıcı teklifleri Listelendi"));
-        }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody]AppUserRegisterDto registerDto)
+        public async Task<IActionResult> RegisterAsync([FromBody]AppUserRegisterDto registerDto)
         {
+            Log.Information($"{User.Identity?.Name}: Register a AppUser.");
+
             AppUser appUser =await _appUserService.RegisterAsync(registerDto);
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
@@ -94,8 +92,10 @@ namespace FinalProject.Api
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] AppUserLoginDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromBody] AppUserpasswordUpdateDto loginDto)
         {
+            Log.Information($"{User.Identity?.Name}: Login a AppUser.");
+
             AppUser appUser =await _appUserService.LoginAsync(loginDto);
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
@@ -105,21 +105,24 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }
 
+        [Authorize]
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] AppUserUpdateDto updateDto)
+        public async Task<IActionResult> UpdateAsync([FromBody] AppUserUpdateDto updateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Update a AppUser ID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             AppUser appUser = _mapper.Map<AppUserUpdateDto, AppUser>(updateDto);
 
             //user claimlerinden AppUserId'nin degerini alıyoruz.
             string userId = (User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value;
 
-            appUser.ID = int.Parse(userId);
+           appUser.ID = int.Parse(userId);
            await _appUserService.UpdateAsync(appUser);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Gücelleme İşlemi Başarılı"));
         }
 
-
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -128,10 +131,14 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Silme işlemi Başarılı"));
         }
 
+        [Authorize]
         [HttpPost]
         [Route("ChangePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody] AppUserPasswordUpdateDto passwordUpdateDto)
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] AppUserPasswordUpdateDto passwordUpdateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Change Password a AppUser ID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
+
             if (!CheckPassword.CheckingPassword(passwordUpdateDto.NewPassword, passwordUpdateDto.ConfirmPassword))
                 return CreateActionResult(CustomResponseDto<NoContentDto>.Fail(400,"Girilen Şifreler Uyuşmuyor"));
 

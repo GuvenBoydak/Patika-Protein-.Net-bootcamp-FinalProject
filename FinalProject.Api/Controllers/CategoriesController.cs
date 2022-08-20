@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using FinalProject.Base;
 using FinalProject.Business;
-using FinalProject.DataAccess;
 using FinalProject.DTO;
 using FinalProject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.Security.Claims;
 
 namespace FinalProject.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : CustomBaseController
@@ -44,8 +47,8 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<CategoryListDto>>.Success(200, categoryListDtos, "Tüm Categoryler listelendi"));
         }
 
-        [HttpGet("GetPasive")]
-        public async Task<IActionResult> GetPasive()
+        [HttpGet("GetPassive")]
+        public async Task<IActionResult> GetPassiveAsync()
         {
             List<Category> categories = await _categoryService.GetPassiveAsync();
 
@@ -55,7 +58,7 @@ namespace FinalProject.Api
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             Category category = await _categoryService.GetByIDAsync(id);
 
@@ -66,28 +69,32 @@ namespace FinalProject.Api
 
         [HttpGet]
         [Route("GetCategoryWithProducts/{id}")]
-        public async Task<IActionResult> GetCategoryWithProducts([FromRoute] int id)
+        public async Task<IActionResult> GetCategoryWithProductsAsync([FromRoute] int id)
         {
             Category category = await _categoryService.GetCategoryWithProductsAsync(id);
 
-            CategoryDto categoryDto = _mapper.Map<Category, CategoryDto>(category);
+            CategoryWithProductsDto categoryDto = _mapper.Map<Category, CategoryWithProductsDto>(category);
 
-            return CreateActionResult(CustomResponseDto<CategoryDto>.Success(200,categoryDto, $"{id} numaralı Category ve Productlar Listlendi."));
+            return CreateActionResult(CustomResponseDto<CategoryWithProductsDto>.Success(200,categoryDto, $"{id} numaralı Category ve Productlar Listlendi."));
         }
 
         [HttpPost]
         public IActionResult Add([FromBody] CategoryAddDto categoryAddDto)
         {
+            Log.Information($"{User.Identity?.Name}: Add a Category  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             Category category = _mapper.Map<CategoryAddDto, Category>(categoryAddDto);
 
             _categoryService.Add(category);
 
-            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(200, "Ekleme işlem başarılı"));
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Ekleme işlem başarılı"));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] CategoryUpdateDto categoryUpdateDto)
+        public async Task<IActionResult> UpdateAsync([FromBody] CategoryUpdateDto categoryUpdateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Update a Category  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             Category category = _mapper.Map<CategoryUpdateDto, Category>(categoryUpdateDto);
             await _categoryService.UpdateAsync(category);
 

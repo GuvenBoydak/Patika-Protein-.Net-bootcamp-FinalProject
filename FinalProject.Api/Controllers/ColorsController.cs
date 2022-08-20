@@ -3,10 +3,14 @@ using FinalProject.Base;
 using FinalProject.Business;
 using FinalProject.DTO;
 using FinalProject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.Security.Claims;
 
 namespace FinalProject.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ColorsController :CustomBaseController
@@ -66,6 +70,8 @@ namespace FinalProject.Api
         [HttpPost]
         public IActionResult Add([FromBody] ColorAddDto colorAddDto)
         {
+            Log.Information($"{User.Identity?.Name}: Add a Color  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             Color color = _mapper.Map<Color>(colorAddDto);
 
             _colorService.Add(color);
@@ -74,8 +80,10 @@ namespace FinalProject.Api
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ColorUpdateDto colorUpdateDto)
+        public async Task<IActionResult> UpdateAsync([FromBody] ColorUpdateDto colorUpdateDto)
         {
+            Log.Information($"{User.Identity?.Name}: Update a Color  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
+
             Color color = _mapper.Map<Color>(colorUpdateDto);
             
            await  _colorService.UpdateAsync(color);
@@ -83,7 +91,7 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Günceleme işlemi Başarılı"));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
         {
             _colorService.Delete(id);

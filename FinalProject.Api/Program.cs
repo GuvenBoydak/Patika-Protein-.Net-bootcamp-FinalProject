@@ -1,14 +1,14 @@
-﻿using FinalProject.Api;
-using FinalProject.Base;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using FinalProject.Api;
 using FinalProject.Business;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-//Hangfire services. PosgreSQL
+//Hangfire services. PostgreSQL
 HangfireInjection.HangfireServiceInjection(builder.Services);
 
 
@@ -19,28 +19,21 @@ x.RegisterValidatorsFromAssemblyContaining(typeof(ProductAddDtoValidator)));
 //AutoMapper
 AutoMapperInjection.AutoMapperServiceInjection(builder.Services);
 
+//Autofact
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new InjectionModule()));
 
-//Swager
+//Swagger
 SwaggerShemeInjection.SwaggerShemeServiceInjection(builder.Services);
 
 
 //jwt 
-var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+JWTBearerInjection.JwtBearerServiceInjection(builder.Services);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-     .AddJwtBearer(options =>
-     {
-         options.TokenValidationParameters = new TokenValidationParameters
-         {
-             ValidateIssuer = true,
-             ValidateAudience = true,
-             ValidateLifetime = true,
-             ValidIssuer = tokenOptions.Issuer,
-             ValidAudience = tokenOptions.Audience,
-             ValidateIssuerSigningKey = true,
-             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
-         };
-     });
+//Serilog
+builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+Log.Information("Application is starting.");
 
 
 // Add services to the container.

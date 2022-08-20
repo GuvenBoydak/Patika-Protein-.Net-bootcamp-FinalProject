@@ -7,19 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
     <PackageReference Include="Hangfire" Version="1.7.30" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.9.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FinalProject.Base\FinalProject.Base.csproj" />
     <ProjectReference Include="..\FinalProject.Business\FinalProject.Business.csproj" />
-    <ProjectReference Include="..\FinalProject.DataAccess\FinalProject.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
