@@ -23,7 +23,7 @@ namespace FinalProject.Test
             });
             _appUserService = new Mock<IAppUserService>();
             _mapper = map.CreateMapper();
-            _appUserController = new AppUsersController(_appUserService.Object, _mapper,null,null);
+            _appUserController = new AppUsersController(_appUserService.Object, _mapper,null);
         }
 
         List<AppUser> appUsers = new List<AppUser>
@@ -98,5 +98,56 @@ namespace FinalProject.Test
              Assert.IsAssignableFrom<CustomResponseDto<AppUserDto>>(objectResult.Value);
         }
 
+
+        [Fact]
+        public async void Register_ActionExecutes_Return200WithAccessToken()
+        {
+            AppUser appUser=new AppUser();
+            AccessToken accessToken=new AccessToken();
+            AppUserRegisterDto dto = new AppUserRegisterDto() { Email = "test@gmail.com", Password = "12345678" };
+
+            _appUserService.Setup(x => x.RegisterAsync(It.IsAny<AppUserRegisterDto>())).ReturnsAsync(appUser);
+            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).Returns(accessToken);
+
+            IActionResult result = await _appUserController.RegisterAsync(dto);
+
+            ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal<int>(200, objectResult.StatusCode.Value);
+
+            Assert.IsAssignableFrom<CustomResponseDto<AccessToken>>(objectResult.Value);
+        }
+
+        [Fact]
+        public async void Login_ActionExecutes_Return200WithAccessToken()
+        {
+            AppUser appUser = new AppUser();
+            AccessToken accessToken = new AccessToken();
+            AppUserRegisterDto dto = new AppUserRegisterDto() { Email = "test@gmail.com", Password = "12345678" };
+
+            _appUserService.Setup(x => x.LoginAsync(It.IsAny<AppUserpasswordUpdateDto>())).ReturnsAsync(appUser);
+            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).Returns(accessToken);
+
+            IActionResult result = await _appUserController.RegisterAsync(dto);
+
+            ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal<int>(200, objectResult.StatusCode.Value);
+
+            Assert.IsAssignableFrom<CustomResponseDto<AccessToken>>(objectResult.Value);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public  void Delete_ActionExecutes_Return204NoContentDto(int id)
+        {
+            _appUserService.Setup(x => x.Delete(It.IsAny<int>()));
+
+            IActionResult result = _appUserController.Delete(id);
+
+            ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal<int>(204, objectResult.StatusCode.Value);
+        }
     }
 }

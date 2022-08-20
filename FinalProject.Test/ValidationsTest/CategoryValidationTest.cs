@@ -41,11 +41,11 @@ namespace FinalProject.Test
         [InlineData(2,"deneme", "test")]
         public void WhenInvalidInputsAreGiven_CategoryUpdateDtoValidator_SouldNotBeReturnErrors(int id,string name, string description)
         {
-            CategoryAddDto categoryAddDto = new CategoryAddDto()
-            { Name = name, Description = description };
+            CategoryUpdateDto categoryUpdate = new CategoryUpdateDto()
+            {ID=id,Name = name, Description = description };
 
-            CategoryAddDtoValidator validation = new CategoryAddDtoValidator();
-            ValidationResult result = validation.Validate(categoryAddDto);
+            CategoryUpdateDtoValidator validation = new CategoryUpdateDtoValidator();
+            ValidationResult result = validation.Validate(categoryUpdate);
 
             result.Errors.Count.Should().Be(0);
         }
@@ -55,11 +55,11 @@ namespace FinalProject.Test
         [InlineData(0, "deneme1", "tes2t")]
         public void WhenInvalidInputsAreGiven_CategoryUpdateDtoValidator_SouldBeReturnErrors(int id, string name, string description)
         {
-            CategoryAddDto categoryAddDto = new CategoryAddDto()
-            { Name = name, Description = description };
+            CategoryUpdateDto categoryUpdate = new CategoryUpdateDto()
+            { ID = id, Name = name, Description = description };
 
-            CategoryAddDtoValidator validation = new CategoryAddDtoValidator();
-            ValidationResult result = validation.Validate(categoryAddDto);
+            CategoryUpdateDtoValidator validation = new CategoryUpdateDtoValidator();
+            ValidationResult result = validation.Validate(categoryUpdate);
 
             result.Errors.Count.Should().BeGreaterThan(0);
         }

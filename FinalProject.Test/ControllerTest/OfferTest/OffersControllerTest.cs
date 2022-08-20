@@ -37,6 +37,13 @@ namespace FinalProject.Test
             new Offer(){ID=3,Price=130,IsApproved=false,AppUserID=3,ProductID=3,CreatedDate=DateTime.UtcNow,Status=DataStatus.Inserted },
         };
 
+        List<Product> products = new List<Product>()
+        {
+            new Product(){ID=1,Name="laptop",Description="mac pro",UnitPrice=25000,UnitsInStock=5,ImageUrl="59cae2de-8e12-23d2-bed5-9d1985ec8c94.png",AppUserID=1,CategoryID=1,BrandID=1,ColorID=1,CreatedDate=DateTime.Now,Status=DataStatus.Inserted},
+            new Product(){ID=2,Name="ayakkabı",Description="erkek ayakabısı",UnitPrice=1000,UnitsInStock=5,ImageUrl="33cae2de-1e82-42d2-bed5-9d1985ec8c94.png",AppUserID=2,CategoryID=4,BrandID=2,ColorID=1,CreatedDate=DateTime.Now,Status=DataStatus.Inserted},
+            new Product(){ID=3,Name="tornavida",Description="yıldız tornavida",UnitPrice=500,UnitsInStock=1,ImageUrl="25cae1de-8e82-43d2-bed5-9d1985ec8c94.png",AppUserID=3,CategoryID=2,BrandID=3,ColorID=2,CreatedDate=DateTime.Now,Status=DataStatus.Inserted}
+        };
+
 
         [Fact]
         public async void GetAll_ActionExecutes_Return200WithOfferListDto()
@@ -107,12 +114,28 @@ namespace FinalProject.Test
 
         [Theory]
         [InlineData(1)]
-        [InlineData(2)]
-        public async void GetByAppUserID_ActionExecutes_Return200WithOfferListDto(int id)
+        public async void GetByAppUserProductsOffers_ActionExecutes_Return200WithAppUserProductsOfferListDto(int id)
         {
-            _offerService.Setup(x => x.GetByAppUserIDAsync(It.IsAny<int>())).ReturnsAsync(offers);
+            _offerService.Setup(x => x.GetByAppUserProductsOffersAsync(It.IsAny<int>())).ReturnsAsync(products);
 
-            IActionResult result = await _offersController.GetByAppUserID(id);
+            IActionResult result = await _offersController.GetByAppUserProductsOffersAsync(id);
+
+            ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal<int>(200, objectResult.StatusCode.Value);
+
+            Assert.IsAssignableFrom<CustomResponseDto<List<AppUserProductsOfferListDto>>>(objectResult.Value);
+        }
+
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async void GetByAppUserOffers_ActionExecutes_Return200WithOfferListDto(int id)
+        {
+            _offerService.Setup(x => x.GetByAppUserOffersAsync(It.IsAny<int>())).ReturnsAsync(offers);
+
+            IActionResult result = await _offersController.GetByAppUserOffersAsync(id);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
@@ -121,15 +144,32 @@ namespace FinalProject.Test
              Assert.IsAssignableFrom<CustomResponseDto<List<OfferListDto>>>(objectResult.Value);
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async void GetByOffersProductID_ActionExecutes_Return200WithProductOffersListDto(int id)
+        {
+            _offerService.Setup(x => x.GetByOffersProductIDAsync(It.IsAny<int>())).ReturnsAsync(offers);
+
+            IActionResult result = await _offersController.GetByOffersProductIDAsync(id);
+
+            ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
+
+            Assert.Equal<int>(200, objectResult.StatusCode.Value);
+
+            Assert.IsAssignableFrom<CustomResponseDto<List<ProductOffersListDto>>>(objectResult.Value);
+        }
+
+
         [Fact]
         public async void BuyProduct_ActionExecutes_Return204NoContentDto()
         {
             Offer offer = new Offer() { ID = 4, Price = 140, IsApproved = false, AppUserID = 1, ProductID = 3, CreatedDate = DateTime.UtcNow, Status = DataStatus.Inserted };
-            _offerService.Setup(x => x.BuyProduct(offer));
+            _offerService.Setup(x => x.BuyProductAsync(offer));
 
             OfferBuyProductDto offerBuyProductDto = _mapper.Map<Offer, OfferBuyProductDto>(offer);
 
-            IActionResult result = await _offersController.BuyProduct(offerBuyProductDto);
+            IActionResult result = await _offersController.BuyProductAsync(offerBuyProductDto);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
@@ -140,11 +180,11 @@ namespace FinalProject.Test
         public async void OfferApproval_ActionExecutes_Return204NoContentDto()
         {
             Offer offer = new Offer() { ID = 5, Price = 150, IsApproved = false, AppUserID = 2, ProductID = 1, CreatedDate = DateTime.UtcNow, Status = DataStatus.Inserted };
-            _offerService.Setup(x => x.BuyProduct(offer));
+            _offerService.Setup(x => x.OfferApprovalAsync(offer));
 
             OfferApprovalDto offerApprovalDto = _mapper.Map<Offer, OfferApprovalDto>(offer);
 
-            IActionResult result = await _offersController.OfferApproval(offerApprovalDto);
+            IActionResult result = await _offersController.OfferApprovalAsync(offerApprovalDto);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
@@ -159,7 +199,7 @@ namespace FinalProject.Test
 
             OfferUpdateDto offerUpdateDto = _mapper.Map<Offer, OfferUpdateDto>(offer);
 
-            IActionResult result = await _offersController.Update(offerUpdateDto);
+            IActionResult result = await _offersController.UpdateAsync(offerUpdateDto);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
@@ -172,7 +212,7 @@ namespace FinalProject.Test
         {
             _offerService.Setup(x => x.DeleteAsync(It.IsAny<int>()));
 
-            IActionResult result = await _offersController.Delete(id);
+            IActionResult result = await _offersController.DeleteAsync(id);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
