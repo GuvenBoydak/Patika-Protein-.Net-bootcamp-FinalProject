@@ -35,14 +35,14 @@ namespace FinalProject.Base
                 throw new Exception("Resim Bulunamadı");
         }
 
-        public void Update(IFormFile file, string filePath, string root)
+        public string Update(IFormFile file, string filePath, string root)
         {
             if (File.Exists(filePath))//Aynı isimli dosya varmı diye kontrol ediyoruz.
                 File.Delete(filePath);
 
             CheckFileSize(file);//Dosya boyutunu kontrol ediyoruz.
 
-            Add(file, root);
+          return Add(file, root);
         }
 
         //Dosya Uzantısı konrol ediyoruz.

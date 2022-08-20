@@ -9,7 +9,7 @@ namespace FinalProject.Base
 
         void Delete(string filePath);
 
-        void Update(IFormFile file, string filePath, string root);
+        string Update(IFormFile file, string filePath, string root);
     }
 
 }

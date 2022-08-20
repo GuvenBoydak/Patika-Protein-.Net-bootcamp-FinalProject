@@ -44,7 +44,6 @@ consumer.Received += async (s, e) =>
     {
         Console.WriteLine("RabitMq tarafıdan Mesaj Gönderilemedi");
     }
-
 };
 
 //BasicConsume ile consumer tarafından yakaladıgımız mesaları tüketiyoruz.
