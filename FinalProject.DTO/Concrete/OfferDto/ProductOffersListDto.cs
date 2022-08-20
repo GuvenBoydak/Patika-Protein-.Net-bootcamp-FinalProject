@@ -1,6 +1,8 @@
-﻿namespace FinalProject.DTO
+﻿using FinalProject.Entities;
+
+namespace FinalProject.DTO
 {
-    public class OfferListDto : BaseDto
+    public class ProductOffersListDto
     {
         public int ID { get; set; }
 

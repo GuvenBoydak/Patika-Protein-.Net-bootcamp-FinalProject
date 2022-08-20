@@ -1,6 +1,6 @@
 ﻿namespace FinalProject.DTO
 {
-    public class AppUserLoginDto : BaseDto
+    public class AppUserpasswordUpdateDto : BaseDto
     {
         public string Email { get; set; }
 

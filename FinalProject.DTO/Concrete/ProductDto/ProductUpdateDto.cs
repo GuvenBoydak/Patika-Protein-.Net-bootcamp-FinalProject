@@ -1,4 +1,5 @@
 ﻿using FinalProject.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace FinalProject.DTO
 {
@@ -8,11 +9,9 @@ namespace FinalProject.DTO
 
         public string Name { get; set; }
 
-        public int UnitInStock { get; set; }
+        public int UnitsInStock { get; set; }
 
         public decimal UnitPrice { get; set; }
-
-        public string ImageUrl { get; set; }
 
         public string Description { get; set; }
 
@@ -27,6 +26,9 @@ namespace FinalProject.DTO
         public int? BrandID { get; set; }
 
         public int? ColorID { get; set; }
+
+        public IFormFile File { get; set; }
+
 
     }
 }
