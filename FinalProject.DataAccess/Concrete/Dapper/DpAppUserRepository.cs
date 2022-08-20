@@ -27,7 +27,7 @@ namespace FinalProject.DataAccess
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                return await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"ActivationCode\" = @ActivationCode and \"AppUsers\".\"Status\" != 2", new { ActivationCode = code });
+                return await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"ActivationCode\" = @ActivationCode and \"Status\" != 2", new { ActivationCode = code });
             }
         }
 
@@ -39,28 +39,12 @@ namespace FinalProject.DataAccess
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                AppUser result = await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"Email\" = @email and \"AppUsers\".\"Status\" != 2", new {email=email});
+                AppUser result = await con.QueryFirstOrDefaultAsync<AppUser>("select * from \"AppUsers\" where \"Email\" = @email and \"Status\" != 2", new {email=email});
                 return result;
             }
         }
 
-        /// <summary>
-        /// İlgili kullanıcı teklifleri
-        /// </summary>
-        /// <param name="id">kullanıcı id bilgisi</param>
-        public async Task<List<AppUser>> GetByOffers(int id)
-        {
-            using (IDbConnection con=_dbContext.GetConnection())
-            {
-                IEnumerable<AppUser> result = await con.QueryAsync<AppUser>("select * from \"AppUsers\" where \"ID\"=@id and \"AppUsers\".\"Status\" != 2", new {id=id});
-                foreach (AppUser item in result)
-                {
-                    item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"AppUserID\"=@id and \"Offers\".\"Status\" != 2", new { id = id }).ToList();
-                }
 
-                return result.ToList();
-            }
-        }
 
         public async Task UpdateAsync(AppUser appUser)
         {

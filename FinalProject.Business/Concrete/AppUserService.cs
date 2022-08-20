@@ -62,20 +62,12 @@ namespace FinalProject.Business
             return appUser;
         }
 
-        /// <summary>
-        /// Kullanıcının yaptıgı teklif Listesi
-        /// </summary>
-        /// <param name="id">Kullanıcı id'si Giriyoruz</param>
-        public async Task<List<AppUser>> GetByOffers(int id)
-        {
-            return await _userRepository.GetByOffers(id);
-        }
 
         /// <summary>
         /// Giriş işlemleri
         /// </summary>
         /// <param name="entity">Kulanıcı giriş bilgileri</param>
-        public async Task<AppUser> LoginAsync(AppUserLoginDto entity)
+        public async Task<AppUser> LoginAsync(AppUserpasswordUpdateDto entity)
         {
             AppUser appUser = await GetByEmailAsync(entity.Email);
 

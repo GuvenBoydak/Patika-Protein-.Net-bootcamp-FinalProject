@@ -19,28 +19,46 @@ namespace FinalProject.DataAccess
             await UpdateAsync(deleteToOffer);
         }
         /// <summary>
-        /// İlgili id li kulanıcının teklifleri
+        ///  Girilen kullanıcı Id'sinin yaptıgı teklifler
         /// </summary>
         /// <param name="id">kulanıcı id bilgisi</param>
-        public async Task<List<Offer>> GetByAppUserIDAsync(int id)
+        public async Task<List<Offer>> GetByAppUserOffersAsync(int id)
         {
             using (IDbConnection con = _dbContext.GetConnection())
             {
-                IEnumerable<Offer> result = await con.QueryAsync<Offer>("select * from \"Offers\" where \"AppUserID\" = @id and \"Offers\".\"Status\" != 2", new { id = id });
+                IEnumerable<Offer> result = await con.QueryAsync<Offer>("select * from \"Offers\" where \"AppUserID\" = @id and \"Status\" != 2", new { id = id });
                 return result.ToList();
             }
         }
 
         /// <summary>
-        /// İlgli id li ürünlerin teklifleri
+        /// Girilen Ürün Id'sine yapılan teklifler 
         /// </summary>
         /// <param name="id">ürün id bilgisi</param>
         public async Task<List<Offer>> GetByOffersProductIDAsync(int id)
         {
             using (IDbConnection con=_dbContext.GetConnection())
             {
-                IEnumerable<Offer> offers = await con.QueryAsync<Offer>("select * from  \"Offers\" where \"ProductID\" = @id and \"Offers\".\"Status\" != 2", new { id = id });
+                IEnumerable<Offer> offers = await con.QueryAsync<Offer>("select * from  \"Offers\" where \"ProductID\" = @id and \"Status\" != 2", new { id = id });
                 return offers.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Girilen ID'li kullanıcının ürünlerine gelen teklifler
+        /// </summary>
+        /// <param name="id">kullanıcı id bilgisi</param>
+        public async Task<List<Product>> GetByAppUserProductsOffers(int id)
+        {
+            using (IDbConnection con = _dbContext.GetConnection())
+            {
+                IEnumerable<Product> result = await con.QueryAsync<Product>("select * from \"Products\" where \"AppUserID\"=@id and \"Status\" != 2", new { id = id });
+                foreach (Product item in result)
+                {
+                    item.Offers = con.Query<Offer>("Select * from \"Offers\" where \"ProductID\"=@id and \"Status\" != 2", new { id = item.ID }).ToList();
+                }
+
+                return result.ToList();
             }
         }
 
@@ -58,9 +76,9 @@ namespace FinalProject.DataAccess
 
 
                 string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUserID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, updateToOffer);
+                     con.Execute(query, updateToOffer);
                 });
             }
             else
@@ -73,9 +91,9 @@ namespace FinalProject.DataAccess
                 updateToOffer.ProductID = entity.ProductID == default ? updateToOffer.ProductID : entity.ProductID;
 
                 string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, updateToOffer);
+                     con.Execute(query, updateToOffer);
                 });
             }
         }

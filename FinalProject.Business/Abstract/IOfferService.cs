@@ -8,11 +8,15 @@ namespace FinalProject.Business
 
         Task DeleteAsync(int id);
 
-        Task<List<Offer>> GetByAppUserIDAsync(int id);
+        Task<List<Offer>> GetByAppUserOffersAsync(int id);
 
-        Task OfferApproval(Offer offer);
+        Task OfferApprovalAsync(Offer offer);
 
-        Task BuyProduct(Offer offer);
+        Task BuyProductAsync(Offer offer);
+
+        Task<List<Product>> GetByAppUserProductsOffersAsync(int id);
+
+        Task<List<Offer>> GetByOffersProductIDAsync(int id);
     }
 
 }

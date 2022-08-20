@@ -78,8 +78,7 @@ namespace FinalProject.DataAccess
             updateToProduct.UsageStatus = product.UsageStatus == default ? updateToProduct.UsageStatus : product.UsageStatus;
             updateToProduct.CategoryID = product.CategoryID == default ? updateToProduct.CategoryID : product.CategoryID;
             updateToProduct.BrandID = product.BrandID == default ? updateToProduct.BrandID : product.BrandID;
-            updateToProduct.ColorID = product.ColorID == default ? updateToProduct.ColorID : product.ColorID;
-          
+            updateToProduct.ColorID = product.ColorID == default ? updateToProduct.ColorID : product.ColorID;       
             updateToProduct.AppUserID = product.AppUserID == default ? updateToProduct.AppUserID : product.AppUserID;
         }
     }

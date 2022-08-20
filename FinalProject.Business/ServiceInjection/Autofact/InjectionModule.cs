@@ -11,7 +11,7 @@ namespace FinalProject.Business
             builder.RegisterGeneric(typeof(GenericService<>)).As(typeof(IBaseService<>)).InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(GenericRepository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
-            builder.RegisterType<IDapperContext>().As<DapperContext>().InstancePerLifetimeScope();
+            builder.RegisterType<DapperContext>().As<IDapperContext>().InstancePerLifetimeScope();
 
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<DpProductRespository>().As<IProductRepository>().InstancePerLifetimeScope();

@@ -5,22 +5,22 @@ using System.Reflection;
 
 namespace FinalProject.DataAccess
 {
-    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
+    public class DpGenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         protected IDapperContext _dbContext;
         private string _tableName;
 
-        public GenericRepository(IDapperContext dapperContext)
+        public DpGenericRepository(IDapperContext dapperContext)
         {
-            _dbContext = dapperContext;
+            this._dbContext = dapperContext;
             //Reflection ile T nin tipini alıp stringe ceviriyoruz.
-            _tableName = typeof(T).Name.ToString();
+            this._tableName = typeof(T).Name.ToString();
         }
 
         //Girilen arguman eger Category ise substring ile y atıp sonuna ies ekliyoruz, degilse sonuna sadece s ekliyoruz ve bir tablo ismi oluşturuyoruz.
         private string GetTableName(string entity)
         {
-            if (entity == "Category" || entity == "Categor")
+            if (entity == "Category")
             {
                 _tableName = _tableName.Substring(0, 7);
                 return $"{_tableName}ies";
@@ -39,6 +39,7 @@ namespace FinalProject.DataAccess
                 && !Attribute.IsDefined(e, typeof(DapperIgnoreAttribute)))
                 .Select(e => e.Name);
         }
+
 
         public void Add(T entity)
         {
@@ -84,7 +85,7 @@ namespace FinalProject.DataAccess
 
         public async Task<T> GetByIDAsync(int id)
         {
-            string query = $"select * from \"{GetTableName(_tableName)}\" where \"ID\" = @id and \"Status\" != 2 ";
+            string query = $"select * from \"{GetTableName(_tableName)}\" where \"ID\" = @id and \"{GetTableName(_tableName)}\".\"Status\" != 2 ";
 
             using (IDbConnection con = _dbContext.GetConnection())
             {

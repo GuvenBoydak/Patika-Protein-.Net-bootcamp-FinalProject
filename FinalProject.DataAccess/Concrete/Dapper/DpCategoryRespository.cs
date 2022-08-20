@@ -29,9 +29,11 @@ namespace FinalProject.DataAccess
             using (IDbConnection con=_dbContext.GetConnection())
             {
                 //id ye karşılık gelen category alıyoruz.
-                Category result = await con.QueryFirstOrDefaultAsync<Category>("select * from \"Categories\" where \"ID\" =@id and \"Categories\".\"Status\" != 2", new { id = id });                   
-                //categorynin productlarına categoryId'si ID ile eşlesenleri alıyoruz.
-                result.Products =  con.Query<Product>("select * from \"Products\" where \"CategoryID\" =@id and \"Products\".\"Status\" != 2", new {id=id}).ToList();
+                Category result = await con.QueryFirstOrDefaultAsync<Category>("select * from \"Categories\" where \"ID\" =@id and \"Status\" != 2", new { id = id });   
+                
+                if(result!=null)//categorynin productlarına categoryId'si ID ile eşlesenleri alıyoruz.
+                    result.Products =  con.Query<Product>("select * from \"Products\" where \"CategoryID\" =@id and \"Status\" != 2", new {id=id}).ToList();
+
                 return result;
             }
         }
@@ -48,9 +50,9 @@ namespace FinalProject.DataAccess
 
                 string query = "update \"Categories\" set \"Name\"=@Name,\"Description\"=@Description,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
 
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute((con) =>
                 {
-                    await con.ExecuteAsync(query, updateToCategory);
+                     con.Execute(query, updateToCategory);
                 });
             }
             else
@@ -62,9 +64,9 @@ namespace FinalProject.DataAccess
 
                 string query = "update \"Categories\" set \"Name\"=@Name,\"Description\"=@Description,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
 
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, updateToCategory);
+                    con.Execute(query, updateToCategory);
                 });
             }
         }

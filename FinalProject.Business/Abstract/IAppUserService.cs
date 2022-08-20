@@ -8,7 +8,7 @@ namespace FinalProject.Business
     {
         Task<AppUser> RegisterAsync(AppUserRegisterDto registerDto);
 
-        Task<AppUser> LoginAsync(AppUserLoginDto entity);
+        Task<AppUser> LoginAsync(AppUserpasswordUpdateDto entity);
 
         Task<AppUser> GetByEmailAsync(string email);
 
@@ -19,8 +19,6 @@ namespace FinalProject.Business
         Task UpdateAsync(AppUser entity);
 
         void Delete(int id);
-
-        Task<List<AppUser>> GetByOffers(int id);
 
         Task<AppUser> GetByActivationCode(Guid code);
     }

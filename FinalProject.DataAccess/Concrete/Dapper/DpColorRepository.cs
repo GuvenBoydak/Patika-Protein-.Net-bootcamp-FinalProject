@@ -30,9 +30,9 @@ namespace FinalProject.DataAccess
 
                 string query = "update \"Colors\" set \"Name\"=@Name, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where \"ID\"=@ID";
 
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, entity);
+                     con.Execute(query, entity);
                 });
             }
             else
@@ -43,9 +43,9 @@ namespace FinalProject.DataAccess
 
                 string query = "update \"Colors\" set \"Name\"=@Name, \"UpdatedDate\"=@UpdatedDate, \"Status\"=@Status where \"ID\"=@ID";
 
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, entity);
+                     con.Execute(query, entity);
                 });
             }
         }

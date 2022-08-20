@@ -18,7 +18,7 @@ namespace FinalProject.Business
         /// Ürün satın alma işlemleri
         /// </summary>
         /// <param name="offer">Satın alınıcak teklif bilgisi</param>
-        public async Task BuyProduct(Offer offer)//Ürün Satın alma 
+        public async Task BuyProductAsync(Offer offer)//Ürün Satın alma 
         {
             Product product = await _productService.GetByIDAsync(offer.ProductID);
             product.UnitPrice = offer.Price;
@@ -35,6 +35,15 @@ namespace FinalProject.Business
             }
         }
 
+        /// <summary>
+        /// Girilen ID'li kullanıcının ürünlerine gelen teklifler
+        /// </summary>
+        /// <param name="id">Kullanıcı id bilgisi</param>
+        public async Task<List<Product>> GetByAppUserProductsOffersAsync(int id)
+        {
+            return await _offerRepository.GetByAppUserProductsOffers(id);
+        }
+
         public async Task DeleteAsync(int id)
         {
             try
@@ -47,15 +56,19 @@ namespace FinalProject.Business
             }
         }
 
-        public async Task<List<Offer>> GetByAppUserIDAsync(int id)
+        /// <summary>
+        /// Girilen kullanıcı Id'sinin yaptıgı teklifler
+        /// </summary>
+        /// <param name="id">Kullanıcı id bilgisi</param>
+        public async Task<List<Offer>> GetByAppUserOffersAsync(int id)
         {
             try
             {
-              return  await _offerRepository.GetByAppUserIDAsync(id);
+              return  await _offerRepository.GetByAppUserOffersAsync(id);
             }
             catch (Exception e)
             {
-                throw new Exception($"GetByAppUserID_Error  =>  {e.Message}");
+                throw new Exception($"GetByAppUserOffers_Error  =>  {e.Message}");
             }
         }
 
@@ -63,7 +76,7 @@ namespace FinalProject.Business
         /// Teklif Onaylama işlemleri
         /// </summary>
         /// <param name="offer">Teklif Bilgisi</param>
-        public async Task OfferApproval(Offer offer)
+        public async Task OfferApprovalAsync(Offer offer)
         {
             //Teklif Onaylandıysa ilgili Ürünün bilgilerini güncelliyoruz.
             if (offer.IsApproved == true)
@@ -93,6 +106,16 @@ namespace FinalProject.Business
             {
                 throw new Exception($"Update_Error  =>  {e.Message}");
             }
+        }
+
+
+        /// <summary>
+        /// Girilen Ürün Id'sine yapılan teklifler 
+        /// </summary>
+        /// <param name="id">ürün id bilgisi</param>
+        public async Task<List<Offer>> GetByOffersProductIDAsync(int id)
+        {
+           return await _offerRepository.GetByOffersProductIDAsync(id);
         }
     }
 }

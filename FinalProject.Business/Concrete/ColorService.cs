@@ -3,7 +3,7 @@ using FinalProject.Entities;
 
 namespace FinalProject.Business
 {
-    public class ColorService : GenericService<Color>, IColorRepository
+    public class ColorService : GenericService<Color>, IColorService
     {
         private readonly IColorRepository _colorRepository;
 
