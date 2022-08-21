@@ -1,15 +1,30 @@
-### Protein ve Patika iş birliği ile yapılan Protein .Net Bootcamp'inin bitirme projesi olarak yaptığım uygulama.
+## Patika  Protein .Net Bootcamp'inin bitirme projesi olarak yaptığım uygulama.
+## *Kullanıcıların giriş işlemleri yaptıkları ve Ürünlere teklif vererek veya direk satın aldıkları mini e Ticaret uygulaması.*
+#### *Projede kullanılan teknoloji ve kütüphaneler*
+- Dapper 
+- JWT Authentication
+- Hangfire BackgroundJop
+- RabbitMQ
+- PostgreSql
+- Fluent Migrations
+- Serilog
+- HMACSHA512 şifreleme algoritması
+- Autofact 
+- Fluent Validation
+- AutoMapper
+- XUnit Test with Mock
+- Generic Repository pattern
 
-- ##  Projemiz Kullanıcıların istedikleri ürünlere teklif verip yada direk satın aldıkları mini e Ticaret uygulaması.
+
 ### Üye İşlemleri
 - Kullanıcı ilgili bilgileri doldurup kayıt olabiliyor.Ardından E mail ile bir Guid activasyon code gönderiliyor ve kişinin Activasyon işlemlerini tamamlanıyor.
 - Kullanıcı Email ve Pasword ile sisteme giriş yapabiliyor. Ardından Kullanıcıya Hoş geldiniz maili gönderiliyor.
 - Kullanıcı girdigi şifre kontrol ediliyor 3 kez yanlış girilen şifrelerde Hesap Bloke ediliyor. Ardındna kullanıcının mail adresine Guid ile code gönderilip bloke işlemini kaldırılmasını saglıyoruz.
 - Kullanıcı istedigi zaman şifresini degiştirip yeni bir şifre alabiliyor.
-- Kulanıcıları aktif, pasif veya veri tabanındaki tüm kayıtları listeliyoruz.
+- Kulanıcıların aktif, pasif veya veri tabanındaki tüm kayıtlarını listeliyoruz.
 ### Ürün işlemleri
 - Kullanıcılar satıcakları ürünleri Kategori, Renk, Marka, Kullanım durumu gibi özelliklerle ekleyebiliyor.
-- Kulanıcıcılar bir ürüne sadece 1 resim yükleyebliyor ve resim boyutu maksimum 400kb olabiliyor. 
+- Kulanıcılar bir ürüne sadece 1 resim yükleyebliyor ve resim boyutu maksimum 400kb olabiliyor. 
 - Kullanıcının ürünlerini veri tabanından çekip listeliyebilir.
 - Ürünleri aktif, pasif veya tüm ürünleri listeliyoruz.
 ### Teklif işlemleri
@@ -30,11 +45,15 @@
  <hr>
  
  ## Projenin Kurulumu
- - Proje’yi çalıştırmak için PostgreSql'in bilgisayarımızda yüklü ve çalışıyor olması gerekmektedir. Daha Sonra FinalProject.Api katmanındakı **appsettings.json** dosyası
- içerisindeki sırasıyla kendi database ayaralarına göre değiştirmelisiniz.
+ - Proje’yi çalıştırmak için PostgreSql'in bilgisayarımızda yüklü ve çalışıyor olması gerekmektedir. Daha Sonra FinalProject.Api katmanındakı **appsettings.json** dosyası içerisindeki baglantı adreslerini sırasıyla kendi database ayaralarınıza göre değiştirmelisiniz. PostgreSql'de HangFire Database ve proje Database'i  çalıştırıyoruz.
  
- `
+ ````
  ConnectionStrings": {
-  "DefaultConnection": "User ID=(DatabaseUserBuraya(postgres));Password=(ŞifreBuraya);Host=(HostIp veya 'localhost');Port=(PortNumarası(5432));Database=MiniCommerceDb;Integrated Security=true;Pooling=true"
-}, `
+  "PostgreSql": "User ID=postgres; Password=(Şifre); Server=localhost; Port=5432 ;Database=FinalProject; Integrated Security=true; Pooling=true"
+}, 
+
+"RabbitMq": "ilgili rabbitmq amps instance bilgisi",
+
+"HangfirePostreSql": "User ID=postgres; Password=(Şifre); Server=localhost; Port=5432 ;Database=FinalProject; Integrated Security=true; Pooling=true",
+ 
  
