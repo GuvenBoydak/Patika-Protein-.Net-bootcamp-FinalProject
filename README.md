@@ -27,6 +27,7 @@
 - Kulanıcılar bir ürüne sadece 1 resim yükleyebliyor ve resim boyutu maksimum 400kb olabiliyor. 
 - Kullanıcının ürünlerini veri tabanından çekip listeliyebilir.
 - Ürünleri aktif, pasif veya tüm ürünleri listeliyoruz.
+- Ürünleri belirtilen sayı kadar sayfa sayfa listeliyoruz.
 ### Teklif işlemleri
 - Kullanıcı teklif vericegi ürünün isOfferable alanı kontrol edilip teklif verebilmesini saglıyoruz.
 - Kullanıcının yaptıgı teklifleri listeliyoruz.
