@@ -1,6 +1,4 @@
-﻿using FinalProject.Entities;
-
-namespace FinalProject.DTO
+﻿namespace FinalProject.DTO
 {
     public class AppUserWithOffersDto : BaseDto
     {

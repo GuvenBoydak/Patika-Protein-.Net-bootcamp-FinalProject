@@ -20,6 +20,19 @@ namespace FinalProject.DataAccess
         }
 
         /// <summary>
+        /// Kulanıcının Ürünleri bilgisi
+        /// </summary>
+        /// <param name="id">Kullanıcı id bilgisi</param>
+        public async Task<List<Product>> GetAppUserProductsAsync(int id)
+        {
+            using (IDbConnection con =_dbContext.GetConnection())
+            {
+                IEnumerable<Product> result = await con.QueryAsync<Product>("select * from \"Products\" where \"AppUserID\"=@id and \"Status\" != 2", new { id = id });
+                return result.ToList();
+            }
+        }
+
+        /// <summary>
         /// ilgili Aktivasyon kodlu kullanıcı
         /// </summary>
         /// <param name="code">Aktivasyon kod bilgisi</param>

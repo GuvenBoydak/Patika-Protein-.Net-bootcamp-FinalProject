@@ -11,5 +11,7 @@ namespace FinalProject.DataAccess
         Task UpdateAsync(AppUser appUser);
 
         Task<AppUser> GetByActivationCode(Guid code);
+
+        Task<List<Product>> GetAppUserProductsAsync(int id);
    }
 }

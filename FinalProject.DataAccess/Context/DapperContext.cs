@@ -23,7 +23,7 @@ namespace FinalProject.DataAccess
 
         public NpgsqlConnection GetConnection()
         {
-            return new NpgsqlConnection(configuration.GetConnectionString("PosgreSql"));
+            return new NpgsqlConnection(configuration.GetConnectionString("PostgreSql"));
         }
     }
 

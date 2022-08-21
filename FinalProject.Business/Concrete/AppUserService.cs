@@ -44,6 +44,16 @@ namespace FinalProject.Business
         }
 
         /// <summary>
+        /// Kulanıcının Ürünleri bilgisi
+        /// </summary>
+        /// <param name="id">Kullanıcı id bilgisi</param>
+        public async Task<List<Product>> GetAppUserProductsAsync(int id)
+        {
+          return  await _userRepository.GetAppUserProductsAsync(id);
+        }
+
+
+        /// <summary>
         /// İlgili activasyon kodlu Kullanıcıyı Bilgisini alıyoruz
         /// </summary>
         /// <param name="code">kullanıcı aktivasyon kodu bilgisi</param>

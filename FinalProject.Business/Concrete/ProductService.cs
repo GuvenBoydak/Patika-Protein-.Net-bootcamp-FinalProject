@@ -34,6 +34,11 @@ namespace FinalProject.Business
             return await _productRepository.GetByAppUserProductsWithOffers(id);
         }
 
+        public Task<List<Product>> GetByProductsPaginationAsync(int limit, int page)
+        {
+            return _productRepository.GetByProductsPaginationAsync(limit,page);
+        }
+
         public async Task UpdateAsync(Product entity)
         {
             try

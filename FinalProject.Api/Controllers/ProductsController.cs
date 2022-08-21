@@ -28,8 +28,19 @@ namespace FinalProject.Api
             _configuration = configuration;
         }
 
+        [HttpGet]
+        [Route("GetByProductsPagination")]
+        public async Task<IActionResult> GetByProductsPaginationAsync([FromQuery]int limit,[FromQuery]int page)
+        {
+            List<Product> products = await _productService.GetByProductsPaginationAsync(limit,page);
 
-        [HttpGet("GetActive")]
+            List<ProductListDto> productListDtos = _mapper.Map<List<Product>, List<ProductListDto>>(products);
+
+            return CreateActionResult(CustomResponseDto<List<ProductListDto>>.Success(200, productListDtos, "Ürünler sayfalanarak listelendi"));
+        }
+
+        [HttpGet]
+        [Route("GetActive")]
         public async Task<IActionResult> GetActiveAsync()
         {
             List<Product> products = await _productService.GetActiveAsync();
@@ -39,7 +50,8 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<ProductListDto>>.Success(200, productListDtos, "Active Ürünler listelendi"));
         }
 
-        [HttpGet("GetPassive")]
+        [HttpGet]
+        [Route("GetPassive")]
         public async Task<IActionResult> GetPassiveAsync()
         {
             List<Product> products = await _productService.GetPassiveAsync();
@@ -49,7 +61,8 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<ProductListDto>>.Success(200, productListDtos, "Pasive Ürünler listelendi"));
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet]
+        [Route("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
             List<Product> products = await _productService.GetAllAsync();

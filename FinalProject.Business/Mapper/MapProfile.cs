@@ -19,6 +19,7 @@ namespace FinalProject.Business
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Product, ProductListDto>().ReverseMap();
             CreateMap<Product, AppUserProductsOfferListDto>().ReverseMap();
+            CreateMap<Product, AppUserProductsDto>().ReverseMap();
 
             CreateMap<Brand, BrandListDto>().ReverseMap();
             CreateMap<Brand, BrandDto>().ReverseMap();

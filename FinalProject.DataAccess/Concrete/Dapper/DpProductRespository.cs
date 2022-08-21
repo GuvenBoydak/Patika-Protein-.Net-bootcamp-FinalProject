@@ -33,6 +33,21 @@ namespace FinalProject.DataAccess
             }
         }
 
+        public async Task<List<Product>> GetByProductsPaginationAsync(int limit, int page)
+        {
+            using (IDbConnection con = _dbContext.GetConnection())
+            {
+                IEnumerable<Product> products = await con.QueryAsync<Product>("select * from \"Products\" where \"Status\" != '2' order by \"ID\"  limit  @limit offset  @page  ",
+                    new
+                    {
+                        limit = limit,
+                        page = (page - 1) * limit
+                    });
+
+                return products.ToList();
+            }
+        }
+
         public async Task UpdateAsync(Product entity)
         {
             Product updateToProduct = await GetByIDAsync(entity.ID);

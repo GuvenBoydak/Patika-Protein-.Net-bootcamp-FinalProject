@@ -90,6 +90,19 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<NoContentDto>.Fail(404, "Activasyon Gerçekleştirilemedi"));
         }
 
+        [HttpGet]
+        [Route("GetAppUserProducts")]
+        public async Task<IActionResult> GetAppUserProductsAsync()
+        {
+            string appUserID = (User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value;
+
+           List<Product> products= await _appUserService.GetAppUserProductsAsync(int.Parse(appUserID));
+
+            List<AppUserProductsDto> appUserProducts = _mapper.Map<List<Product>, List<AppUserProductsDto>>(products);
+
+            return CreateActionResult(CustomResponseDto<List<AppUserProductsDto>>.Success(200,appUserProducts, "Kullanıcının Ürünleri Listelendi"));
+        }
+
 
         [HttpPost]
         [Route("Register")]

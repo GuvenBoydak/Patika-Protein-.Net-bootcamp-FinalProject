@@ -21,6 +21,8 @@ namespace FinalProject.Business
         void Delete(int id);
 
         Task<AppUser> GetByActivationCode(Guid code);
+
+        Task<List<Product>> GetAppUserProductsAsync(int id);
     }
 
 }

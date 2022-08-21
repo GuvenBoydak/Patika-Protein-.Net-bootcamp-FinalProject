@@ -10,5 +10,6 @@ namespace FinalProject.Business
 
         Task<List<Product>> GetByAppUserProductsWithOffers(int id);
 
+        Task<List<Product>> GetByProductsPaginationAsync(int limit, int page);
     }
 }

@@ -11,7 +11,7 @@ namespace FinalProject.Business
             RuleFor(x => x.Name).MaximumLength(100).WithMessage("Ürün Adı en fazla 100 karakter olmalıdır.").Matches(@"^[a-zA-ZiİçÇşŞğĞÜüÖö\s@]*$").WithMessage("Sadece Harf Giriniz.");
             RuleFor(x => x.UnitPrice).InclusiveBetween(0,int.MaxValue).WithMessage("Girilen Fiyat sıfırdan büyük olamlı");
             RuleFor(x => x.Description).MaximumLength(500).WithMessage("Girilen deger en Fazla 500 karakter olmalıdır.")
-                .Matches(@"^[a-zA-ZiİçÇşŞğĞÜüÖö\s@]*$").WithMessage("Sadece Harf Giriniz.");
+                .Matches(@"^[a-zA-ZiİçÇşŞğĞÜüÖöIıUuOo\s@]*$").WithMessage("Sadece Harf Giriniz.");
             RuleFor(x => x.CategoryID).InclusiveBetween(0, int.MaxValue).WithMessage("Kategori Id alını sıfırdan büyük olmalıdır.");
         }
     }
