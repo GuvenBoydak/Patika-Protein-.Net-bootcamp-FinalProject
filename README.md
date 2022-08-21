@@ -45,7 +45,9 @@
  <hr>
  
  ## Projenin Kurulumu
- - Proje’yi çalıştırmak için PostgreSql'in bilgisayarımızda yüklü ve çalışıyor olması gerekmektedir. Daha Sonra FinalProject.Api katmanındakı **appsettings.json** dosyası içerisindeki baglantı adreslerini sırasıyla kendi database ayaralarınıza göre değiştirmelisiniz. PostgreSql'de HangFire Database ve proje Database'i  çalıştırıyoruz.
+ - Proje’yi çalıştırmak için PostgreSql'in bilgisayarımızda yüklü ve çalışıyor olması gerekmektedir. Daha Sonra FinalProject.Api katmanındakı **appsettings.json** dosyası içerisindeki baglantı adreslerini sırasıyla kendi database ayaralarınıza göre değiştirmelisiniz. 
+ - PostgreSql'de HangFire Database ve proje Database'i  çalıştırıyoruz. Fluent migrations ile postgresql e tabloları oluşturabilmesi için bir database yaratmanız gerekiyor.
+ - Projeyi çalıştırmak için Solution dosyası üzerinden property diyip daha sonra Multiple Start-Up projesi seçilerek FinalProject.API ve FinalProject.RabbitMqConsumer aynı anda işaretlenmesiniz. Daha sonra Swagger veya postman üzerinde api'yi kullanabilirsiniz.
  
  ````
  ConnectionStrings": {
@@ -55,5 +57,6 @@
 "RabbitMq": "ilgili rabbitmq amps instance bilgisi",
 
 "HangfirePostreSql": "User ID=postgres; Password=(Şifre); Server=localhost; Port=5432 ;Database=FinalProject; Integrated Security=true; Pooling=true",
- 
+  ````
+
  
