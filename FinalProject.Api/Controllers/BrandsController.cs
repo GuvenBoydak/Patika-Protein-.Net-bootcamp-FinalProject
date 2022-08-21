@@ -35,7 +35,7 @@ namespace FinalProject.Api.Controllers
             return CreateActionResult(CustomResponseDto<List<BrandListDto>>.Success(200,brandListDtos,"Active Markalar listelendi"));
         }
 
-        [HttpGet("GetPasive")]
+        [HttpGet("GetPassive")]
         public async Task<IActionResult> GetPassiveAsync()
         {
             List<Brand> brands = await _brandService.GetPassiveAsync();

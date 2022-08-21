@@ -39,8 +39,8 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<List<ProductListDto>>.Success(200, productListDtos, "Active Ürünler listelendi"));
         }
 
-        [HttpGet("GetPasive")]
-        public async Task<IActionResult> GetPasiveAsync()
+        [HttpGet("GetPassive")]
+        public async Task<IActionResult> GetPassiveAsync()
         {
             List<Product> products = await _productService.GetPassiveAsync();
 
@@ -102,7 +102,6 @@ namespace FinalProject.Api
             if (productUpdateDto.File != null)//parametreden gelen File boş degilse resim günceliyoruz.
             {
                 product.ImageUrl = _fileHelper.Update(productUpdateDto.File, _configuration.GetSection("ImageUrl").Value + product.ImageUrl, _configuration.GetSection("ImageUrl").Value);
-                throw new Exception("Güncellenecek resim bulunamadı");
             }
 
             await _productService.UpdateAsync(product);

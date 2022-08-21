@@ -30,6 +30,7 @@ namespace FinalProject.Api
 
         [Authorize]
         [HttpGet]
+        [Route("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
             List<AppUser> appUsers = await _appUserService.GetAllAsync();
@@ -75,6 +76,21 @@ namespace FinalProject.Api
         }
 
 
+        [HttpGet]
+        [Route("Activation/{code}")]
+        public async Task<IActionResult> GetByActivationCode(Guid code)
+        {
+           AppUser appUser=  await _appUserService.GetByActivationCode(code);
+
+           if(appUser.Active==true)
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Activasyon Başarıyla Gerçekleşti"));
+           else if(appUser.IsLock==false)
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Hesabınızın Erişim Kısıtlaması Kaldırıldı"));
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Fail(404, "Activasyon Gerçekleştirilemedi"));
+        }
+
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody]AppUserRegisterDto registerDto)
@@ -85,9 +101,9 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
-            //ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
+            ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
 
-            return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token olışturuldu"));
+            return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token oluşturuldu"));
         }
 
         [HttpPost]
@@ -100,7 +116,7 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
-            //await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
+           // await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }
@@ -132,7 +148,7 @@ namespace FinalProject.Api
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         [Route("ChangePassword")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] AppUserPasswordUpdateDto passwordUpdateDto)
         {

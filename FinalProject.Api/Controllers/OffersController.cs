@@ -73,9 +73,9 @@ namespace FinalProject.Api
         {
             List<Offer> offers = await _offerService.GetByAppUserOffersAsync(appUserId);
 
-            List<OfferListDto> offerListDtos = _mapper.Map<List<Offer>, List<OfferListDto>>(offers);
+            List<OfferListDto> offersDtos = _mapper.Map<List<Offer>, List<OfferListDto>>(offers);
 
-            return CreateActionResult(CustomResponseDto<List<OfferListDto>>.Success(200,offerListDtos,"Kulanıcının yaptıgı Teklifleri Listelendi."));
+            return CreateActionResult(CustomResponseDto<List<OfferListDto>>.Success(200, offersDtos, "Kulanıcının yaptıgı Teklifleri Listelendi."));
         }
 
         [HttpGet]
@@ -109,6 +109,9 @@ namespace FinalProject.Api
 
             Offer offer = _mapper.Map<OfferBuyProductDto, Offer>(offerBuyProductDto);
 
+            string appUserClaimId = (User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value;
+            offer.AppUserID = int.Parse(appUserClaimId);//Kullanıcı claim ıd'sini alıp offer.AppUserID sine atadık.
+
             await _offerService.BuyProductAsync(offer);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Satın alma başarıyla Onaylandı."));
@@ -121,6 +124,9 @@ namespace FinalProject.Api
             Log.Information($"{User.Identity?.Name}: OfferApproval a Offer  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
 
             Offer offer = _mapper.Map<OfferApprovalDto, Offer>(offerApprovalDto);
+
+            string appUserClaimId = (User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value;
+            offer.AppUserID = int.Parse(appUserClaimId);//Kullanıcı claim ıd'sini alıp offer.AppUserID sine atadık.
 
             await _offerService.OfferApprovalAsync(offer);
 
@@ -139,6 +145,9 @@ namespace FinalProject.Api
 
             Offer offer =_mapper.Map<Offer>(offerAddDto);
 
+            string appUserClaimId = (User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value;
+            offer.AppUserID = int.Parse(appUserClaimId);//Kullanıcı claim ıd'sini alıp offer.AppUserID sine atadık.
+
             _offerService.Add(offer);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Eklem İşlemi Başarılı"));
@@ -151,7 +160,10 @@ namespace FinalProject.Api
 
             Offer offer = _mapper.Map<Offer>(offerUpdateDto);
 
-          await  _offerService.UpdateAsync(offer);
+            string appUserClaimId = (User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value;
+            offer.AppUserID = int.Parse(appUserClaimId);//Kullanıcı claim ıd'sini alıp offer.AppUserID sine atadık.
+
+            await  _offerService.UpdateAsync(offer);
 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204, "Güncelleme İşlemi Başarılı"));
         }
