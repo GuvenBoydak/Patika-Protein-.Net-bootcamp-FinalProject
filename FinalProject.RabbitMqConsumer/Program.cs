@@ -34,7 +34,7 @@ consumer.Received += async (s, e) =>
     AppUser appUser = JsonSerializer.Deserialize<AppUser>(serializData);
 
     string subject = "Aktivasyon işlemlemi";
-    string body = "Kayıt için lütfen aktivasyon linkine tıklayınız.\n   https://localhost:7137/api/appusers/activation/" + appUser.ActivationCode + " ";
+    string body = "Aktivasyon için lütfen linke tıklayınız.\n   https://localhost:7137/api/appusers/activation/" + appUser.ActivationCode + " ";
 
     try
     {

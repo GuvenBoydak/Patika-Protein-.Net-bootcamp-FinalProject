@@ -21,18 +21,25 @@ namespace FinalProject.Business
         public async Task BuyProductAsync(Offer offer)//Ürün Satın alma 
         {
             Product product = await _productService.GetByIDAsync(offer.ProductID);
-            product.UnitPrice = offer.Price;
-            product.IsSold=true;
-            product.IsOfferable = false;
-            product.AppUserID=offer.AppUserID;
-            await _productService.UpdateAsync(product);//Ürün bilgilerini güncelliyoruz.
-
-            List<Offer> offers = await _offerRepository.GetByOffersProductIDAsync(offer.ProductID);//İlgili üründeki tüm Offerları siliyoruz.
-            foreach (Offer item in offers)
+            if(product.IsSold!=true)
             {
-               if(item.DeletedDate ==null )
-                    await DeleteAsync(item.ID);
-            }
+                product.IsSold = true;
+                product.IsOfferable = false;               
+                await _productService.UpdateAsync(product);//Ürün bilgilerini güncelliyoruz.
+
+                offer.Price = product.UnitPrice;
+                _offerRepository.Add(offer);//Satın Alım teklifini kaydediyoruz.
+
+                List<Offer> offers = await _offerRepository.GetByOffersProductIDAsync(offer.ProductID);//İlgili üründeki tüm Offerları siliyoruz.
+                foreach (Offer item in offers)
+                {
+                    if (item.DeletedDate == null)
+                        await DeleteAsync(item.ID);
+                }
+            }else
+                throw new Exception("Bu Ürün Satılmış Satın Alamasınız.");
+
+
         }
 
         /// <summary>

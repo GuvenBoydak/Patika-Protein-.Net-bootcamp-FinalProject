@@ -9,15 +9,14 @@ namespace FinalProject.Test
     {
 
         [Theory]
-        [InlineData("test","test",22,1,1)]
-        public void WhenInvalidInputsAreGiven_ProductAddDtoValidator_SouldNotBeReturnErrors(string name,string description,decimal unitprice,int unitsInStock,int categoryID)
+        [InlineData("test","test",22,1)]
+        public void WhenInvalidInputsAreGiven_ProductAddDtoValidator_SouldNotBeReturnErrors(string name,string description,decimal unitprice,int categoryID)
         {
             ProductAddDto productAddDto = new ProductAddDto()
             {
                 Name = name,
                 Description = description,
                 UnitPrice = unitprice,
-                UnitsInStock = unitsInStock,
                 CategoryID = categoryID,
                 UsageStatus=Entities.UsageStatus.LittleUsed
             };
@@ -29,15 +28,14 @@ namespace FinalProject.Test
         }
 
         [Theory]
-        [InlineData("t2est","", -22, 0, 1)]
-        public void WhenInvalidInputsAreGiven_ProductAddDtoValidator_SouldBeReturnErrors(string name, string description, decimal unitprice, int unitsInStock, int categoryID)
+        [InlineData("t2est","", -22, 0)]
+        public void WhenInvalidInputsAreGiven_ProductAddDtoValidator_SouldBeReturnErrors(string name, string description, decimal unitprice, int categoryID)
         {
             ProductAddDto productAddDto = new ProductAddDto()
             {
                 Name = name,
                 Description = description,
                 UnitPrice = unitprice,
-                UnitsInStock = unitsInStock,
                 CategoryID = categoryID
             };
 
@@ -49,15 +47,15 @@ namespace FinalProject.Test
 
 
         [Theory]
-        [InlineData(-7,"t2est", "t1est", 0, 0, 1)]
-        public void WhenInvalidInputsAreGiven_ProductUpdateDtoValidator_SouldBeReturnErrors(int id,string name, string description, decimal unitprice, int unitsInStock, int categoryID)
+        [InlineData(-7,"t2est", "t1est", 0, 1)]
+        public void WhenInvalidInputsAreGiven_ProductUpdateDtoValidator_SouldBeReturnErrors(int id,string name, string description, decimal unitprice,  int categoryID)
         {
             ProductUpdateDto productUpdateDto = new ProductUpdateDto()
             {
+                ID=id,
                 Name = name,
                 Description = description,
                 UnitPrice = unitprice,
-                UnitsInStock = unitsInStock,
                 CategoryID = categoryID
             };
 
@@ -69,8 +67,8 @@ namespace FinalProject.Test
 
 
         [Theory]
-        [InlineData(1,"test", "test", 12, 1, 1)]
-        public void WhenInvalidInputsAreGiven_ProductUpdateDtoValidator_SouldNotBeReturnErrors(int id,string name, string description, decimal unitprice, int unitsInStock, int categoryID)
+        [InlineData(1,"test", "test", 12,  1)]
+        public void WhenInvalidInputsAreGiven_ProductUpdateDtoValidator_SouldNotBeReturnErrors(int id,string name, string description, decimal unitprice, int categoryID)
         {
             ProductUpdateDto productUpdateDto = new ProductUpdateDto()
             {
@@ -78,7 +76,6 @@ namespace FinalProject.Test
                 Name = name,
                 Description = description,
                 UnitPrice = unitprice,
-                UnitsInStock = unitsInStock,
                 CategoryID = categoryID
             };
 

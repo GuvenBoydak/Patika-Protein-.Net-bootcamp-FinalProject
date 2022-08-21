@@ -77,7 +77,7 @@ namespace FinalProject.Test.ControllerTest.ProductTest
         {
             _productService.Setup(x => x.GetPassiveAsync()).ReturnsAsync(products);
 
-            IActionResult result = await _productsController.GetPasiveAsync();
+            IActionResult result = await _productsController.GetPassiveAsync();
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 

@@ -44,16 +44,27 @@ namespace FinalProject.Business
         }
 
         /// <summary>
-        /// İlgili activasyon kodlu Kullanıcıyı Bilgisi.
+        /// İlgili activasyon kodlu Kullanıcıyı Bilgisini alıyoruz
         /// </summary>
         /// <param name="code">kullanıcı aktivasyon kodu bilgisi</param>
         public async Task<AppUser> GetByActivationCode(Guid code)
         {
-            return  await _userRepository.GetByActivationCode(code);
+           AppUser appUser = await _userRepository.GetByActivationCode(code);
+
+            if (appUser.IsLock == true)//Kullanıcı hesabındakı kilidi kaldırıyoruz.
+            {
+                appUser.IsLock = false;
+                appUser.IncorrectEntry = 1;
+            }
+            else if (appUser.Active == false)//Kullanıcıyı activasyonunu tamamlıyoruz.
+                appUser.Active = true;
+           await UpdateAsync(appUser);
+
+            return appUser;
         }
 
         /// <summary>
-        /// İlgili Emaili olan Kullanıcıyı Bilgisi
+        /// İlgili Emaili olan Kullanıcıyı Bilgisini alıyoruz
         /// </summary>
         /// <param name="email">Kullanıcı email bilgisi</param>
         public async Task<AppUser> GetByEmailAsync(string email)
@@ -73,7 +84,7 @@ namespace FinalProject.Business
 
             if (appUser == null)
                 throw new InvalidOperationException($"({entity.Email}) Kullanıcı Bulunamadı");
-            else if (appUser.IncorrectEntry == 3 && appUser.IsLock == true)
+            else if (appUser.IncorrectEntry == 4 && appUser.IsLock == true)
                 throw new InvalidOperationException($"({entity.Email}) Hesabınız Askıya alındı");
 
             //Kulanıcı gridigi Password'u Databaseden gelen PasswordHash ve PasswordSalt ile hashleyip kontrol ediyoruz.
@@ -84,10 +95,11 @@ namespace FinalProject.Business
                 if (appUser.IncorrectEntry == 4)
                 {
                     appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
-                    DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.               
+                    DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
+                    await UpdateAsync(appUser);//IsLock Güncelliyoruz
                     throw new InvalidOperationException($" Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
                 }
-                await UpdateAsync(appUser);
+                await UpdateAsync(appUser);//IncorrectEntry Günceliyoruz
                 throw new InvalidOperationException($" Paralonanız Yanlış");
             }
 
@@ -122,7 +134,6 @@ namespace FinalProject.Business
                 PasswordSalt = passwordSalt,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                DateOfBirth = registerDto.DateOfBirth.Value,
                 PhoneNumber = registerDto.PhoneNumber,
             };
 

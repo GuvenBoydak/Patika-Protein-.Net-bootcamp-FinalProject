@@ -12,7 +12,8 @@ namespace FinalProject.Business
         public static void SendMailJob(AppUser appUser)
         {
             string subject = "Hesap İşlemleri";
-            string body = "Parolanız 3 kez yanlış girilmiştir ve Hesabınız askıya alınmıştır.";
+            string body = "Parolanız 3 kez yanlış girilmiştir ve Hesabınız askıya alınmıştır. \n Tekrar Actifleştirmek için lütfen linke tıklayınız.\n   https://localhost:7137/api/appusers/activation/" + appUser.ActivationCode + " ";
+
 
             try
             {

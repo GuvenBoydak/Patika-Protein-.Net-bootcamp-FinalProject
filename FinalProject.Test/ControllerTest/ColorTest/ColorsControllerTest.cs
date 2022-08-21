@@ -130,7 +130,7 @@ namespace FinalProject.Test
 
             ColorUpdateDto colorUpdateDto = _mapper.Map<Color, ColorUpdateDto>(color);
 
-            IActionResult result =await _colorController.Update(colorUpdateDto);
+            IActionResult result =await _colorController.UpdateAsync(colorUpdateDto);
 
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
 
