@@ -9,8 +9,6 @@ namespace FinalProject.DTO
 
         public string Name { get; set; }
 
-        public int UnitsInStock { get; set; }
-
         public decimal UnitPrice { get; set; }
 
         public string Description { get; set; }

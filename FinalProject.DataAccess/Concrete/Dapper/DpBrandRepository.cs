@@ -29,9 +29,9 @@ namespace FinalProject.DataAccess
                 brandToUpdate.Name = entity.Name == default ? brandToUpdate.Name : entity.Name;
 
                 string query = "update \"Brands\" set \"Name\"=@Name, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where \"ID\"=@ID";
-                _dbContext.Execute(async (con) =>
+                _dbContext.Execute( (con) =>
                 {
-                    await con.ExecuteAsync(query, entity);
+                   con.Execute(query, entity);
                 });
             }
             else

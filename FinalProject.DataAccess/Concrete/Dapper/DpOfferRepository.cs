@@ -75,7 +75,7 @@ namespace FinalProject.DataAccess
                 updateToOffer.ProductID = entity.ProductID == default ? entity.ProductID : updateToOffer.ProductID;
 
 
-                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUserID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
+                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUserID,\"ProductID\"=@ProductID,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute( (con) =>
                 {
                      con.Execute(query, updateToOffer);
@@ -90,7 +90,7 @@ namespace FinalProject.DataAccess
                 updateToOffer.AppUserID = entity.AppUserID == default ? updateToOffer.AppUserID : entity.AppUserID;
                 updateToOffer.ProductID = entity.ProductID == default ? updateToOffer.ProductID : entity.ProductID;
 
-                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
+                string query = "update \"Offers\" set \"Price\"=@Price,\"IsApproved\"=@IsApproved,\"AppUserID\"=@AppUSerID,\"ProductID\"=@ProductID,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID";
                 _dbContext.Execute( (con) =>
                 {
                      con.Execute(query, updateToOffer);

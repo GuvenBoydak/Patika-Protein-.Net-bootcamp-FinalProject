@@ -8,8 +8,6 @@ namespace FinalProject.DTO
 
         public string Name { get; set; }
 
-        public int UnitInStock { get; set; }
-
         public decimal UnitPrice { get; set; }
 
         public string ImageUrl { get; set; }
@@ -27,8 +25,6 @@ namespace FinalProject.DTO
         public int? BrandID { get; set; }
 
         public int? ColorID { get; set; }
-
-        public int? OfferID { get; set; }
 
         public int AppUserID { get; set; }
     }

@@ -35,8 +35,8 @@ namespace FinalProject.DataAccess
             return typeof(T)
                     .GetProperties()
                     .Where(e => e.Name != "ID"
-                    && !e.PropertyType.GetTypeInfo().IsGenericType
-                && !Attribute.IsDefined(e, typeof(DapperIgnoreAttribute)))
+                     && !Attribute.IsDefined(e, typeof(DapperIgnoreAttribute))
+                )
                 .Select(e => e.Name);
         }
 
@@ -54,9 +54,9 @@ namespace FinalProject.DataAccess
             string query = $"insert into \"{GetTableName(_tableName)}\" ({stringOfColumns}) values ({stringOfParameters})";
 
             //Execute metoduna arguman olarak Action<NpgsqlConnection> isteyen metoda NpgsqlConnection tipinde con baglantı nesnesini veriyoruz. 
-            _dbContext.Execute((con) =>
+            _dbContext.Execute( (con) =>
             {
-               con.ExecuteAsync(query, entity);
+               con.Execute(query, entity);
             });
         }
 

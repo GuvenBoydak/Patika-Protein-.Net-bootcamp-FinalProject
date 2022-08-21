@@ -13,8 +13,6 @@ namespace FinalProject.Entities
 
         public string Name { get; set; }
 
-        public int UnitsInStock { get; set; }
-
         public decimal UnitPrice { get; set; }
 
         public string ImageUrl { get; set; }
@@ -39,12 +37,16 @@ namespace FinalProject.Entities
         //Relational Properties
         [DapperIgnore]
         public  Category Category { get; set; }
+
         [DapperIgnore]
         public Brand Brand { get; set; }
+
         [DapperIgnore]
-        public  Color Color { get; set; }
+        public Color Color { get; set; }
+
         [DapperIgnore]
         public  List<Offer> Offers { get; set; }
+
         [DapperIgnore]
         public  AppUser AppUser { get; set; }
 

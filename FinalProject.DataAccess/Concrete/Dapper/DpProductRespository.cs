@@ -43,7 +43,7 @@ namespace FinalProject.DataAccess
                 updateToProduct.DeletedDate = entity.DeletedDate;
                 CheckDefaultValues(updateToProduct, entity);
 
-                string query = "update \"Products\" set \"Name\"=@Name, \"UnitInStock\"=@UnitInStock, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"AppUserID\"=@AppUserID, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where  \"ID\"=@ID";
+                string query = "update \"Products\" set \"Name\"=@Name, \"UnitPrice\"=@UnitPrice, \"ImageUrl\"=@ImageUrl, \"Description\"=@Description, \"IsOfferable\"=@IsOfferable, \"IsSold\"=@IsSold, \"UsageStatus\"=@UsageStatus, \"CategoryID\"=@CategoryID, \"BrandID\"=@BrandID, \"ColorID\"=@ColorID, \"AppUserID\"=@AppUserID, \"DeletedDate\"=@DeletedDate, \"Status\"=@Status where  \"ID\"=@ID";
 
                 _dbContext.Execute((con) =>
                 {
@@ -56,7 +56,7 @@ namespace FinalProject.DataAccess
                 updateToProduct.UpdatedDate = DateTime.UtcNow;
                 CheckDefaultValues(updateToProduct, entity);
 
-                string query = "update \"Products\" set \"Name\"= @Name, \"UnitsInStock\"= @UnitsInStock, \"UnitPrice\"= @UnitPrice, \"ImageUrl\"= @ImageUrl, \"Description\"= @Description, \"IsOfferable\"= @IsOfferable, \"IsSold\"= @IsSold, \"UsageStatus\"= @UsageStatus, \"CategoryID\"= @CategoryID, \"BrandID\"= @BrandID, \"ColorID\"= @ColorID, \"AppUserID\"= @AppUserID, \"UpdatedDate\"= @UpdatedDate, \"Status\"= @Status where  \"ID\"= @ID";
+                string query = "update \"Products\" set \"Name\"= @Name, \"UnitPrice\"= @UnitPrice, \"ImageUrl\"= @ImageUrl, \"Description\"= @Description, \"IsOfferable\"= @IsOfferable, \"IsSold\"= @IsSold, \"UsageStatus\"= @UsageStatus, \"CategoryID\"= @CategoryID, \"BrandID\"= @BrandID, \"ColorID\"= @ColorID, \"AppUserID\"= @AppUserID, \"UpdatedDate\"= @UpdatedDate, \"Status\"= @Status where  \"ID\"= @ID";
 
                 _dbContext.Execute( (con) =>
                 {
@@ -69,7 +69,6 @@ namespace FinalProject.DataAccess
         private void CheckDefaultValues(Product updateToProduct, Product product)
         {
             updateToProduct.Name = product.Name == default ? updateToProduct.Name : product.Name;
-            updateToProduct.UnitsInStock = product.UnitsInStock == default ? updateToProduct.UnitsInStock : product.UnitsInStock;
             updateToProduct.UnitPrice = product.UnitPrice == default ? updateToProduct.UnitPrice : product.UnitPrice;
             updateToProduct.ImageUrl = product.ImageUrl == default ? updateToProduct.ImageUrl : product.ImageUrl;
             updateToProduct.Description = product.Description == default ? updateToProduct.Description : product.Description;
