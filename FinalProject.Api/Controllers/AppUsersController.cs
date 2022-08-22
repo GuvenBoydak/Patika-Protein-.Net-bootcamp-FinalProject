@@ -78,7 +78,7 @@ namespace FinalProject.Api
 
         [HttpGet]
         [Route("Activation/{code}")]
-        public async Task<IActionResult> GetByActivationCode(Guid code)
+        public async Task<IActionResult> GetByActivationCode([FromRoute]Guid code)
         {
            AppUser appUser=  await _appUserService.GetByActivationCode(code);
 

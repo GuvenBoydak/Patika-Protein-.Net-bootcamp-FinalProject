@@ -69,7 +69,7 @@ namespace FinalProject.Api
 
         [HttpGet]
         [Route("GetByAppUserOffers/{appUserId}")]
-        public async Task<IActionResult> GetByAppUserOffersAsync(int appUserId)
+        public async Task<IActionResult> GetByAppUserOffersAsync([FromRoute]int appUserId)
         {
             List<Offer> offers = await _offerService.GetByAppUserOffersAsync(appUserId);
 
@@ -80,7 +80,7 @@ namespace FinalProject.Api
 
         [HttpGet]
         [Route("GetByOffersProductID/{productId}")]
-        public async Task<IActionResult> GetByOffersProductIDAsync(int productId)
+        public async Task<IActionResult> GetByOffersProductIDAsync([FromRoute] int productId)
         {
             List<Offer> offers = await _offerService.GetByOffersProductIDAsync(productId);
 
@@ -91,7 +91,7 @@ namespace FinalProject.Api
 
         [HttpGet]
         [Route("GetByAppUserProductsOffers/{appUserId}")]
-        public async Task<IActionResult> GetByAppUserProductsOffersAsync(int appUserId)
+        public async Task<IActionResult> GetByAppUserProductsOffersAsync([FromRoute] int appUserId)
         {
             List<Product> products = await _offerService.GetByAppUserProductsOffersAsync(appUserId);
 
