@@ -15,6 +15,8 @@
 - XUnit Test with Mock
 - Generic Repository pattern
 
+### Postman Api dökümantastonu için [Tıklayınız](https://documenter.getpostman.com/view/15763755/VUqpuHvg) 
+
 
 ### Üye İşlemleri
 - Kullanıcı ilgili bilgileri doldurup kayıt olabiliyor.Ardından E mail ile bir Guid activasyon code gönderiliyor ve kişinin Activasyon işlemlerini tamamlanıyor.
