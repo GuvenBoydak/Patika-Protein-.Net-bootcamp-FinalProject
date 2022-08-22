@@ -6,6 +6,7 @@ namespace FinalProject.Business
 {
     public class InjectionModule:Module
     {
+        //Api tarafında DataAccess katmanı direk kullanmak yerine serviceleri Business katmanında tanımlayıp Api tarafında program.cs de Busines katmanını çagırarak servicelere erişiyoruz. Bu sayede DataAccess Api Katmanında direk kulanılmayacak.
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterGeneric(typeof(GenericService<>)).As(typeof(IBaseService<>)).InstancePerLifetimeScope();
