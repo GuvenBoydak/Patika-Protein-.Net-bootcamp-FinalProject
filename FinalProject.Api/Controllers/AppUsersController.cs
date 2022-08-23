@@ -16,7 +16,6 @@ namespace FinalProject.Api
     [ApiController]
     public class AppUsersController : CustomBaseController
     {
-
         private readonly IAppUserService _appUserService;
         private readonly IMapper _mapper;
         private readonly IFireAndForgetJob _fireAndForgetJob;
@@ -26,7 +25,7 @@ namespace FinalProject.Api
             _appUserService = appUserService;
             _mapper = mapper;
             _fireAndForgetJob = fireAndForgetJob;
-        }
+        } 
 
         [Authorize]
         [HttpGet]
