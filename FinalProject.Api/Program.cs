@@ -12,6 +12,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 HangfireInjection.HangfireServiceInjection(builder.Services);
 
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:7137", "https://localhost:7137").AllowAnyMethod().
+AllowAnyHeader()
+));
+
 //Default FluentValidation Filterini devre dışı bırakıp kendi yazdıgımız ValidatorFilterAttribute u ekliyoruz.
 builder.Services.AddControllers(option => option.Filters.Add<ValidatorFilterAttribute>()).AddFluentValidation(x => 
 x.RegisterValidatorsFromAssemblyContaining(typeof(ProductAddDtoValidator)));
@@ -59,10 +63,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
+
 
 //Exceptionları handler etigimiz middleware
 app.UseCustomExeption();
+
 
 app.UseAuthentication();
 

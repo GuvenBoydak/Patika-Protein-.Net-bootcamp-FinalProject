@@ -4,7 +4,6 @@ using FinalProject.Business;
 using FinalProject.DTO;
 using FinalProject.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Security.Claims;

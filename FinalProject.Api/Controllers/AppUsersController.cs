@@ -120,7 +120,7 @@ namespace FinalProject.Api
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] AppUserpasswordUpdateDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromBody] AppUserLoginDto loginDto)
         {
             Log.Information($"{User.Identity?.Name}: Login a AppUser.");
 
@@ -128,7 +128,7 @@ namespace FinalProject.Api
 
             AccessToken token = _appUserService.CreateAccessToken(appUser);
 
-           await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
+           //await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }

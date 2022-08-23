@@ -14,7 +14,6 @@ namespace FinalProject.Test
         {
             OfferAddDto offerAddDto = new OfferAddDto()
             {
-                AppUserID = appUserId,
                 Price = price,
                 ProductID = productId
             };
@@ -32,7 +31,6 @@ namespace FinalProject.Test
         {
             OfferAddDto offerAddDto = new OfferAddDto()
             {
-                AppUserID = appUserId,
                 Price = price,
                 ProductID = productId
             };
@@ -51,7 +49,6 @@ namespace FinalProject.Test
             OfferUpdateDto offerUpdateDto = new OfferUpdateDto()
             {
                 ID = id,
-                AppUserID = appUserId,
                 Price = price,
                 ProductID = productId
             };
@@ -70,7 +67,6 @@ namespace FinalProject.Test
             OfferUpdateDto offerUpdateDto = new OfferUpdateDto()
             {   
                 ID = id,
-                AppUserID = appUserId,
                 Price = price,
                 ProductID = productId
             };
