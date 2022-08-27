@@ -1,5 +1,6 @@
 ﻿using FinalProject.Base;
 using FinalProject.DTO;
+using System.Net.Http.Headers;
 
 namespace FinalProject.MVCUI
 {
@@ -15,7 +16,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<CategoryListDto>> GetAllAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<CategoryListDto>> responseDto =await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetAll");
 
@@ -24,7 +25,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<CategoryListDto>> GetActiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<CategoryListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetActive");
 
@@ -33,7 +34,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<CategoryListDto>> GetPassiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<CategoryListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetPassive");
 
@@ -42,7 +43,7 @@ namespace FinalProject.MVCUI
 
         public async Task<CategoryDto> GetByIDAsync(int id,string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<CategoryDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<CategoryDto>>($"Categories/{id}");
 
@@ -51,7 +52,7 @@ namespace FinalProject.MVCUI
 
         public async Task<CategoryWithProductsDto> GetCategoryWithProductsAsync(int id, string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<CategoryWithProductsDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<CategoryWithProductsDto>>($"Categories/GetCategoryWithProducts/{id}");
 
@@ -60,7 +61,8 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> AddAsync(string token,CategoryAddDto categoryAddDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             HttpResponseMessage response =await _httpClient.PostAsJsonAsync("Categories", categoryAddDto);
 
             return response.IsSuccessStatusCode;
@@ -68,7 +70,8 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> DeleteAsync(string token,int id)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             HttpResponseMessage response = await _httpClient.DeleteAsync($"Categories/{id}");
 
             return response.IsSuccessStatusCode;
@@ -76,7 +79,8 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> UpdateAsync(string token, CategoryUpdateDto categoryUpdateDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"Categories",categoryUpdateDto);
 
             return response.IsSuccessStatusCode;

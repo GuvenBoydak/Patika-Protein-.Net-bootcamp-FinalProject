@@ -1,5 +1,6 @@
 ﻿using FinalProject.Base;
 using FinalProject.DTO;
+using System.Net.Http.Headers;
 
 namespace FinalProject.MVCUI
 {
@@ -14,7 +15,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<ColorListDto>> GetAllAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<ColorListDto>> responseDto =await _httpClient.GetFromJsonAsync<CustomResponseDto<List<ColorListDto>>>("Colors/GetAll");
 
@@ -23,7 +24,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<ColorListDto>> GetActiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<ColorListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<ColorListDto>>>("Colors/GetActive");
 
@@ -32,7 +33,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<ColorListDto>> GetPassiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<ColorListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<ColorListDto>>>("Colors/GetPasive");
 
@@ -41,7 +42,7 @@ namespace FinalProject.MVCUI
 
         public async Task<ColorDto> GetByIDAsync(string token,int id)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<ColorDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<ColorDto>>($"Colors/{id}");
 
@@ -50,7 +51,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> AddAsync(string token,ColorAddDto colorAddDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Colors",colorAddDto);
 
@@ -59,7 +60,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> UpdateAsync(string token, ColorUpdateDto colorUpdateDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PutAsJsonAsync("Colors", colorUpdateDto);
 
@@ -68,7 +69,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> DeleteAsync(string token,int id)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.DeleteAsync($"Colors/{id}");
 

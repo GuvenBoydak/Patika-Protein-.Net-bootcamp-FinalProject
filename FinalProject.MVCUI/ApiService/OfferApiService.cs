@@ -1,5 +1,6 @@
 ﻿using FinalProject.Base;
 using FinalProject.DTO;
+using System.Net.Http.Headers;
 
 namespace FinalProject.MVCUI
 {
@@ -14,7 +15,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<OfferListDto>> GetAllAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetAll");
 
@@ -23,7 +24,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<OfferListDto>> GetActiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetActive");
 
@@ -32,7 +33,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<OfferListDto>> GetPassiveAsync(string token)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetPassive");
 
@@ -41,7 +42,7 @@ namespace FinalProject.MVCUI
 
         public async Task<OfferDto> GetByIDAsync(string token,int id)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<OfferDto> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<OfferDto>>($"Offers/{id}");
 
@@ -50,7 +51,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<OfferListDto>> GetByAppUserOffersAsync(string token,int appUserID)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>($"Offers/GetByAppUserOffers/{appUserID}");
 
@@ -59,7 +60,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<ProductOffersListDto>> GetByOffersProductIDAsync(string token, int productID)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<ProductOffersListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<ProductOffersListDto>>>($"Offers/GetByOffersProductID/{productID}");
 
@@ -68,7 +69,7 @@ namespace FinalProject.MVCUI
 
         public async Task<List<AppUserProductsOfferListDto>> GetByAppUserProductsOffersAsync(string token, int appUserId)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CustomResponseDto<List<AppUserProductsOfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserProductsOfferListDto>>>($"Offers/GetByAppUserProductsOffers/{appUserId}");
 
@@ -77,7 +78,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> BuyProductAsync(string token, OfferBuyProductDto offerBuyProductDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/BuyProduct",offerBuyProductDto);
 
@@ -86,7 +87,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> OfferApprovalAsync(string token, OfferApprovalDto offerApprovalDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/OfferApproval", offerApprovalDto);
 
@@ -95,7 +96,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> AddAsync(string token, OfferAddDto offerAddDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerAddDto);
 
@@ -104,7 +105,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> UpdateAsync(string token, OfferUpdateDto offerUpdateDto)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerUpdateDto);
 
@@ -113,7 +114,7 @@ namespace FinalProject.MVCUI
 
         public async Task<bool> DeleteAsync(string token, int id)
         {
-            _httpClient = Authorization.AuthorizationWithToken(token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.DeleteAsync($"Offers/{id}");
 
