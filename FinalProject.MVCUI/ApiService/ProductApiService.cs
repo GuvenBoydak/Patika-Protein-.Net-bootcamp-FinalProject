@@ -1,6 +1,7 @@
 ﻿using FinalProject.Base;
 using FinalProject.DTO;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace FinalProject.MVCUI
 {
@@ -53,6 +54,7 @@ namespace FinalProject.MVCUI
         public async Task<bool> AddAsync(ProductAddDto productAddDto, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Products", productAddDto);
 
             return response.IsSuccessStatusCode;

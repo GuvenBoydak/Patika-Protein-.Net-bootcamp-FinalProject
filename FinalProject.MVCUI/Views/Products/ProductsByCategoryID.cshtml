@@ -1,0 +1,54 @@
+﻿
+@model ProductsVM
+
+@{
+    ViewData["Title"] = "ProductsByCategoryID";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-2">
+         <section class="panel">
+            <header class="panel-heading">
+                Category
+            </header>
+            <div class="panel-body">
+                <ul class="nav prod-cat">
+                  @foreach (Category item in Model.Categories)
+                  {
+                      <li > 
+                          <a asp-action="ProductsByCategoryID" asp-route-id="@item.ID" class="btn btn-primary">@item.Name</a> 
+                       </li>
+                  }
+                </ul>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-10">
+        <div class="row product-list">
+            @foreach (Product item in Model.Products)
+            {
+                <div class="col-md-4">
+                    <section class="panel">
+                        <div class="pro-img-box">
+                           @*<img src=""/>*@
+                        </div>
+                        <div class="panel-body text-center">
+                            <h4>
+                                <a href="#" class="pro-title">
+                                    @item.Name
+                                </a>
+                            </h4>
+                            <p class="price">@item.UnitPrice</p>
+                        </div>
+                    </section>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+
+
