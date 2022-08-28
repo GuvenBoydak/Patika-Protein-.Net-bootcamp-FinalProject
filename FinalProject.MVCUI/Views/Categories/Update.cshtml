@@ -4,6 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (ViewBag.Fail != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Fail
+    </div>
+}
+
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 offset-md-1">
@@ -11,11 +19,11 @@
                 <input asp-for="CategoryUpdateDto.ID" type="hidden" />
                 <div class="form-group">
                     <label> Kategori İsmi</label>
-                  <input type="text" asp-for="CategoryUpdateDto.Name" class="form-control" />
+                    <input type="text" asp-for="CategoryUpdateDto.Name" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label> Kategori Açıklaması</label>
-                   <input type="text" asp-for="CategoryUpdateDto.Description" class="form-control" />
+                    <input type="text" asp-for="CategoryUpdateDto.Description" class="form-control" />
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary">Güncelle</button>
