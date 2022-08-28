@@ -71,6 +71,7 @@ app.UseHttpsRedirection();
 //Exceptionları handler etigimiz middleware
 app.UseCustomExeption();
 
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
