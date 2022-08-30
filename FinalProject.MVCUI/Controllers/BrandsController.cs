@@ -67,6 +67,7 @@ namespace FinalProject.MVCUI.Controllers
             if ((int)TempData["ID"] == brandUpdateDto.ID)
             {
                 await _brandApiService.UpdateAsync(token,brandUpdateDto);
+
                 return RedirectToAction("Index");
             }
 
