@@ -43,12 +43,14 @@ namespace FinalProject.Business
             CreateMap<Offer, OfferBuyProductDto>().ReverseMap();
             CreateMap<Offer, ProductOffersListDto>().ReverseMap();
             CreateMap<OfferDto, OfferUpdateDto>().ReverseMap();
+            CreateMap<Offer, AppUserProductsOfferListDto>().ReverseMap().ForMember(x => x.Price, x => x.MapFrom(x => x.UnitPrice));
 
 
             CreateMap<AppUser, AppUserListDto>().ReverseMap();
             CreateMap<AppUser, AppUserDto>().ReverseMap();
             CreateMap<AppUser, AppUserUpdateDto>().ReverseMap();
             CreateMap<AppUser, AppUserWithOffersDto>().ReverseMap();
+            
 
         }
     }
