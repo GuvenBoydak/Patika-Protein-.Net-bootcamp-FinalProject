@@ -76,6 +76,17 @@ namespace FinalProject.Api
 
 
         [HttpGet]
+        [Route("GetAppUserByEmail/{email}")]
+        public async Task<IActionResult> GetByEmailAsync(string email)
+        {
+            AppUser appUser = await _appUserService.GetByEmailAsync(email);
+
+            AppUserDto appUserDto= _mapper.Map<AppUser, AppUserDto>(appUser);
+
+            return CreateActionResult(CustomResponseDto<AppUserDto>.Success(200,appUserDto,$"{email} li kullanıcı listelendi.")); 
+        }
+
+        [HttpGet]
         [Route("Activation/{code}")]
         public async Task<IActionResult> GetByActivationCode([FromRoute]Guid code)
         {
