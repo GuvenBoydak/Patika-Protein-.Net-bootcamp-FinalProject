@@ -1,4 +1,6 @@
-﻿@{
+﻿@model AppUserVM
+
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -10,59 +12,81 @@
                     <a href="#">
                         <img src="~/OutherTools/FlatAdmin/img/profile-avatar.jpg" alt="">
                     </a>
-                    <h1>Jonathan Smith</h1>
-                    <p>jsmith@flatlab.com</p>
+                    <h1>@Model.AppUser.UserName</h1>
+                    <p>@Model.AppUser.Email</p>
                 </div>
 
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="profile.html"> <i class="icon-user"></i> Profile</a></li>
-                    <li><a href="profile-activity.html"> <i class="icon-calendar"></i> Recent Activity <span class="label label-danger pull-right r-activity">9</span></a></li>
-                    <li><a href="profile-edit.html"> <i class="icon-edit"></i> Edit profile</a></li>
+                    <li class="active"><a asp-action="Index" asp-controller="AppUsers"> <i class="icon-user"></i>Ürünlerim</a></li>
+                    <li><a asp-action="GetByAppUserOffers" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID"> <i class="icon-calendar"></i> Yaptıgım Teklifler </a></li>
+                    <li><a asp-action="Profile" asp-controller="AppUsers"> <i class="icon-edit"></i> Profil Bilgilerim</a></li>
                 </ul>
-
             </section>
         </aside>
         <aside class="profile-info col-lg-9">
-            <section class="panel">
-                <div class="bio-graph-heading">
-                    Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
-                </div>
-                <div class="panel-body bio-graph-info">
-                    <h1>Bio Graph</h1>
-                    <div class="row">
-                        <div class="bio-row">
-                            <p><span>First Name </span>: Jonathan</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Last Name </span>: Smith</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Country </span>: Australia</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Birthday</span>: 13 July 1983</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Occupation </span>: UI Designer</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Email </span>: jsmith@flatlab.com</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Mobile </span>: (12) 03 4567890</p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Phone </span>: 88 (02) 123456</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+             <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ürün İsmi</th>
+                            <th>Ürün Açıklma</th>
+                            <th>Ürün Fiyat</th>
+                            <th>Ürün Kategorisi</th>
+                            <th>Ürün Markası</th>
+                            <th>Ürün Rengi</th>
+                            <th>Ürün Durumu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int id = 0; }
+                        @foreach (Product item in Model.Products)
+                        {
+                            <tr>
+                                @{ id++; }
+                                <td>@id</td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@item.UnitPrice</td>
+                                <td>
+                                      @foreach (Category category in Model.Categories)
+                                    {
+                                        if (category.ID == item.CategoryID)
+                                            @category.Name                                      
+                                    }
+                                </td>
+                                <td>
+                                      @foreach (Brand brand in Model.Brands)
+                                    {
+                                        if (brand.ID == item.BrandID)
+                                            @brand.Name                                 
+                                    }
+                                </td> 
+                                <td>
+                                      @foreach (Color color in Model.Colors)
+                                    {
+                                        if (color.ID == item.ColorID)
+                                            @color.Name                                       
+                                    }
+                                </td>
+                                 @if (item.IsSold == true)
+                                {
+                                    <td>Teklif Satılmış</td>
+                                }
+                                else
+                                {
+                                    <td>Teklif henüz <strong>Satılmamış</strong></td>
+                                }
+                                <td>
+                                    <a asp-action="GetByProductsOffer" asp-route-id="@item.ID" class="btn btn-info">Gelen teklifler</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </aside>
     </div>
 
     <!-- page end-->
-
-
     <!-- js placed at the end of the document so the pages load faster -->
     <script src="~/OutherTools/FlatAdmin/js/jquery.js"></script>
     <script src="~/OutherTools/FlatAdmin/js/bootstrap.min.js"></script>
@@ -84,6 +108,14 @@
 
 
 </body>
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,61 @@
+﻿@model AppUserVM
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <div class="row">
+        <aside class="profile-nav col-lg-3">
+            <section class="panel">
+                <div class="user-heading round">
+                    <a href="#">
+                        <img src="~/OutherTools/FlatAdmin/img/profile-avatar.jpg" alt="">
+                    </a>
+                    <h1>@Model.AppUser.UserName</h1>
+                    <p>@Model.AppUser.Email</p>
+                </div>
+
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="/AppUsers/Index"> <i class="icon-user"></i>Ürünlerim</a></li>
+                    <li><a href="/AppUsers/GetByAppUserOffers"> <i class="icon-calendar"></i> Yapılan Teklifler </a></li>
+                    <li><a href="/AppUsers/Profile"> <i class="icon-edit"></i> Profil Bilgilerim</a></li>
+                </ul>
+            </section>
+        </aside>
+        <aside class="profile-info col-lg-9">
+            <section class="panel">
+                <div class="panel-body bio-graph-info">
+                    <h1>Profil Detayları</h1>
+                    <div class="row">
+                        <div class="bio-row">
+                            <p><span>UserName </span>: @Model.AppUser.UserName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>İsim </span>: @Model.AppUser.FirstName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Soyisim </span>:  @Model.AppUser.LastName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Telefon </span>:  @Model.AppUser.PhoneNumber</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Email </span>:  @Model.AppUser.Email</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Son Giriş </span>:  @Model.AppUser.LastActivty</p>
+                        </div>
+                        <div class="bio-row">
+                            <a class="btn btn-warning" asp-action="UpdateProfile" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID">Güncelle</a>
+                            <a class="btn btn-danger" asp-action="ChangePassword" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID">Şifre Degiştir</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+</body>
+
+

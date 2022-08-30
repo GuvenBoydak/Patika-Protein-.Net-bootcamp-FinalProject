@@ -1,0 +1,62 @@
+﻿@model AppUserVM
+@{
+    ViewData["Title"] = "GetByAppUserOffers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <section class="panel">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Teklif fiyatı</th>
+                            <th>Teklif Durumu</th>
+                            <th>Teklif Edilen Ürün</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int id = 0;
+                        }
+                        @foreach (Offer item in Model.Offers)
+                        {
+                            <tr>
+                                @{
+                                    id++;
+                                }
+                                <td>@id</td>
+                                <td>@item.Price</td>
+
+                                @if (item.IsApproved == true)
+                                {
+                                    <td>Teklif Kabul Edilmiş</td>
+                                }
+                                else
+                                {
+                                    <td>Teklif Kabul <strong>Edilmemiş</strong></td>
+                                }
+                                <td>
+                                    @foreach (Product product in Model.Products)
+                                    {
+                                        if (product.ID == item.ProductID)
+                                            @product.Name
+                                        ;
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Delete" asp-controller="Offers" asp-route-id="@item.ID" class="btn btn-danger">Geri Çek</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+    </div>
+</div>
+

@@ -52,6 +52,16 @@ namespace FinalProject.MVCUI
             return responseDto.Data;
         }
 
+        public async Task<AppUserDto> GetByEmailAsync(string token,string email)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            CustomResponseDto<AppUserDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<AppUserDto>>($"AppUsers/GetAppUserByEmail/{email}");
+
+            return responseDto.Data;
+
+        }
+
         public async Task<bool> GetActivationAsync(string token, Guid code)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -84,22 +94,18 @@ namespace FinalProject.MVCUI
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<bool> ChangePasswordAsync(string token, AppUserPasswordUpdateVM appUserPasswordUpdateVM)
+        public async Task<bool> ChangePasswordAsync(string token, AppUserPasswordUpdateDto appUserPasswordUpdateDto)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            AppUserPasswordUpdateDto appUserPasswordUpdateDto= _mapper.Map<AppUserPasswordUpdateVM, AppUserPasswordUpdateDto>(appUserPasswordUpdateVM);
 
             HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers/ChangePassword", appUserPasswordUpdateDto);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(string token, AppUserUpdateVM appUserUpdateVM)
+        public async Task<bool> UpdateAsync(string token, AppUserUpdateDto appUserUpdateDto)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            AppUserUpdateDto appUserUpdateDto = _mapper.Map<AppUserUpdateVM, AppUserUpdateDto>(appUserUpdateVM);
 
             HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers", appUserUpdateDto);
 
