@@ -26,6 +26,8 @@ namespace FinalProject.DTO
 
         public int AppUserID { get; set; }
 
+        public int ProductID { get; set; }
+
         public List<OfferDto> Offers { get; set; }
 
     }

@@ -1,4 +1,6 @@
-﻿namespace FinalProject.DTO
+﻿using FinalProject.Entities;
+
+namespace FinalProject.DTO
 {
     public class CategoryWithProductsDto:BaseDto
     {

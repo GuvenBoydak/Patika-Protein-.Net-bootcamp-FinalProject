@@ -25,7 +25,7 @@ namespace FinalProject.DTO
 
         public int? ColorID { get; set; }
 
-        public IFormFile File { get; set; }
+        public IFormFile ImageUrl { get; set; }
 
 
     }

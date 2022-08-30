@@ -23,5 +23,9 @@ namespace FinalProject.DTO
         public int? BrandID { get; set; }
 
         public int? ColorID { get; set; }
+
+        public int? AppUserID { get; set; }
+
+        public int? ProductID { get; set; }
     }
 }
