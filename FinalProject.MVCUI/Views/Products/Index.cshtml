@@ -4,68 +4,53 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-2">
-         <section class="panel">
-            <header class="panel-heading">
-                Category
-            </header>
-            <div class="panel-body">
-                <ul class="nav prod-cat">
-                  @foreach (Category item in Model.Categories)
-                  {
-                      <li > 
-                          <a asp-action="ProductsByCategoryID" asp-route-id="@item.ID" class="btn btn-primary">@item.Name</a> 
-                       </li>
-                  }
+<!--external css-->
+<link href="~/OutherTools/FlatAdmin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="~/OutherTools/FlatAdmin/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/OutherTools/FlatAdmin/css/gallery.css" />
 
-                </ul>
-            </div>
-        </section>
-    </div>
-    <div class="col-md-10">
-        <section class="panel">
-            <div class="panel-body">
-                <div class="pro-sort">
-                    <label class="pro-lab">Sort By</label>
-                    <select class="styled">
-                        <option>Price Low to High</option>
-                        <option>Price High to Low</option>
-                    </select>
-                </div>
-                <div class="pull-right">
-                    <ul class="pagination pagination-sm pro-page-list">
-
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">»</a></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <div class="row product-list">
+<section class="panel">
+    <header class="panel-heading">
+        <div class="btn-group ">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kategoriler</button>
+            <ul role="menu" class="dropdown-menu">
+                <li><a href="/products/Index"><strong>Tüm Ürünler</strong> </a></li>
+                @foreach (Category item in Model.Categories)
+                {
+                    <li><a asp-action="Index" asp-route-id="@item.ID">@item.Name</a></li>
+                }
+            </ul>
+        </div>
+    </header>
+    <div class="panel-body">
+        <ul class="grid cs-style-3">
             @foreach (Product item in Model.Products)
             {
-                <div class="col-md-4">
-                    <section class="panel">
-                        <div class="pro-img-box">
-                            <img src="@item.ImageUrl" alt="@item.Name" />
-                        </div>
-
-                        <div class="panel-body text-center">
-                            <h4>
-                                <a href="#" class="pro-title">
-                                    @item.Name
-                                </a>
-                            </h4>
-                            <p class="price">@item.UnitPrice</p>
-                        </div>
-                    </section>
-                </div>
+                <li>
+                    <figure>
+                        <img src="@item.ImageUrl" alt="@item.Name" width="150" height="250">
+                        <figcaption>
+                            <h3>@item.Name  - @item.UnitPrice₺</h3>
+                            <a class="fancybox" rel="group" asp-action="ProductDetail" asp-controller="Products" asp-route-id="@item.ID">Detay</a>
+                        </figcaption>
+                    </figure>
+                </li>
             }
-        </div>
+        </ul>
 
     </div>
-</div>
+</section>
+
+<script src="~/OutherTools/FlatAdmin/assets/fancybox/source/jquery.fancybox.js"></script>
+<script src="~/OutherTools/FlatAdmin/js/modernizr.custom.js"></script>
+<script src="~/OutherTools/FlatAdmin/js/toucheffects.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+        //    fancybox
+        jQuery(".fancybox").fancybox();
+    });
+
+</script>
 

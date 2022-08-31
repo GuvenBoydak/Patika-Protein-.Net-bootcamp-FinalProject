@@ -4,9 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+
     <div class="row">
-        <div class="col-md-10 offset-md-1">
+        <div class="profile-nav col-lg-3">
+            <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml">
+        </div>
+        <div class="profile-info col-lg-9">
             <section class="panel">
                 <table class="table table-hover">
                     <thead>
@@ -48,6 +51,7 @@
                                     }
                                 </td>
                                 <td>
+                                    <a asp-action="Update" asp-controller="Offers" asp-route-id="@item.ID" class="btn btn-warning">Güncelle</a>
                                     <a asp-action="Delete" asp-controller="Offers" asp-route-id="@item.ID" class="btn btn-danger">Geri Çek</a>
                                 </td>
                             </tr>
@@ -58,5 +62,4 @@
         </div>
 
     </div>
-</div>
 

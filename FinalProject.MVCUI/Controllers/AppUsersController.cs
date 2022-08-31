@@ -3,7 +3,6 @@ using FinalProject.Base;
 using FinalProject.DTO;
 using FinalProject.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace FinalProject.MVCUI.Controllers
@@ -58,9 +57,16 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token =await _appUserApiService.LoginAsync(appUserLoginDto);
 
+            if (token == "")
+            {
+                ViewBag.FailPassword = "Hatalı Şifre Girildi.";
+                return View();
+            }
+
             HttpContext.Session.SetString("token", DeserialezeToken(token));
 
             HttpContext.Session.SetString("User", appUserLoginDto.Email);
+
             return RedirectToAction("Index","Products");
         }
 
@@ -73,7 +79,13 @@ namespace FinalProject.MVCUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(AppUserRegisterDto appUserRegisterDto)
         {
-            await _appUserApiService.RegisterAsync(appUserRegisterDto);
+           string token= await _appUserApiService.RegisterAsync(appUserRegisterDto);
+
+            if (token == "")
+            {
+                ViewBag.FailRegister = "Hatalı Şifre Girildi.";
+                return View();
+            }
 
             return RedirectToAction("Login");
         }
@@ -130,11 +142,16 @@ namespace FinalProject.MVCUI.Controllers
                 string token = HttpContext.Session.GetString("token");
                 AppUserUpdateDto appUserUpdateDto = _mapper.Map<AppUser, AppUserUpdateDto>(appUser);
 
-                await _appUserApiService.UpdateAsync(token,appUserUpdateDto);
+              bool result=  await _appUserApiService.UpdateAsync(token,appUserUpdateDto);
+                if(!result)
+                {
+                    ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız.";
+                    return View();
+                }
             }
 
             ViewBag.Fail = "Girilen ID Yanlış";
-            return View(appUser);
+            return View();
         }
 
 
@@ -153,13 +170,18 @@ namespace FinalProject.MVCUI.Controllers
             {
                 string token = HttpContext.Session.GetString("token");
 
-                await _appUserApiService.ChangePasswordAsync(token, appUserPasswordUpdateDto);
+                bool result = await _appUserApiService.ChangePasswordAsync(token, appUserPasswordUpdateDto);
+                if (!result)
+                {
+                    ViewBag.FailUpdate = "Şifre Güncelleme işlemi Başarısız. ";
+                    return View();
+                }
 
                 return RedirectToAction("Index");
             }
 
             ViewBag.Fail = "Girilen ID Yanlış";
-            return View(appUserPasswordUpdateDto);
+            return View();
         }
 
 
@@ -167,11 +189,13 @@ namespace FinalProject.MVCUI.Controllers
         public async Task<IActionResult> GetByAppUserOffers(int id)
         {
             string token = HttpContext.Session.GetString("token");
+            string email = HttpContext.Session.GetString("User");
 
             AppUserVM vM = new AppUserVM
             {
                 Offers = _mapper.Map<List<OfferListDto>, List<Offer>>(await _offerApiService.GetByAppUserOffersAsync(token, id)),
-                Products= _mapper.Map<List<ProductListDto>,List<Product>>(await _productApiService.GetActiveProductsAsync(token))
+                Products= _mapper.Map<List<ProductListDto>,List<Product>>(await _productApiService.GetActiveProductsAsync(token)),
+                AppUser=_mapper.Map<AppUserDto,AppUser>(await _appUserApiService.GetByEmailAsync(token,email))
             };
 
             return View(vM);

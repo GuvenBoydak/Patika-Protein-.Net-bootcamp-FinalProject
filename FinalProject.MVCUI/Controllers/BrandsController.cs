@@ -39,7 +39,12 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _brandApiService.AddAsync(token, brandAddDto);
+           bool result= await _brandApiService.AddAsync(token, brandAddDto);
+            if(!result)
+            {
+                ViewBag.FailAdd = "Ekleme işlemi Başarısız.";
+                return View();
+            }
 
             return RedirectToAction("Index");
         }
@@ -66,13 +71,18 @@ namespace FinalProject.MVCUI.Controllers
 
             if ((int)TempData["ID"] == brandUpdateDto.ID)
             {
-                await _brandApiService.UpdateAsync(token,brandUpdateDto);
+                bool result= await _brandApiService.UpdateAsync(token,brandUpdateDto);
+                if(!result)
+                {
+                    ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız";
+                    return View();
+                }
 
                 return RedirectToAction("Index");
             }
 
             ViewBag.Fail = "Girilen ID Yanlış";
-            return View(brandUpdateDto);
+            return View();
         }
 
         [HttpGet]
@@ -80,7 +90,9 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _brandApiService.DeleteAsync(token,id);
+          bool result=  await _brandApiService.DeleteAsync(token,id);
+            if (!result)
+                ViewBag.FailDelete = "Silme İşlemi Başarısız";
 
             return RedirectToAction("Index");
         }

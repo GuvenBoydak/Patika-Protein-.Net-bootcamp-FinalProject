@@ -1,5 +1,6 @@
 ﻿using FinalProject.DTO;
 using FinalProject.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FinalProject.MVCUI
 {
@@ -18,5 +19,11 @@ namespace FinalProject.MVCUI
         public ProductAddDto ProductAddDto { get; set; }
 
         public ProductUpdateDto ProductUpdateDto { get; set; }
+
+        public Offer Offer { get; set; }
+
+        public CategoryDto Category { get; set; }
+
+        public List<SelectListItem> PriceList { get; set; }
     }
 }

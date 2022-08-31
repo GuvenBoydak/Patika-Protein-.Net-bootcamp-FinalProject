@@ -6,24 +6,10 @@
 }
 <body>
     <div class="row">
-        <aside class="profile-nav col-lg-3">
-            <section class="panel">
-                <div class="user-heading round">
-                    <a href="#">
-                        <img src="~/OutherTools/FlatAdmin/img/profile-avatar.jpg" alt="">
-                    </a>
-                    <h1>@Model.AppUser.UserName</h1>
-                    <p>@Model.AppUser.Email</p>
-                </div>
-
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="/AppUsers/Index"> <i class="icon-user"></i>Ürünlerim</a></li>
-                    <li><a href="/AppUsers/GetByAppUserOffers"> <i class="icon-calendar"></i> Yapılan Teklifler </a></li>
-                    <li><a href="/AppUsers/Profile"> <i class="icon-edit"></i> Profil Bilgilerim</a></li>
-                </ul>
-            </section>
-        </aside>
-        <aside class="profile-info col-lg-9">
+        <div class="profile-nav col-lg-3">
+            <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml">
+        </div>
+        <div class="profile-info col-lg-9">
             <section class="panel">
                 <div class="panel-body bio-graph-info">
                     <h1>Profil Detayları</h1>
@@ -54,7 +40,7 @@
                     </div>
                 </div>
             </section>
-        </aside>
+        </div>
     </div>
 </body>
 

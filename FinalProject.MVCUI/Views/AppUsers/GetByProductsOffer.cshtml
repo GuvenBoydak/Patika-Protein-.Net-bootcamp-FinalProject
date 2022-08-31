@@ -4,6 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+@if (ViewBag.FailOfferApproval != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.FailOfferApproval
+    </div>
+}
+
+           
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 offset-md-1">

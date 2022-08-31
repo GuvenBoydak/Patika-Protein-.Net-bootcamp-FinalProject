@@ -10,7 +10,12 @@
         @ViewBag.Fail
     </div>
 }
-
+@if (ViewBag.FailUpdate != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.FailUpdate
+    </div>
+}
 
 <div class="container">
     <div class="row">

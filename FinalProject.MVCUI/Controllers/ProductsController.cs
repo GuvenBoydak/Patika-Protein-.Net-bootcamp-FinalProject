@@ -2,6 +2,7 @@
 using FinalProject.DTO;
 using FinalProject.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FinalProject.MVCUI.Controllers
 {
@@ -23,7 +24,7 @@ namespace FinalProject.MVCUI.Controllers
             _colorApiService = colorApiService;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {          
             string token = HttpContext.Session.GetString("token");
 
@@ -32,25 +33,25 @@ namespace FinalProject.MVCUI.Controllers
 
             ProductsVM vM = new ProductsVM
             {
-                Products = _mapper.Map<List<ProductListDto>, List<Product>>(products),
-                Categories = _mapper.Map<List<CategoryListDto>,List<Category>>(categories)
+                Products = _mapper.Map<List<ProductListDto>, List<Product>>(id != null ? products.Where(x=>x.CategoryID==id).ToList() : products),
+                Categories = _mapper.Map<List<CategoryListDto>,List<Category>>(categories)        
             };
 
             return View(vM);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductsByCategoryID(int id)
+        public async Task<IActionResult> ProductDetail(int id)
         {
             string token = HttpContext.Session.GetString("token");
 
-            CategoryWithProductsDto categoryProducts = await _categoryApiService.GetCategoryWithProductsAsync(id,token);
-            List<CategoryListDto> category = await _categoryApiService.GetActiveAsync(token);
-            
+            ProductDto product = await _productApiService.GetByIDAsync(id, token);
+
             ProductsVM vM = new ProductsVM
             {
-                Products = _mapper.Map<CategoryWithProductsDto, Category>(categoryProducts).Products,
-                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(category)
+                PriceList = PriceList(await _productApiService.GetByIDAsync(id, token)),
+                Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token)),
+                Category = await _categoryApiService.GetByIDAsync(product.CategoryID, token)
             };
 
             return View(vM);
@@ -119,9 +120,30 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _productApiService.DeleteAsync(id,token);
+           bool result= await _productApiService.DeleteAsync(id,token);
+            if (!result)
+            {
+                ViewBag.FailDelete = "Ürün silme İşlmemi Başarısız.";
+                ProductsVM vM = new ProductsVM
+                {
+                    Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token))
+                };
+                return RedirectToAction("ProductDetail", "Products", vM);
+            }
 
             return RedirectToAction("Index");
+        }
+
+        private List<SelectListItem> PriceList(ProductDto product)
+        {
+            List<SelectListItem> priceList = new List<SelectListItem>();
+            for (int i = 10; i <= 100; i += 10)
+            {
+                decimal priceCheck = (decimal)(product.UnitPrice * i / 100);
+                priceList.Add(new SelectListItem() { Text = $"%{i} : ₺{priceCheck}", Value = priceCheck.ToString() });
+            }
+
+            return priceList;
         }
     }
 }

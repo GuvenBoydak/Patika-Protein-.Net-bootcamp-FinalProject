@@ -6,84 +6,74 @@
 
 <body>
     <div class="row">
-        <aside class="profile-nav col-lg-3">
-            <section class="panel">
-                <div class="user-heading round">
-                    <a href="#">
-                        <img src="~/OutherTools/FlatAdmin/img/profile-avatar.jpg" alt="">
-                    </a>
-                    <h1>@Model.AppUser.UserName</h1>
-                    <p>@Model.AppUser.Email</p>
-                </div>
-
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a asp-action="Index" asp-controller="AppUsers"> <i class="icon-user"></i>Ürünlerim</a></li>
-                    <li><a asp-action="GetByAppUserOffers" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID"> <i class="icon-calendar"></i> Yaptıgım Teklifler </a></li>
-                    <li><a asp-action="Profile" asp-controller="AppUsers"> <i class="icon-edit"></i> Profil Bilgilerim</a></li>
-                </ul>
-            </section>
-        </aside>
-        <aside class="profile-info col-lg-9">
-             <table class="table table-hover">
-                    <thead>
+        <div class="profile-nav col-lg-3">
+            <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml"  >
+        </div>
+        <div class="profile-info col-lg-9">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ürün İsmi</th>
+                        <th>Ürün Açıklma</th>
+                        <th>Ürün Fiyat</th>
+                        <th>Ürün Kategorisi</th>
+                        <th>Ürün Markası</th>
+                        <th>Ürün Rengi</th>
+                        <th>Ürün Durumu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int id = 0;
+                    }
+                    @foreach (Product item in Model.Products)
+                    {
                         <tr>
-                            <th>#</th>
-                            <th>Ürün İsmi</th>
-                            <th>Ürün Açıklma</th>
-                            <th>Ürün Fiyat</th>
-                            <th>Ürün Kategorisi</th>
-                            <th>Ürün Markası</th>
-                            <th>Ürün Rengi</th>
-                            <th>Ürün Durumu</th>
+                            @{
+                                id++;
+                            }
+                            <td>@id</td>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>@item.UnitPrice</td>
+                            <td>
+                                @foreach (Category category in Model.Categories)
+                                {
+                                    if (category.ID == item.CategoryID)
+                                        @category.Name
+                                }
+                            </td>
+                            <td>
+                                @foreach (Brand brand in Model.Brands)
+                                {
+                                    if (brand.ID == item.BrandID)
+                                        @brand.Name
+                                }
+                            </td>
+                            <td>
+                                @foreach (Color color in Model.Colors)
+                                {
+                                    if (color.ID == item.ColorID)
+                                        @color.Name
+                                }
+                            </td>
+                            @if (item.IsSold == true)
+                            {
+                                <td>Teklif Satılmış</td>
+                            }
+                            else
+                            {
+                                <td>Teklif henüz <strong>Satılmamış</strong></td>
+                            }
+                            <td>
+                                <a asp-action="GetByProductsOffer" asp-route-id="@item.ID" class="btn btn-info">Gelen teklifler</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @{ int id = 0; }
-                        @foreach (Product item in Model.Products)
-                        {
-                            <tr>
-                                @{ id++; }
-                                <td>@id</td>
-                                <td>@item.Name</td>
-                                <td>@item.Description</td>
-                                <td>@item.UnitPrice</td>
-                                <td>
-                                      @foreach (Category category in Model.Categories)
-                                    {
-                                        if (category.ID == item.CategoryID)
-                                            @category.Name                                      
-                                    }
-                                </td>
-                                <td>
-                                      @foreach (Brand brand in Model.Brands)
-                                    {
-                                        if (brand.ID == item.BrandID)
-                                            @brand.Name                                 
-                                    }
-                                </td> 
-                                <td>
-                                      @foreach (Color color in Model.Colors)
-                                    {
-                                        if (color.ID == item.ColorID)
-                                            @color.Name                                       
-                                    }
-                                </td>
-                                 @if (item.IsSold == true)
-                                {
-                                    <td>Teklif Satılmış</td>
-                                }
-                                else
-                                {
-                                    <td>Teklif henüz <strong>Satılmamış</strong></td>
-                                }
-                                <td>
-                                    <a asp-action="GetByProductsOffer" asp-route-id="@item.ID" class="btn btn-info">Gelen teklifler</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-        </aside>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- page end-->

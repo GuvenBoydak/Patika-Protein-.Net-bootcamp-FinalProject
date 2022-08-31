@@ -11,6 +11,14 @@
     </div>
 }
 
+@if(ViewBag.FailUpdate!=null)
+{
+      <div class="alert alert-danger">
+            @ViewBag.FailUpdate
+        </div>
+}
+
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 offset-md-1">

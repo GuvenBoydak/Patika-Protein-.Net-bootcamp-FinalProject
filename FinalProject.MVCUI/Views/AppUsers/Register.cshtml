@@ -26,30 +26,37 @@
 
 </head>
 
-  <body class="login-body">
+<body class="login-body">
 
     <div class="container">
 
-      <form class="form-signin" asp-action="Register" asp-controller="AppUsers">
-        <h2 class="form-signin-heading">Kayıt Ol</h2>
-        <div class="login-wrap">
-            <p>Kayıt olmak için bilgileri doldurunuz</p>
-            <input type="text" class="form-control" asp-for="AppUserRegisterDto.Email"  placeholder="Email" autofocus>
-            <input type="password" class="form-control" asp-for="AppUserRegisterDto.Password" placeholder="Password" autofocus>
-            <input type="text" class="form-control" asp-for="AppUserRegisterDto.UserName" placeholder="UserName" autofocus>
-            <input type="text" class="form-control" asp-for="AppUserRegisterDto.FirstName" placeholder="FirstName" autofocus>
-            <input type="text" class="form-control" asp-for="AppUserRegisterDto.LastName" placeholder="LastName" autofocus>
-            <input type="text" class="form-control" asp-for="AppUserRegisterDto.PhoneNumber" placeholder="Phone Number" autofocus>
-           
-            <label class="checkbox">
-                <input type="checkbox" value="agree this condition">Hizmet Şartlarını ve Gizlilik Politikasını kabul ediyorum
-            </label>
-            <button class="btn btn-lg btn-login btn-block" type="submit">Kayıt Ol</button>
-        </div>
+        @if (ViewBag.FailRegister != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.FailRegister
+            </div>
+        }
 
-      </form>
+        <form class="form-signin" asp-action="Register" asp-controller="AppUsers">
+            <h2 class="form-signin-heading">Kayıt Ol</h2>
+            <div class="login-wrap">
+                <p>Kayıt olmak için bilgileri doldurunuz</p>
+                <input type="text" class="form-control" asp-for="AppUserRegisterDto.Email" placeholder="Email" autofocus>
+                <input type="password" class="form-control" asp-for="AppUserRegisterDto.Password" placeholder="Password" autofocus>
+                <input type="text" class="form-control" asp-for="AppUserRegisterDto.UserName" placeholder="UserName" autofocus>
+                <input type="text" class="form-control" asp-for="AppUserRegisterDto.FirstName" placeholder="FirstName" autofocus>
+                <input type="text" class="form-control" asp-for="AppUserRegisterDto.LastName" placeholder="LastName" autofocus>
+                <input type="text" class="form-control" asp-for="AppUserRegisterDto.PhoneNumber" placeholder="Phone Number" autofocus>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="agree this condition">Hizmet Şartlarını ve Gizlilik Politikasını kabul ediyorum
+                </label>
+                <button class="btn btn-lg btn-login btn-block" type="submit">Kayıt Ol</button>
+            </div>
+
+        </form>
 
     </div>
-  </body>
+</body>
 </html>
 

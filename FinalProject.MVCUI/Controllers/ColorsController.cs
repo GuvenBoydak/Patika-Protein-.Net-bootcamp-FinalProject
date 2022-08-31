@@ -39,7 +39,12 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _colorApiService.AddAsync(token,colorAddDto);
+           bool result= await _colorApiService.AddAsync(token,colorAddDto);
+            if (!result)
+            {
+                ViewBag.FailAdd = "Ekleme İşlemi Başarısız";
+                return View();
+            }
 
             return RedirectToAction("Index");
         }
@@ -65,13 +70,20 @@ namespace FinalProject.MVCUI.Controllers
             {
                 string token = HttpContext.Session.GetString("token");
 
-                await _colorApiService.UpdateAsync(token, colorUpdateDto);
+                bool result=await _colorApiService.UpdateAsync(token, colorUpdateDto);
+
+                if (!result)
+                {
+                    ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız";
+                    return View();
+                }
+
                 return RedirectToAction("Index");
             }
 
 
             ViewBag.Fail = "Girilen ID Yanlış";
-            return View(colorUpdateDto);
+            return View();
         }
 
 
@@ -80,7 +92,11 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _colorApiService.DeleteAsync(token,id);
+           bool result= await _colorApiService.DeleteAsync(token,id);
+
+            if (!result)
+                ViewBag.FailDelete = "Silme İşlemi Başarısız";
+
 
             return RedirectToAction("Index");
         }
