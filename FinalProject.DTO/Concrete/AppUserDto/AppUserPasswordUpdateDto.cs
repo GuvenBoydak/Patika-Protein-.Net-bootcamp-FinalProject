@@ -2,6 +2,8 @@
 {
     public class AppUserPasswordUpdateDto : BaseDto
     {
+        public int ID { get; set; }
+
         public string OldPassword { get; set; }
 
         public string NewPassword { get; set; }
