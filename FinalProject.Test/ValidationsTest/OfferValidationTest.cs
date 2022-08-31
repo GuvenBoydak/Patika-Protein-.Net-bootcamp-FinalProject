@@ -8,9 +8,9 @@ namespace FinalProject.Test
     public class OfferValidationTest
     {
         [Theory]
-        [InlineData(1,1,1)]
-        [InlineData(2,2,2)]
-        public void WhenInvalidInputsAreGiven_OfferAddDtoValidator_SouldNotBeReturnErrors(int appUserId,decimal price,int productId)
+        [InlineData(1,1)]
+        [InlineData(2,2)]
+        public void WhenInvalidInputsAreGiven_OfferAddDtoValidator_SouldNotBeReturnErrors(decimal price,int productId)
         {
             OfferAddDto offerAddDto = new OfferAddDto()
             {
@@ -25,9 +25,9 @@ namespace FinalProject.Test
         }
 
         [Theory]
-        [InlineData(-1, 0,0)]
-        [InlineData(0, 1, -4)]
-        public void WhenInvalidInputsAreGiven_OfferAddDtoValidator_SouldBeReturnErrors(int appUserId, decimal price, int productId)
+        [InlineData(-1, 0)]
+        [InlineData(0, 1)]
+        public void WhenInvalidInputsAreGiven_OfferAddDtoValidator_SouldBeReturnErrors( decimal price, int productId)
         {
             OfferAddDto offerAddDto = new OfferAddDto()
             {
@@ -42,9 +42,9 @@ namespace FinalProject.Test
         }
 
         [Theory]
-        [InlineData(0,-1, 0, 0)]
-        [InlineData(-9,0, 1, -4)]
-        public void WhenInvalidInputsAreGiven_OfferUpdateDtoValidator_SouldBeReturnErrors(int id,int appUserId, decimal price, int productId)
+        [InlineData(0, 0, 0)]
+        [InlineData(-9, 1, -4)]
+        public void WhenInvalidInputsAreGiven_OfferUpdateDtoValidator_SouldBeReturnErrors(int id, decimal price, int productId)
         {
             OfferUpdateDto offerUpdateDto = new OfferUpdateDto()
             {
@@ -60,9 +60,9 @@ namespace FinalProject.Test
         }
 
         [Theory]
-        [InlineData(1,1, 2, 3)]
-        [InlineData(1,3, 1, 2)]
-        public void WhenInvalidInputsAreGiven_OfferUpdateDtoValidator_SouldNotBeReturnErrors(int id,int appUserId, decimal price, int productId)
+        [InlineData(1, 2, 3)]
+        [InlineData(1,1, 2)]
+        public void WhenInvalidInputsAreGiven_OfferUpdateDtoValidator_SouldNotBeReturnErrors(int id, decimal price, int productId)
         {
             OfferUpdateDto offerUpdateDto = new OfferUpdateDto()
             {   
