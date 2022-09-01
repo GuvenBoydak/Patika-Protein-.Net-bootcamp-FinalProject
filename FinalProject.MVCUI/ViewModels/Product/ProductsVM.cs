@@ -16,14 +16,14 @@ namespace FinalProject.MVCUI
 
         public Product Product { get; set; }
 
-        public ProductAddDto ProductAddDto { get; set; }
-
-        public ProductUpdateDto ProductUpdateDto { get; set; }
+        public ProductAddWitFileDto ProductAddWitFileDto { get; set; }
 
         public Offer Offer { get; set; }
 
         public CategoryDto Category { get; set; }
 
         public List<SelectListItem> PriceList { get; set; }
+
+        public AppUser AppUser { get; set; }
     }
 }

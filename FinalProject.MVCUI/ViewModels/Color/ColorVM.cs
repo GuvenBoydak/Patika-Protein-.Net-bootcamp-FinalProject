@@ -1,13 +1,12 @@
 ﻿using FinalProject.DTO;
+using FinalProject.Entities;
 
 namespace FinalProject.MVCUI
 {
     public class ColorVM
     {
-        public List<ColorListDto> ColorListDtos { get; set; }
+        public List<Color> Colors { get; set; }
 
-        public ColorAddDto ColorAddDto { get; set; }
-
-        public ColorUpdateDto ColorUpdateDto { get; set; }
+        public Color Color { get; set; }
     }
 }

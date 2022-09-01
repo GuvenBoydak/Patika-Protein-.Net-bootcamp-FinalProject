@@ -1,14 +1,14 @@
-﻿using FinalProject.DTO;
+﻿using FinalProject.Entities;
 
 namespace FinalProject.MVCUI
 {
     public class BrandVM
     {
-        public List<BrandListDto> BrandListDtos { get; set; }
+        public List<Brand> Brands { get; set; }
 
-        public BrandUpdateDto BrandUpdateDto { get; set; }
+        public Brand Brand { get; set; }
 
-        public BrandAddDto BrandAddDto { get; set; }
+
 
     }
 }

@@ -1,14 +1,13 @@
 ﻿using FinalProject.DTO;
+using FinalProject.Entities;
 
 namespace FinalProject.MVCUI
 {
     public class CategoryVM
     {
-        public List<CategoryListDto> CategoryListDtos { get; set; }
+        public List<Category> Categories { get; set; }
 
 
-        public CategoryAddDto CategoryAddDto { get; set; }
-
-        public CategoryUpdateDto CategoryUpdateDto { get; set; }
+        public Category Category { get; set; }
     }
 }
