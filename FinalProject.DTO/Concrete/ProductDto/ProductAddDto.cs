@@ -1,5 +1,4 @@
 ﻿using FinalProject.Entities;
-using Microsoft.AspNetCore.Http;
 
 namespace FinalProject.DTO
 {
@@ -19,7 +18,6 @@ namespace FinalProject.DTO
 
         public int? ColorID { get; set; }
 
-        public IFormFile ImageUrl { get; set; }
-
+        public string ImageUrl { get; set; }
     }
 }
