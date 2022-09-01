@@ -84,18 +84,13 @@ namespace FinalProject.Api
 
         
         [HttpPost]
-        public IActionResult Add([FromForm] ProductAddDto productAddDto)
+        public IActionResult Add(ProductAddDto productAddDto)
         {
             Log.Information($"{User.Identity?.Name}: Add a Product  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
-
-            if (productAddDto.ImageUrl==null)//Girelen resim vamrı bakıyoruz.
-                throw new Exception("Resim kısmı boş geçilemez");
 
             Product product = _mapper.Map<Product>(productAddDto);
 
             product.AppUserID = int.Parse((User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value);//Kullanıcı claimlerinden Id sini aldık.
-
-            product.ImageUrl =$"{_configuration.GetSection("BaseUrl").Value}{_fileHelper.Add(productAddDto.ImageUrl, _configuration.GetSection("ImageUrl").Value)}" ;//Resim ekleme işlemi
 
             _productService.Add(product);
 
@@ -104,18 +99,13 @@ namespace FinalProject.Api
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromForm]ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> UpdateAsync(ProductUpdateDto productUpdateDto)
         {
             Log.Information($"{User.Identity?.Name}: Update a Product  AppUserID is {(User.Identity as ClaimsIdentity).FindFirst("AppUserId").Value}.");
 
             Product product = _mapper.Map<Product>(productUpdateDto);
 
             product.AppUserID = int.Parse((User.Identity as ClaimsIdentity).FindFirst("AppUserID").Value);//Kullanıcı claimlerinden Id sini aldık.
-
-            if (productUpdateDto.ImageUrl != null)//parametreden gelen File boş degilse resim günceliyoruz.
-            {
-                product.ImageUrl = _fileHelper.Update(productUpdateDto.ImageUrl, _configuration.GetSection("ImageUrl").Value + product.ImageUrl, _configuration.GetSection("ImageUrl").Value);
-            }
 
             await _productService.UpdateAsync(product);
 
