@@ -12,20 +12,22 @@ namespace FinalProject.MVCUI.Controllers
         private readonly BrandApiService _brandApiService;
         private readonly ColorApiService _colorApiService;
         private readonly CategoryApiService _categoryApiService;
-        
+        private readonly AppUserApiService _appUserApiService;
+
         private readonly IMapper _mapper;
 
-        public ProductsController(ProductApiService productApiService, IMapper mapper, CategoryApiService categoryApiService, BrandApiService brandApiService, ColorApiService colorApiService)
+        public ProductsController(ProductApiService productApiService, IMapper mapper, CategoryApiService categoryApiService, BrandApiService brandApiService, ColorApiService colorApiService, AppUserApiService appUserApiService)
         {
             _productApiService = productApiService;
             _mapper = mapper;
             _categoryApiService = categoryApiService;
             _brandApiService = brandApiService;
             _colorApiService = colorApiService;
+            _appUserApiService = appUserApiService;
         }
         [HttpGet]
         public async Task<IActionResult> Index(int? id)
-        {          
+        {
             string token = HttpContext.Session.GetString("token");
 
             List<ProductListDto> products = await _productApiService.GetActiveProductsAsync(token);
@@ -33,8 +35,8 @@ namespace FinalProject.MVCUI.Controllers
 
             ProductsVM vM = new ProductsVM
             {
-                Products = _mapper.Map<List<ProductListDto>, List<Product>>(id != null ? products.Where(x=>x.CategoryID==id).ToList() : products),
-                Categories = _mapper.Map<List<CategoryListDto>,List<Category>>(categories)        
+                Products = _mapper.Map<List<ProductListDto>, List<Product>>(id != null ? products.Where(x => x.CategoryID == id).ToList() : products),
+                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(categories),
             };
 
             return View(vM);
@@ -44,6 +46,7 @@ namespace FinalProject.MVCUI.Controllers
         public async Task<IActionResult> ProductDetail(int id)
         {
             string token = HttpContext.Session.GetString("token");
+            string userEmail = HttpContext.Session.GetString("User");
 
             ProductDto product = await _productApiService.GetByIDAsync(id, token);
 
@@ -51,7 +54,8 @@ namespace FinalProject.MVCUI.Controllers
             {
                 PriceList = PriceList(await _productApiService.GetByIDAsync(id, token)),
                 Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token)),
-                Category = await _categoryApiService.GetByIDAsync(product.CategoryID, token)
+                Category = await _categoryApiService.GetByIDAsync(product.CategoryID, token),
+                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByEmailAsync(token, userEmail))
             };
 
             return View(vM);
@@ -72,11 +76,11 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ProductAddDto productAddDto)
+        public async Task<IActionResult> Add(ProductAddWitFileDto productAddWitFileDto)
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _productApiService.AddAsync(productAddDto, token);
+            await _productApiService.AddAsync(productAddWitFileDto, token);
 
             return RedirectToAction("Index");
         }
@@ -91,7 +95,7 @@ namespace FinalProject.MVCUI.Controllers
                 Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(await _categoryApiService.GetActiveAsync(token)),
                 Brands = _mapper.Map<List<BrandListDto>, List<Brand>>(await _brandApiService.GetActiveAsync(token)),
                 Colors = _mapper.Map<List<ColorListDto>, List<Color>>(await _colorApiService.GetActiveAsync(token)),
-                Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id,token))
+                Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token))
             };
 
             TempData["ID"] = id;
@@ -99,19 +103,21 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> Update(Product product, IFormFile file)
         {
             string token = HttpContext.Session.GetString("token");
 
-            if ((int)TempData["ID"] == productUpdateDto.ID)
+            if ((int)TempData["ID"] == product.ID)
             {
-                await _productApiService.UpdateAsync(productUpdateDto, token);
+                ProductUpdateDto productUpdateDto = _mapper.Map<Product, ProductUpdateDto>(product);
+
+                await _productApiService.UpdateAsync(productUpdateDto, file, token);
 
                 return RedirectToAction("Index");
             }
 
             ViewBag.Fail = "Girilen ID Yanlış";
-            return View(productUpdateDto);
+            return View();
         }
 
 
@@ -120,7 +126,7 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-           bool result= await _productApiService.DeleteAsync(id,token);
+            bool result = await _productApiService.DeleteAsync(id, token);
             if (!result)
             {
                 ViewBag.FailDelete = "Ürün silme İşlmemi Başarısız.";

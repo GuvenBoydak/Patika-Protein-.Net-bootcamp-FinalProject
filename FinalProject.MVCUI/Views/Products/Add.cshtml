@@ -10,41 +10,44 @@
             <form asp-action="Add" asp-controller="Products" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label> Ürün İsmi</label>
-                    <input type="text" asp-for="ProductAddDto.Name" class="form-control" />
+                    <input type="text" asp-for="ProductAddWitFileDto.Name" class="form-control" />
+                  <span asp-validation-for="ProductAddWitFileDto.Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Ürün Fiyat</label>
-                    <input type="text" asp-for="ProductAddDto.UnitPrice" class="form-control" />
+                    <input type="text" asp-for="ProductAddWitFileDto.UnitPrice" class="form-control" />
+                  <span asp-validation-for="ProductAddWitFileDto.UnitPrice" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Ürün Açıklama</label>
-                    <input type="text" asp-for="ProductAddDto.Description" class="form-control" />
+                    <input type="text" asp-for="ProductAddWitFileDto.Description" class="form-control" />
+                  <span asp-validation-for="ProductAddWitFileDto.Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Ürün Resmi</label>
-                    <input type="file" asp-for="ProductAddDto.ImageUrl" class="form-control" />
+                    <input type="file" asp-for="ProductAddWitFileDto.ImageUrl" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label> Ürün Kategorisi</label>
-                    <select asp-for="ProductAddDto.CategoryID" asp-items="@(new SelectList(Model.Categories,"ID","Name"))" class="form-control">
+                    <select asp-for="ProductAddWitFileDto.CategoryID" asp-items="@(new SelectList(Model.Categories,"ID","Name"))" class="form-control">
                         <option selected="selected" value="1">Please select</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label> Ürün Rengi </label>
-                    <select asp-for="ProductAddDto.ColorID" asp-items="@(new SelectList(Model.Colors,"ID","Name"))" class="form-control">
+                    <select asp-for="ProductAddWitFileDto.ColorID" asp-items="@(new SelectList(Model.Colors,"ID","Name"))" class="form-control">
                         <option selected="selected" value="1">Please select</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label> Ürün Markası </label>
-                    <select asp-for="ProductAddDto.BrandID" asp-items="@(new SelectList(Model.Brands,"ID","Name"))" class="form-control">
+                    <select asp-for="ProductAddWitFileDto.BrandID" asp-items="@(new SelectList(Model.Brands,"ID","Name"))" class="form-control">
                         <option selected="selected" value="0">Please select</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label> Ürün Kullanım durumu</label>
-                    <select asp-for="ProductAddDto.UsageStatus" class="form-control" asp-items="Html.GetEnumSelectList<UsageStatus>()">
+                    <select asp-for="ProductAddWitFileDto.UsageStatus" class="form-control" asp-items="Html.GetEnumSelectList<UsageStatus>()">
                         <option>Please select</option>
                     </select>
                 </div>
