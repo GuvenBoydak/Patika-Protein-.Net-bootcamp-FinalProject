@@ -1,4 +1,5 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
+
 using Hangfire;
 
 namespace FinalProject.Business
@@ -7,6 +8,6 @@ namespace FinalProject.Business
     {
         //Metot hata aldıkca 1 eksilerek çalişmaya devam eder en fazla 5 defa. En son status fail a düşer.
         [AutomaticRetry(Attempts = 5 , OnAttemptsExceeded = AttemptsExceededAction.Fail)]
-        Task SendMailJobAsync(AppUser appUser);
+        void SendMailJob(AppUser appUser);
     }
 }

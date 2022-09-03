@@ -20,7 +20,7 @@ namespace FinalProject.Business
             // Use PosgreSql
             .AddPostgres11_0()
             // connection string
-            .WithGlobalConnectionString(configuration.GetConnectionString("PosgreSql"))
+            .WithGlobalConnectionString(configuration.GetConnectionString("PostgreSql"))
             // Specify the assembly with the migrations
             .WithMigrationsIn(typeof(InitialMigration).Assembly));
 

@@ -10,6 +10,6 @@ namespace FinalProject.Entities
 
         //Relational Properyties
         [DapperIgnore]
-        public virtual List<Product> Products { get; set; }
+        public  List<Product> Products { get; set; }
     }
 }

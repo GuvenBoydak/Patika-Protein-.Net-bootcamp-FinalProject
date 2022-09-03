@@ -9,7 +9,7 @@ using Serilog;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 //Hangfire services. PostgreSQL
-HangfireInjection.HangfireServiceInjection(builder.Services);
+//HangfireInjection.HangfireServiceInjection(builder.Services);
 
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:7137", "https://localhost:7137").AllowAnyMethod().
@@ -78,7 +78,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //Hangfire
-app.UseHangfireDashboard();
+//app.UseHangfireDashboard();
 
 app.MapControllers();
 

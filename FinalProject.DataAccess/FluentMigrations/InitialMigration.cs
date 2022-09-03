@@ -2,7 +2,7 @@
 
 namespace FinalProject.DataAccess
 {
-    [Migration(20220810,"V1.0")]
+    [Migration(20220810, "V1.0")]
     public class InitialMigration : Migration
     {
         public override void Down()
@@ -23,9 +23,9 @@ namespace FinalProject.DataAccess
                 .WithColumn("IsOfferable").AsBoolean().NotNullable()
                 .WithColumn("IsSold").AsBoolean().NotNullable()
                 .WithColumn("UsageStatus").AsInt32().NotNullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable()
                 .WithColumn("CategoryID").AsInt32().NotNullable()
                 .WithColumn("BrandID").AsInt32().Nullable()
@@ -37,9 +37,9 @@ namespace FinalProject.DataAccess
                 .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(50).NotNullable()
                 .WithColumn("Description").AsString(200).NotNullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Offer
@@ -49,27 +49,27 @@ namespace FinalProject.DataAccess
                 .WithColumn("AppUserID").AsInt32().NotNullable()
                 .WithColumn("IsApproved").AsBoolean().Nullable()
                 .WithColumn("ProductID").AsInt32().NotNullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Color
             Create.Table("Colors")
                 .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(40).NotNullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //Brand
             Create.Table("Brands")
                 .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(50).NotNullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
                 .WithColumn("Status").AsInt32().NotNullable();
 
             //AppUser
@@ -83,15 +83,34 @@ namespace FinalProject.DataAccess
                 .WithColumn("IsLock").AsBoolean().Nullable()
                 .WithColumn("ActivationCode").AsGuid().NotNullable()
                 .WithColumn("Active").AsBoolean().NotNullable()
-                .WithColumn("EmailStatus").AsInt16().Nullable()
                 .WithColumn("FirstName").AsString(50).Nullable()
                 .WithColumn("LastName").AsString(50).Nullable()
                 .WithColumn("PhoneNumber").AsString(15).Nullable()
-                .WithColumn("CreatedDate").AsDateTime().NotNullable()
-                .WithColumn("UpdatedDate").AsDateTime().Nullable()
-                .WithColumn("DeletedDate").AsDateTime().Nullable()
-                .WithColumn("LastActivty").AsDateTime().NotNullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
+                .WithColumn("LastActivty").AsDate().NotNullable()
                 .WithColumn("Status").AsInt32().NotNullable();
+
+            //Role
+            Create.Table("Roles")
+                .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("Name").AsString(50).NotNullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
+                .WithColumn("Status").AsInt32().NotNullable();
+
+            //AppUserRole
+            Create.Table("AppUserRoles")
+                .WithColumn("AppUserID").AsInt32().Nullable()
+                .WithColumn("RoleID").AsInt32().Nullable()
+                .WithColumn("CreatedDate").AsDate().NotNullable()
+                .WithColumn("UpdatedDate").AsDate().Nullable()
+                .WithColumn("DeletedDate").AsDate().Nullable()
+                .WithColumn("Status").AsInt32().NotNullable();
+
+
             #endregion
 
             #region ForeignKey
@@ -125,6 +144,17 @@ namespace FinalProject.DataAccess
             Create.ForeignKey("Fk_Offer_AppUser")
                 .FromTable("Offers").ForeignColumn("AppUserID")
                 .ToTable("AppUsers").PrimaryColumn("ID");
+
+            //Role - AppUserRole Relational
+            Create.ForeignKey("Role_AppUser_CompositKey")
+            .FromTable("AppUserRoles").ForeignColumn("RoleID")
+                .ToTable("Roles").PrimaryColumn("ID");
+
+            //AppUser - AppUserRole Relational
+            Create.ForeignKey("AppUser_AppUser_CompositKey")
+            .FromTable("AppUserRoles").ForeignColumn("AppUserID")
+            .ToTable("AppUsers").PrimaryColumn("ID");
+
             #endregion
         }
     }

@@ -1,4 +1,4 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using System.Text;

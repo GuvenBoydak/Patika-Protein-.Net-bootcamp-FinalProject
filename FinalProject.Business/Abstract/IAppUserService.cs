@@ -12,7 +12,7 @@ namespace FinalProject.Business
 
         Task<AppUser> GetByEmailAsync(string email);
 
-        AccessToken CreateAccessToken(AppUser entity);
+        Task<AccessToken> CreateAccessToken(AppUser entity);
 
         Task UpdatePasswordAsync(int id, AppUserPasswordUpdateDto entity);
 
@@ -23,6 +23,8 @@ namespace FinalProject.Business
         Task<AppUser> GetByActivationCode(Guid code);
 
         Task<List<Product>> GetAppUserProductsAsync(int id);
+
+        Task<List<Role>> GetRoles(AppUser appUser);
     }
 
 }

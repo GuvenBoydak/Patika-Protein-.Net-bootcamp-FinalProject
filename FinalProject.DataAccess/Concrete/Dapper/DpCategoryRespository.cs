@@ -2,6 +2,8 @@
 using FinalProject.Entities;
 using System.Collections.Generic;
 using System.Data;
+using FinalProject.Base;
+
 
 namespace FinalProject.DataAccess
 {

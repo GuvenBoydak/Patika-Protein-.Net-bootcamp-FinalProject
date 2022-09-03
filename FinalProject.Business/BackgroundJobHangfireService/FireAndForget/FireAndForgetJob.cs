@@ -1,4 +1,4 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
 using Hangfire;
 
 namespace FinalProject.Business
@@ -6,17 +6,11 @@ namespace FinalProject.Business
 
     public class FireAndForgetJob:IFireAndForgetJob
     {
-        private  readonly IAppUserService _user;
-
-        public FireAndForgetJob(IAppUserService user)
-        {
-            _user = user;
-        }
 
         /// <summary>
         /// Tetiklendiginde hemen bir defa çalışan backgroundJob.
         /// </summary>
-        public async Task SendMailJobAsync(AppUser appUser)
+        public void SendMailJob(AppUser appUser)
         {
             string subject = $"Hoş Geldiniz {appUser.UserName}";
             string body = $"Giriş İşlemi Başarılı Hoş geldiniz \n {appUser.UserName}";
@@ -30,10 +24,6 @@ namespace FinalProject.Business
 
                 throw new Exception("Hoş geldiniz Maili Gönderimi Başarısız");
             }
-
-            //Mail göndermede hata yoksa Status u success e cekiyoruz.
-            appUser.EmailStatus = EmailStatus.Success;
-            await _user.UpdateAsync(appUser);
 
         }
     }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FinalProject.DTO;
 using FinalProject.Entities;
+using FinalProject.Base;
+
 
 namespace FinalProject.Business
 {
@@ -22,6 +24,7 @@ namespace FinalProject.Business
             CreateMap<Product, ProductListDto>().ReverseMap();
             CreateMap<Product, AppUserProductsOfferListDto>().ReverseMap();
             CreateMap<Product, AppUserProductsDto>().ReverseMap();
+            CreateMap<ProductAddDto, ProductAddWitFileDto>().ReverseMap();
 
             CreateMap<Brand, BrandListDto>().ReverseMap();
             CreateMap<Brand, BrandDto>().ReverseMap();

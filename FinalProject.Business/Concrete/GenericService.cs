@@ -1,6 +1,5 @@
 ﻿using FinalProject.Base;
 using FinalProject.DataAccess;
-using FinalProject.Entities;
 
 namespace FinalProject.Business
 {

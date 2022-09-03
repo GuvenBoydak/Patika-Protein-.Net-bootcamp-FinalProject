@@ -1,6 +1,8 @@
 ﻿
 
 
+using FinalProject.Base;
+
 namespace FinalProject.Entities
 {
     public class Product:BaseEntity

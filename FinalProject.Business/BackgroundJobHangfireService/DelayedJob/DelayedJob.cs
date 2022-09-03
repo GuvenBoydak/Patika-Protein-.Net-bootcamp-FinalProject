@@ -1,4 +1,4 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
 using Hangfire;
 
 namespace FinalProject.Business

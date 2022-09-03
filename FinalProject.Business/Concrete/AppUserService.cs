@@ -8,21 +8,34 @@ namespace FinalProject.Business
     public class AppUserService : GenericService<AppUser>, IAppUserService
     {
         private readonly IAppUserRepository _userRepository;
+        private readonly IAppUserRoleRepository _appUserRoleRepository;
         private readonly ITokenHelper _tokenHelper;
 
-        public AppUserService( IAppUserRepository userRepository, ITokenHelper tokenHelper) : base(userRepository)
+        public AppUserService(IAppUserRepository userRepository, ITokenHelper tokenHelper, IAppUserRoleRepository appUserRoleRepository) : base(userRepository)
         {
             _userRepository = userRepository;
             _tokenHelper = tokenHelper;
+            _appUserRoleRepository = appUserRoleRepository;
         }
 
         /// <summary>
         /// Token Oluşturma işlemi
         /// </summary>
         /// <param name="entity">Kullanıcı bilgisi</param>
-        public AccessToken CreateAccessToken(AppUser entity)
+        public async Task<AccessToken> CreateAccessToken(AppUser entity)
         {
-            AccessToken accessToken = _tokenHelper.CreateToken(entity.UserName, entity.ID);
+            AppUser user = await _userRepository.GetByEmailAsync(entity.Email);
+
+            AppUserRole appUserRole = new AppUserRole()
+            {
+                AppUserID = user.ID,
+                RoleID = 2
+            };
+            _appUserRoleRepository.Add(appUserRole);
+
+            List<Role> roles = await _userRepository.GetRoles(user);
+
+            AccessToken accessToken = _tokenHelper.CreateToken(user,roles);
             return accessToken;
         }
 
@@ -83,6 +96,15 @@ namespace FinalProject.Business
             return appUser;
         }
 
+        /// <summary>
+        /// Kullanıcının claim bilgilerini alıyoruz
+        /// </summary>
+        /// <param name="appUser">Kullanıcı bilgisi</param>
+        public async Task<List<Role>> GetRoles(AppUser appUser)
+        {
+            return await _userRepository.GetRoles(appUser);
+        }
+
 
         /// <summary>
         /// Giriş işlemleri
@@ -107,7 +129,7 @@ namespace FinalProject.Business
                     appUser.IsLock = true; //3 kere yanlış girilen kulanıcıyı Lock ediyoruz.
                     DelayedJob.SendMailJob(appUser);//Mail Gönderiyoruz.
                     await UpdateAsync(appUser);//IsLock Güncelliyoruz
-                    throw new InvalidOperationException($" Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
+                    throw new InvalidOperationException($"Şifreniz 3 kez yanlış girildi Hesap Askıya alındı");
                 }
                 await UpdateAsync(appUser);//IncorrectEntry Günceliyoruz
                 throw new InvalidOperationException($" Paralonanız Yanlış");

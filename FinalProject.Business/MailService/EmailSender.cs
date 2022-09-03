@@ -1,4 +1,4 @@
-﻿using FinalProject.Entities;
+﻿using FinalProject.Base;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;

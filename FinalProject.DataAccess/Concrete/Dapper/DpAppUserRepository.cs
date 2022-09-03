@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using FinalProject.Entities;
+using FinalProject.Base;
 using System.Data;
 
 namespace FinalProject.DataAccess
@@ -58,6 +59,23 @@ namespace FinalProject.DataAccess
         }
 
 
+        /// <summary>
+        /// Kullanıcının rollerinin bilgisi
+        /// </summary>
+        /// <param name="appUser">kullanıcı bilgisi</param>
+        public async Task<List<Role>> GetRoles(AppUser appUser)
+        {         
+            using (IDbConnection con = _dbContext.GetConnection())
+            {
+               IEnumerable<AppUserRole> appUserRoles = await con.QueryAsync<AppUserRole>("select * from  \"AppUserRoles\" where \"AppUserID\"= @id ", new { id = appUser.ID });
+
+               AppUserRole appUserRoleID= appUserRoles.FirstOrDefault();
+
+                IEnumerable<Role> roles = await con.QueryAsync<Role>("select * from  \"Roles\"  where \"ID\"= @id ", new { id = appUserRoleID.RoleID });
+
+                return roles.ToList();
+            }
+        }
 
         public async Task UpdateAsync(AppUser appUser)
         {
@@ -69,7 +87,7 @@ namespace FinalProject.DataAccess
                 userToUpdate.Status = appUser.Status;
                 CheckDefaultValues(userToUpdate,appUser);
 
-                string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"EmailStatus\"=@EmailStatus,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID ";
+                string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"DeletedDate\"=@DeletedDate,\"Status\"=@Status where \"ID\"=@ID ";
                 _dbContext.Execute((con) =>
                 {
                      con.Execute(query, userToUpdate);
@@ -81,7 +99,7 @@ namespace FinalProject.DataAccess
                 userToUpdate.Status = DataStatus.Updated;
                 CheckDefaultValues(userToUpdate,appUser);
 
-                string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"EmailStatus\"=@EmailStatus,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID ";
+                string query = "update \"AppUsers\" set \"UserName\" = @UserName,\"PasswordHash\"=@PasswordHash,\"PasswordSalt\" = @PasswordSalt,\"Email\" =@Email,\"IncorrectEntry\"=@IncorrectEntry,\"IsLock\"=@IsLock,\"Active\"=@Active,\"FirstName\"=@FirstName,\"LastName\"=@LastName,\"LastActivty\"=@LastActivty,\"PhoneNumber\"=@PhoneNumber,\"UpdatedDate\"=@UpdatedDate,\"Status\"=@Status where \"ID\"=@ID ";
                 _dbContext.Execute( (con) =>
                 {
                      con.Execute(query, userToUpdate);
@@ -99,7 +117,6 @@ namespace FinalProject.DataAccess
             userToUpdate.PasswordSalt = appUser.PasswordSalt == default ? userToUpdate.PasswordSalt : appUser.PasswordSalt;
             userToUpdate.IncorrectEntry = appUser.IncorrectEntry == default ? userToUpdate.IncorrectEntry : appUser.IncorrectEntry;
             userToUpdate.IsLock = appUser.IsLock;
-            userToUpdate.EmailStatus = appUser.EmailStatus == default ? userToUpdate.EmailStatus : appUser.EmailStatus;
             userToUpdate.Active = appUser.Active == default ? userToUpdate.Active : appUser.Active;
             userToUpdate.FirstName = appUser.FirstName == default ? userToUpdate.FirstName : appUser.FirstName;
             userToUpdate.LastName = appUser.LastName == default ? userToUpdate.LastName : appUser.LastName;

@@ -20,6 +20,8 @@ namespace FinalProject.Business
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
             builder.RegisterType<DpCategoryRespository>().As<ICategoryRepository>().InstancePerLifetimeScope();
 
+            builder.RegisterType<DpAppUserRoleRepository>().As<IAppUserRoleRepository>().InstancePerLifetimeScope();
+
             builder.RegisterType<ColorService>().As<IColorService>().InstancePerLifetimeScope();
             builder.RegisterType<DpColorRepository>().As<IColorRepository>().InstancePerLifetimeScope();
 

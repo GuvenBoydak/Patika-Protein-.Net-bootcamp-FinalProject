@@ -74,6 +74,17 @@ namespace FinalProject.Api
             return CreateActionResult(CustomResponseDto<AppUserDto>.Success(200, appUserDto, $"{id} numaralı Kullanıcı Listelendi"));
         }
 
+        [HttpGet]
+        [Route("GetRoles/{appUserId}")]
+        public async Task<IActionResult> GetRoles([FromRoute]int appUserId)
+        {
+           AppUser appUser = await _appUserService.GetByIDAsync(appUserId);
+
+           List<Role> roles= await _appUserService.GetRoles(appUser);
+
+           return CreateActionResult(CustomResponseDto<List<Role>>.Success(200, roles, $"Kullanıcının roleri Listelendi"));
+        }
+
 
         [HttpGet]
         [Route("GetAppUserByEmail/{email}")]
@@ -122,9 +133,9 @@ namespace FinalProject.Api
 
             AppUser appUser =await _appUserService.RegisterAsync(registerDto);
 
-            AccessToken token = _appUserService.CreateAccessToken(appUser);
+            AccessToken token =await _appUserService.CreateAccessToken(appUser);
 
-            ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
+            //ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token oluşturuldu"));
         }
@@ -137,7 +148,7 @@ namespace FinalProject.Api
 
             AppUser appUser =await _appUserService.LoginAsync(loginDto);
 
-            AccessToken token = _appUserService.CreateAccessToken(appUser);
+            AccessToken token = await _appUserService.CreateAccessToken(appUser);
 
            //await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
 
