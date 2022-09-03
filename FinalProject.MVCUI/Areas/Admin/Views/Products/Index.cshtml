@@ -1,0 +1,59 @@
+﻿@model ProductVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--external css-->
+<link href="~/OutherTools/FlatAdmin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="~/OutherTools/FlatAdmin/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/OutherTools/FlatAdmin/css/gallery.css" />
+
+<section class="panel">
+    <header class="panel-heading">
+        <div class="btn-group ">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kategoriler</button>
+            <ul role="menu" class="dropdown-menu">
+                <li><a href="/products/Index"><strong>Tüm Ürünler</strong> </a></li>
+                @foreach (CategoryModel item in Model.Categories)
+                {
+                    <li><a asp-action="Index" asp-route-id="@item.ID">@item.Name</a></li>
+                }
+            </ul>
+        </div>
+                     <a class="btn btn-success " asp-action="Add" asp-controller="Products" >Ürün Ekle</a>
+    </header>
+    <div class="panel-body">
+        <ul class="grid cs-style-3">
+            @foreach (ProductModel item in Model.Products)
+            {
+                <li>
+                    <figure>
+                        <img src="@item.ImageUrl" alt="@item.Name" width="150" height="250">
+                        <figcaption>
+                            <h3>@item.Name  - @item.UnitPrice₺</h3>
+                            <a class="fancybox" rel="group" asp-action="ProductDetail" asp-controller="Products" asp-route-id="@item.ID">Detay</a>
+                        </figcaption>
+                    </figure>
+                </li>
+            }
+        </ul>
+
+    </div>
+</section>
+
+<script src="~/OutherTools/FlatAdmin/assets/fancybox/source/jquery.fancybox.js"></script>
+<script src="~/OutherTools/FlatAdmin/js/modernizr.custom.js"></script>
+<script src="~/OutherTools/FlatAdmin/js/toucheffects.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+        //    fancybox
+        jQuery(".fancybox").fancybox();
+    });
+
+</script>
+
+
+

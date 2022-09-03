@@ -1,0 +1,55 @@
+﻿@model AppUserVM
+
+@{
+    ViewData["Title"] = "UpdateProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.Fail != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Fail
+    </div>
+}
+
+@if (ViewBag.FailUpdate != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.FailUpdate
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <form asp-action="UpdateProfile" asp-controller="AppUsers" method="post" >
+
+                <input type="hidden" asp-for="AppUserModel.ID" />
+                <div class="form-group">
+                    <label> Kullanıcı ismi</label>
+                    <input type="text" asp-for="AppUserModel.FirstName" class="form-control" />
+                <span asp-validation-for="AppUserModel.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label> Kullanıcı Soyismi</label>
+                    <input type="text" asp-for="AppUserModel.LastName" class="form-control" />
+                <span asp-validation-for="AppUserModel.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label> Kullanıcı Telefon numarası</label>
+                    <input type="text" asp-for="AppUserModel.PhoneNumber" class="form-control" />
+                <span asp-validation-for="AppUserModel.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label> Kullanıcı Email</label>
+                    <input type="email" asp-for="AppUserModel.Email" class="form-control" />
+                <span asp-validation-for="AppUserModel.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

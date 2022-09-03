@@ -1,0 +1,70 @@
+﻿@model AppUserVM
+@{
+    ViewData["Title"] = "Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>Mini E-Ticaret App</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/OutherTools/FlatAdmin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/OutherTools/FlatAdmin/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="~/OutherTools/FlatAdmin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/OutherTools/FlatAdmin/css/style.css" rel="stylesheet">
+    <link href="~/OutherTools/FlatAdmin/css/style-responsive.css" rel="stylesheet" />
+
+
+</head>
+
+<body class="login-body">
+
+    <div class="container">
+
+        @if (ViewBag.FailRegister != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.FailRegister
+            </div>
+        }
+
+        <form class="form-signin" asp-action="Register" asp-controller="AppUsers">
+            <h2 class="form-signin-heading">Kayıt Ol</h2>
+            <div class="login-wrap">
+                <p>Kayıt olmak için bilgileri doldurunuz</p>
+                <input type="text" class="form-control" asp-for="AppUserRegisterModel.Email" placeholder="Email" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.Email" class="text-danger"></span>
+                <input type="password" class="form-control" asp-for="AppUserRegisterModel.Password" placeholder="Password" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.Password" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="AppUserRegisterModel.UserName" placeholder="UserName" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.UserName" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="AppUserRegisterModel.FirstName" placeholder="FirstName" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.FirstName" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="AppUserRegisterModel.LastName" placeholder="LastName" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.LastName" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="AppUserRegisterModel.PhoneNumber" placeholder="Phone Number" autofocus>
+                <span asp-validation-for="AppUserRegisterModel.PhoneNumber" class="text-danger"></span>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="agree this condition">Hizmet Şartlarını ve Gizlilik Politikasını kabul ediyorum
+                </label>
+                <button class="btn btn-lg btn-login btn-block" type="submit">Kayıt Ol</button>
+            </div>
+
+        </form>
+
+    </div>
+</body>
+</html>
+
+
+

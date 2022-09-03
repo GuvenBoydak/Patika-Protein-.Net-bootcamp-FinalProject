@@ -1,0 +1,91 @@
+﻿@model AppUserVM
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>FlatLab - Flat & Responsive Bootstrap Admin Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/OutherTools/FlatAdmin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/OutherTools/FlatAdmin/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="~/OutherTools/FlatAdmin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/OutherTools/FlatAdmin/css/style.css" rel="stylesheet">
+    <link href="~/OutherTools/FlatAdmin/css/style-responsive.css" rel="stylesheet" />
+
+</head>
+
+<body class="login-body">
+
+    <div class="container">
+
+        @if (ViewBag.FailPassword != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.FailPassword
+            </div>
+        }
+
+
+        <form class="form-signin" asp-action="Login" asp-controller="AppUsers">
+            <h2 class="form-signin-heading">Giriş İşlemleri</h2>
+            <div class="login-wrap">
+                <input type="text" class="form-control" asp-for="AppUserLoginModel.Email" placeholder="Email" autofocus>
+                <span asp-validation-for="AppUserLoginModel.Email" class="text-danger"></span>
+
+                <input type="password" class="form-control" asp-for="AppUserLoginModel.Password" placeholder="Password">
+                <span asp-validation-for="AppUserLoginModel.Password" class="text-danger"></span>
+
+                <button class="btn btn-round  btn-login btn-block" type="submit">Giriş Yap</button>
+                <span>
+                   <button class="btn btn-round  btn-login btn-block"> <a style="color:white;" asp-action="Register" asp-controller="AppUsers">Kayıt Ol</a></button>
+                </span>
+            </div>
+
+            <!-- Modal -->
+            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Forgot Password ?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Enter your e-mail address below to reset your password.</p>
+                            <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                            <button class="btn btn-success" type="button">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- modal -->
+
+        </form>
+
+    </div>
+
+
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+

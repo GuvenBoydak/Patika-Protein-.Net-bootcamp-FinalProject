@@ -1,0 +1,77 @@
+﻿@model AppUserVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+   <div class="row">
+        <div class="profile-nav col-lg-3">
+            <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml"  >
+        </div>
+        <div class="profile-info col-lg-9">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ürün İsmi</th>
+                        <th>Ürün Açıklma</th>
+                        <th>Ürün Fiyat</th>
+                        <th>Ürün Kategorisi</th>
+                        <th>Ürün Markası</th>
+                        <th>Ürün Rengi</th>
+                        <th>Ürün Durumu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int id = 0;
+                    }
+                    @foreach (ProductModel item in Model.Products)
+                    {
+                        <tr>
+                            @{
+                                id++;
+                            }
+                            <td>@id</td>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>@item.UnitPrice</td>
+                            <td>
+                                @foreach (CategoryModel category in Model.Categories)
+                                {
+                                    if (category.ID == item.CategoryID)
+                                        @category.Name
+                                }
+                            </td>
+                            <td>
+                                @foreach (BrandModel brand in Model.Brands)
+                                {
+                                    if (brand.ID == item.BrandID)
+                                        @brand.Name
+                                }
+                            </td>
+                            <td>
+                                @foreach (ColorModel color in Model.Colors)
+                                {
+                                    if (color.ID == item.ColorID)
+                                        @color.Name
+                                }
+                            </td>
+                            @if (item.IsSold == true)
+                            {
+                                <td>Teklif Satılmış</td>
+                            }
+                            else
+                            {
+                                <td>Teklif henüz <strong>Satılmamış</strong></td>
+                            }
+                            <td>
+                                <a asp-action="GetByProductsOffer" asp-route-id="@item.ID" class="btn btn-info">Gelen teklifler</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+

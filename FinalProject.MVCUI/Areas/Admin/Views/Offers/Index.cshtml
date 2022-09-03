@@ -1,0 +1,86 @@
+﻿@model OfferVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.FailDelete != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.FailDelete
+    </div>
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <section class="panel">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Teklif fiyatı</th>
+                            <th>Teklif Durumu</th>
+                            <th>Teklif Yapan kullanıcı</th>
+                            <th>Teklif yapılan Ürün</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int id = 0;
+                        }
+                        @foreach (OfferModel item in Model.Offers)
+                        {
+                            <tr>
+                                @{
+                                    id++;
+                                }
+                                <td>@id</td>
+                                <td>@item.Price</td>
+
+                                @if (item.IsApproved == true)
+                                {
+                                    <td>Teklif Kabul Edilmiş</td>
+                                }
+                                else
+                                {
+                                    <td>Teklif Kabul <strong>Edilmemiş</strong></td>
+                                }
+                                <td>
+                                    @foreach (AppUserModel appUser in Model.AppUsers)
+                                    {
+                                        if (appUser.ID == item.AppUserID)
+                                            @appUser.UserName
+                                        ;
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (ProductModel product in Model.Products)
+                                    {
+                                        if (product.ID == item.ProductID)
+                                            @product.Name
+                                        ;
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

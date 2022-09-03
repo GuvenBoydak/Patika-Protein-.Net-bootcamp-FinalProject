@@ -1,0 +1,47 @@
+﻿@model AppUserVM
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <div class="row">
+        <div class="profile-nav col-lg-3">
+            <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml">
+        </div>
+        <div class="profile-info col-lg-9">
+            <section class="panel">
+                <div class="panel-body bio-graph-info">
+                    <h1>Profil Detayları</h1>
+                    <div class="row">
+                        <div class="bio-row">
+                            <p><span>UserName </span>: @Model.AppUserModel.UserName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>İsim </span>: @Model.AppUserModel.FirstName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Soyisim </span>:  @Model.AppUserModel.LastName</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Telefon </span>:  @Model.AppUserModel.PhoneNumber</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Email </span>:  @Model.AppUserModel.Email</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Son Giriş </span>:  @Model.AppUserModel.LastActivty</p>
+                        </div>
+                        <div class="bio-row">
+                            <a class="btn btn-warning" asp-action="UpdateProfile" asp-controller="AppUsers" asp-route-id="@Model.AppUserModel.ID">Güncelle</a>
+                            <a class="btn btn-danger" asp-action="ChangePassword" asp-controller="AppUsers" asp-route-id="@Model.AppUserModel.ID">Şifre Degiştir</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+
