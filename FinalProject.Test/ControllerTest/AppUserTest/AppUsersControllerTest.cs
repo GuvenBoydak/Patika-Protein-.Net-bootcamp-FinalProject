@@ -107,7 +107,7 @@ namespace FinalProject.Test
             AppUserRegisterDto dto = new AppUserRegisterDto() { Email = "test@gmail.com", Password = "12345678" };
 
             _appUserService.Setup(x => x.RegisterAsync(It.IsAny<AppUserRegisterDto>())).ReturnsAsync(appUser);
-            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).Returns(accessToken);
+            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).ReturnsAsync(accessToken);
 
             IActionResult result = await _appUserController.RegisterAsync(dto);
 
@@ -126,7 +126,7 @@ namespace FinalProject.Test
             AppUserRegisterDto dto = new AppUserRegisterDto() { Email = "test@gmail.com", Password = "12345678" };
 
             _appUserService.Setup(x => x.LoginAsync(It.IsAny<AppUserLoginDto>())).ReturnsAsync(appUser);
-            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).Returns(accessToken);
+            _appUserService.Setup(x => x.CreateAccessToken(It.IsAny<AppUser>())).ReturnsAsync(accessToken);
 
             IActionResult result = await _appUserController.RegisterAsync(dto);
 

@@ -1,5 +1,5 @@
 ﻿using FinalProject.Business;
-using FinalProject.Entities;
+using FinalProject.Base;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

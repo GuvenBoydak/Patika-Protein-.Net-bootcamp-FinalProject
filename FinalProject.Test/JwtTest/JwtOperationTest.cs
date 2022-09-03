@@ -1,8 +1,6 @@
 ﻿using FinalProject.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Moq;
-using System.Text;
 
 namespace FinalProject.Test
 {
@@ -20,12 +18,21 @@ namespace FinalProject.Test
         }
 
 
-        [Theory]
-        [InlineData("GuvenB", 1)]
-        public void CreateToken_MetotExecute_ReturnAccessToken(string userName, int id)
+        [Fact]
+        public void CreateToken_MetotExecute_ReturnAccessToken()
         {
+            List<Role> roles = new List<Role>()
+            {
+                new Role{ID=1 ,Name="Admin"}
+            };
+            AppUser appUser = new AppUser()
+            {
+                ID = 1,
+                UserName = "guven",
+                Email = "test@gmail.com"
+            };
             //Token yaratıyoruz.
-            AccessToken accessToken = _jwtHelper.CreateToken(userName, id);
+            AccessToken accessToken = _jwtHelper.CreateToken(appUser,roles);
 
             //Gelen deger AccessToken mi kontrol ediyoruz.
             Assert.IsAssignableFrom<AccessToken>(accessToken);
