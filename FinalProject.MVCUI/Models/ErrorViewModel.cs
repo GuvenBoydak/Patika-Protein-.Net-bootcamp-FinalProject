@@ -1,4 +1,4 @@
-namespace FinalProject.MVCUI.Models
+namespace FinalProject.MVCUI
 {
     public class ErrorViewModel
     {
