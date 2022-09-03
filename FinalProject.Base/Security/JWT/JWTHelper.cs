@@ -7,7 +7,7 @@ namespace FinalProject.Base
 {
     public class JWTHelper : ITokenHelper
     {
-        public IConfiguration Configuration { get;}
+        public IConfiguration Configuration { get; }
 
         private TokenOptions _tokenOptions;
 
@@ -20,7 +20,7 @@ namespace FinalProject.Base
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
         }
 
-        public AccessToken CreateToken(string userName, int id)
+        public AccessToken CreateToken(AppUser appUser ,List<Role> roles)
         {
             //Token bitiş süresini 
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
@@ -31,7 +31,7 @@ namespace FinalProject.Base
             //bir üstte oluştrulan securtiyKey veriyoruz ve bize bir creadentials oluşturuyor.
             SigningCredentials signingCredentials = SigningCredentialHelper.CreateSigninCredentials(securityKey);
 
-            JwtSecurityToken jwt = CreateJwtSecurityToken(_tokenOptions,userName,id, signingCredentials);
+            JwtSecurityToken jwt = CreateJwtSecurityToken(_tokenOptions, appUser, signingCredentials,roles);
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
 
@@ -39,33 +39,37 @@ namespace FinalProject.Base
             string token = jwtSecurityTokenHandler.WriteToken(jwt);
 
             //AccessToken dönüyoruz.
-            return new AccessToken { Token=token, Expiration=_accessTokenExpiration};
+            return new AccessToken { Token = token, Expiration = _accessTokenExpiration };
         }
 
         //JWT oluşturdugumuz method. Parametre olarak verdigimiz TokenOptins,userName,id,signingCredentials  vererek bir JWT oluşturuyoruz.
-        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, string userName, int id, SigningCredentials signingCredentials)
+        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, AppUser appUser , SigningCredentials signingCredentials, List<Role> roles)
         {
             JwtSecurityToken jwt = new JwtSecurityToken(
                 issuer: tokenOptions.Issuer,
                 audience: tokenOptions.Audience,
                 expires: _accessTokenExpiration,
-                notBefore: DateTime.Now, //kulanıma başlıcagı sureyi veriyoruz.
-                claims: GetClaim(userName,id),
+                notBefore: DateTime.Now, //kulanıma başlıyacagı sureyi veriyoruz.
+                claims: SetClaims(appUser,roles),
                 signingCredentials: signingCredentials
                 );
             return jwt;
         }
 
-        //UserName ve id parametresini claimslere ekliyoruz.
-        private static Claim[] GetClaim(string userName, int id)
+        //UserName, id ve kullanıcının rollerini claimslere ekliyoruz.
+        private IEnumerable<Claim> SetClaims(AppUser appUser, List<Role> roles)
         {
-            Claim[] claims = new[]
+            List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
-                new Claim(ClaimTypes.Name, userName),
-                new Claim("AppUserId", id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,appUser.ID.ToString()),
+                new Claim(ClaimTypes.Name, appUser.UserName),
+                new Claim("AppUserId",appUser.ID.ToString())
             };
 
+            foreach (Role item in roles)//Kulanıcının rollerini claimlere ekliyoruz.
+            {
+                claims.Add(new Claim(ClaimTypes.Role, item.Name));
+            }
             return claims;
         }
     }
