@@ -1,6 +1,4 @@
-﻿using FinalProject.Base;
-using FinalProject.DTO;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 
 namespace FinalProject.MVCUI
 {
@@ -13,101 +11,101 @@ namespace FinalProject.MVCUI
             _httpClient = httpClient;
         }
 
-        public async Task<List<OfferListDto>> GetAllAsync(string token)
+        public async Task<List<OfferModel>> GetAllAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetAll");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>("Offers/GetAll");
 
             return response.Data;
         }
 
-        public async Task<List<OfferListDto>> GetActiveAsync(string token)
+        public async Task<List<OfferModel>> GetActiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetActive");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>("Offers/GetActive");
 
             return response.Data;
         }
 
-        public async Task<List<OfferListDto>> GetPassiveAsync(string token)
+        public async Task<List<OfferModel>> GetPassiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>("Offers/GetPassive");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>("Offers/GetPassive");
 
             return response.Data;
         }
 
-        public async Task<OfferDto> GetByIDAsync(string token,int id)
+        public async Task<OfferModel> GetByIDAsync(string token, int id)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<OfferDto> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<OfferDto>>($"Offers/{id}");
+            CustomResponseModel<OfferModel> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<OfferModel>>($"Offers/{id}");
 
             return response.Data;
         }
 
-        public async Task<List<OfferListDto>> GetByAppUserOffersAsync(string token,int appUserID)
+        public async Task<List<OfferModel>> GetByAppUserOffersAsync(string token, int appUserID)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<OfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<OfferListDto>>>($"Offers/GetByAppUserOffers/{appUserID}");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>($"Offers/GetByAppUserOffers/{appUserID}");
 
             return response.Data;
         }
 
-        public async Task<List<ProductOffersListDto>> GetByOffersProductIDAsync(string token, int productID)
+        public async Task<List<OfferModel>> GetByOffersProductIDAsync(string token, int productID)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<ProductOffersListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<ProductOffersListDto>>>($"Offers/GetByOffersProductID/{productID}");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>($"Offers/GetByOffersProductID/{productID}");
 
             return response.Data;
         }
 
-        public async Task<List<AppUserProductsOfferListDto>> GetByAppUserProductsOffersAsync(string token, int appUserId)
+        public async Task<List<OfferModel>> GetByAppUserProductsOffersAsync(string token, int appUserId)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<AppUserProductsOfferListDto>> response = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserProductsOfferListDto>>>($"Offers/GetByAppUserProductsOffers/{appUserId}");
+            CustomResponseModel<List<OfferModel>> response = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<OfferModel>>>($"Offers/GetByAppUserProductsOffers/{appUserId}");
 
             return response.Data;
         }
 
-        public async Task<bool> BuyProductAsync(string token, OfferBuyProductDto offerBuyProductDto)
+        public async Task<bool> BuyProductAsync(string token, OfferModel offerModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/BuyProduct",offerBuyProductDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/BuyProduct", offerModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> OfferApprovalAsync(string token, OfferApprovalDto offerApprovalDto)
+        public async Task<bool> OfferApprovalAsync(string token, OfferModel offerModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/OfferApproval", offerApprovalDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers/OfferApproval", offerModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> AddAsync(string token, OfferAddDto offerAddDto)
+        public async Task<bool> AddAsync(string token, OfferModel offerModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerAddDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(string token, OfferUpdateDto offerUpdateDto)
+        public async Task<bool> UpdateAsync(string token, OfferModel offerModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerUpdateDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Offers", offerModel);
 
             return response.IsSuccessStatusCode;
         }

@@ -2,61 +2,65 @@
 
 namespace FinalProject.MVCUI
 {
-    public class BrandApiService
+    public class RoleApiService
     {
         private HttpClient _httpClient;
 
-        public BrandApiService(HttpClient httpClient)
+        public RoleApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<List<BrandModel>> GetAllAsync(string token)
+        public async Task<List<RoleModel>> GetAllAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            CustomResponseModel<List<BrandModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<BrandModel>>>("Brands/GetAll");
+
+            CustomResponseModel<List<RoleModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<RoleModel>>>("Roles/GetAll");
 
             return responseDto.Data;
         }
 
-        public async Task<List<BrandModel>> GetActiveAsync(string token)
+        public async Task<List<RoleModel>> GetActiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            CustomResponseModel<List<BrandModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<BrandModel>>>("Brands/GetActive");
+
+            CustomResponseModel<List<RoleModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<RoleModel>>>("Roles/GetActive");
 
             return responseDto.Data;
         }
 
-        public async Task<List<BrandModel>> GetPassiveAsync(string token)
+        public async Task<List<RoleModel>> GetPassiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            CustomResponseModel<List<BrandModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<BrandModel>>>("Brands/GetPassive");
+
+            CustomResponseModel<List<RoleModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<RoleModel>>>("Roles/GetPassive");
 
             return responseDto.Data;
         }
 
-        public async Task<BrandModel> GetByIDAsync(int id, string token)
+        public async Task<RoleModel> GetByIDAsync(string token, int id)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            CustomResponseModel<BrandModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<BrandModel>>($"Brands/{id}");
+
+            CustomResponseModel<RoleModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<RoleModel>>($"Roles/{id}");
 
             return responseDto.Data;
         }
 
-        public async Task<bool> AddAsync(string token, BrandModel brandModel)
+        public async Task<bool> AddAsync(string token, RoleModel roleModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Brands", brandModel);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Roles", roleModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(string token, BrandModel brandModel)
+        public async Task<bool> UpdateAsync(string token, RoleModel roleModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("Brands", brandModel);
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("Roles", roleModel);
 
             return response.IsSuccessStatusCode;
         }
@@ -65,10 +69,9 @@ namespace FinalProject.MVCUI
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.DeleteAsync($"Brands/{id}");
+            HttpResponseMessage response = await _httpClient.DeleteAsync($"Roles/{id}");
 
             return response.IsSuccessStatusCode;
         }
-
     }
 }

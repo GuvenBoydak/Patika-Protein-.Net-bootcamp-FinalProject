@@ -1,6 +1,4 @@
-﻿using FinalProject.Base;
-using FinalProject.DTO;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 
 namespace FinalProject.MVCUI
 {
@@ -14,61 +12,61 @@ namespace FinalProject.MVCUI
         }
 
 
-        public async Task<List<CategoryListDto>> GetAllAsync(string token)
+        public async Task<List<CategoryModel>> GetAllAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<CategoryListDto>> responseDto =await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetAll");
+            CustomResponseModel<List<CategoryModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<CategoryModel>>>("Categories/GetAll");
 
             return responseDto.Data;
         }
 
-        public async Task<List<CategoryListDto>> GetActiveAsync(string token)
+        public async Task<List<CategoryModel>> GetActiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<CategoryListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetActive");
+            CustomResponseModel<List<CategoryModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<CategoryModel>>>("Categories/GetActive");
 
             return responseDto.Data;
         }
 
-        public async Task<List<CategoryListDto>> GetPassiveAsync(string token)
+        public async Task<List<CategoryModel>> GetPassiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<CategoryListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<CategoryListDto>>>("Categories/GetPassive");
+            CustomResponseModel<List<CategoryModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<CategoryModel>>>("Categories/GetPassive");
 
             return responseDto.Data;
         }
 
-        public async Task<CategoryDto> GetByIDAsync(int id,string token)
+        public async Task<CategoryModel> GetByIDAsync(int id, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<CategoryDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<CategoryDto>>($"Categories/{id}");
+            CustomResponseModel<CategoryModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<CategoryModel>>($"Categories/{id}");
 
             return responseDto.Data;
         }
 
-        public async Task<CategoryWithProductsDto> GetCategoryWithProductsAsync(int id, string token)
+        public async Task<ProductModel> GetCategoryWithProductsAsync(int id, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<CategoryWithProductsDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<CategoryWithProductsDto>>($"Categories/GetCategoryWithProducts/{id}");
+            CustomResponseModel<ProductModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<ProductModel>>($"Categories/GetCategoryWithProducts/{id}");
 
             return responseDto.Data;
         }
 
-        public async Task<bool> AddAsync(string token,CategoryAddDto categoryAddDto)
+        public async Task<bool> AddAsync(string token, CategoryModel categoryModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response =await _httpClient.PostAsJsonAsync("Categories", categoryAddDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("Categories", categoryModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteAsync(string token,int id)
+        public async Task<bool> DeleteAsync(string token, int id)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -77,11 +75,11 @@ namespace FinalProject.MVCUI
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(string token, CategoryUpdateDto categoryUpdateDto)
+        public async Task<bool> UpdateAsync(string token, CategoryModel categoryModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"Categories",categoryUpdateDto);
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"Categories", categoryModel);
 
             return response.IsSuccessStatusCode;
         }

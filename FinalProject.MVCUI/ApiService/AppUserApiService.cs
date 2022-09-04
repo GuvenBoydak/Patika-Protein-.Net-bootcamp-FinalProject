@@ -1,62 +1,67 @@
-﻿using AutoMapper;
-using FinalProject.Base;
-using FinalProject.DTO;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace FinalProject.MVCUI
 {
     public class AppUserApiService
     {
         private HttpClient _httpClient;
-        private IMapper _mapper;
 
-        public AppUserApiService(HttpClient httpClient, IMapper mapper)
+        public AppUserApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _mapper = mapper;
         }
 
-        public async Task<List<AppUserListDto>> GetAllAsync(string token)
+        public async Task<List<AppUserModel>> GetAllAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<AppUserListDto>> responseDto =await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserListDto>>>("AppUsers/GetAll");
+            CustomResponseModel<List<AppUserModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<AppUserModel>>>("AppUsers/GetAll");
 
             return responseDto.Data;
         }
 
-        public async Task<List<AppUserListDto>> GetActiveAsync(string token)
+        public async Task<List<AppUserModel>> GetActiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<AppUserListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserListDto>>>("AppUsers/GetActive");
+            CustomResponseModel<List<AppUserModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<AppUserModel>>>("AppUsers/GetActive");
 
             return responseDto.Data;
         }
 
-        public async Task<List<AppUserListDto>> GetPassiveAsync(string token)
+        public async Task<List<AppUserModel>> GetPassiveAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<AppUserListDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserListDto>>>("AppUsers/GetPassive");
+            CustomResponseModel<List<AppUserModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<AppUserModel>>>("AppUsers/GetPassive");
 
             return responseDto.Data;
         }
 
-        public async Task<AppUserDto> GetByIDAsync(string token,int id)
+        public async Task<List<Role>> GetRolesAsync(string token,int appUserID)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<AppUserDto> responseDto =await _httpClient.GetFromJsonAsync<CustomResponseDto<AppUserDto>>($"AppUsers/{id}");
+            CustomResponseModel<List<Role>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<Role>>>($"AppUsers/GetRoles/{appUserID}");
 
             return responseDto.Data;
         }
 
-        public async Task<AppUserDto> GetByEmailAsync(string token,string email)
+        public async Task<AppUserModel> GetByIDAsync(string token, int id)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<AppUserDto> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<AppUserDto>>($"AppUsers/GetAppUserByEmail/{email}");
+            CustomResponseModel<AppUserModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<AppUserModel>>($"AppUsers/{id}");
+
+            return responseDto.Data;
+        }
+
+        public async Task<AppUserModel> GetByEmailAsync(string token, string email)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            CustomResponseModel<AppUserModel> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<AppUserModel>>($"AppUsers/GetAppUserByEmail/{email}");
 
             return responseDto.Data;
 
@@ -71,54 +76,68 @@ namespace FinalProject.MVCUI
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<List<AppUserProductsDto>> GetAppUserProductsAsync(string token)
+        public async Task<List<ProductModel>> GetAppUserProductsAsync(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CustomResponseDto<List<AppUserProductsDto>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseDto<List<AppUserProductsDto>>>("AppUsers/GetAppUserProducts");
+            CustomResponseModel<List<ProductModel>> responseDto = await _httpClient.GetFromJsonAsync<CustomResponseModel<List<ProductModel>>>("AppUsers/GetAppUserProducts");
 
             return responseDto.Data;
         }
 
-        public async Task<string> RegisterAsync(AppUserRegisterDto appUserRegisterDto)
+        public async Task<HttpResponseMessage> RegisterAsync(AppUserRegisterModel appUserRegisterModel)
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("AppUsers/Register", appUserRegisterDto);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("AppUsers/Register", appUserRegisterModel);
 
-            return await response.Content.ReadAsStringAsync();
+            return response;
         }
 
-        public async Task<string> LoginAsync(AppUserLoginDto appUserLoginDto)
+        public async Task<HttpResponseMessage> LoginAsync(AppUserLoginModel appUserLoginModel)
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("AppUsers/Login", appUserLoginDto);
-            
-            return await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("AppUsers/Login", appUserLoginModel);
+
+            return response;
         }
 
-        public async Task<bool> ChangePasswordAsync(string token, AppUserPasswordUpdateDto appUserPasswordUpdateDto)
+        public async Task<bool> ChangePasswordAsync(string token, AppUserPasswordUpdateModel appUserPasswordUpdateModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers/ChangePassword", appUserPasswordUpdateDto);
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers/ChangePassword", appUserPasswordUpdateModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(string token, AppUserUpdateDto appUserUpdateDto)
+        public async Task<bool> UpdateAsync(string token, AppUserModel appUserModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers", appUserUpdateDto);
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("AppUsers", appUserModel);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteAsync(string token,int id)
+        public async Task<bool> DeleteAsync(string token, int id)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage response = await _httpClient.DeleteAsync($"AppUsers/{id}");
 
             return response.IsSuccessStatusCode;
+        }
+
+
+        private string DeserialezeToken(string json)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            CustomResponseModel<AccessToken> result = JsonSerializer.Deserialize<CustomResponseModel<AccessToken>>(json, options);
+
+
+            return result.Data.Token;
         }
     }
 }
