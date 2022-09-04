@@ -2,7 +2,7 @@
 {
     public class AppUserVM
     {
-        public AppUserModel AppUserModel { get; set; }
+        public AppUserModel AppUser { get; set; }
 
         public AppUserPasswordUpdateModel AppUserPasswordUpdateModel { get; set; }
 

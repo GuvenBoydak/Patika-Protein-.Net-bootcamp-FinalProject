@@ -1,4 +1,4 @@
-﻿@model ProductsVM
+﻿@model ProductVM
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,7 +15,7 @@
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kategoriler</button>
             <ul role="menu" class="dropdown-menu">
                 <li><a href="/products/Index"><strong>Tüm Ürünler</strong> </a></li>
-                @foreach (Category item in Model.Categories)
+                @foreach (CategoryModel item in Model.Categories)
                 {
                     <li><a asp-action="Index" asp-route-id="@item.ID">@item.Name</a></li>
                 }
@@ -25,7 +25,7 @@
     </header>
     <div class="panel-body">
         <ul class="grid cs-style-3">
-            @foreach (Product item in Model.Products)
+            @foreach (ProductModel item in Model.Products)
             {
                 <li>
                     <figure>
@@ -54,4 +54,6 @@
     });
 
 </script>
+
+
 

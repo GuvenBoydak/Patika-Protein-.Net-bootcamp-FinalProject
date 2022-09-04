@@ -33,7 +33,7 @@
                         @{
                             int id = 0;
                         }
-                        @foreach (Offer item in Model.Offers)
+                        @foreach (OfferModel item in Model.Offers)
                         {
                             <tr>
                                 @{
@@ -52,7 +52,7 @@
                                 }
                                 <td>@Model.AppUser.UserName</td>
                                 <td>
-                                    @foreach (Product product in Model.Products)
+                                    @foreach (ProductModel product in Model.Products)
                                     {
                                         if (product.ID == item.ProductID)
                                             @product.Name
@@ -72,4 +72,5 @@
 
     </div>
 </div>
+
 

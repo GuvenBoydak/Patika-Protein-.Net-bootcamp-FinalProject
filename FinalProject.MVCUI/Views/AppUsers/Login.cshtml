@@ -1,5 +1,4 @@
-﻿@model AppUserLoginVM
-
+﻿@model AppUserVM
 @{
     ViewData["Title"] = "Login";
 }
@@ -42,14 +41,16 @@
         <form class="form-signin" asp-action="Login" asp-controller="AppUsers">
             <h2 class="form-signin-heading">Giriş İşlemleri</h2>
             <div class="login-wrap">
-                <input type="text" class="form-control" asp-for="appUserLoginDto.Email" placeholder="Email" autofocus>
-                <input type="password" class="form-control" asp-for="appUserLoginDto.Password" placeholder="Password">
+                <input type="text" class="form-control" asp-for="AppUserLoginModel.Email" placeholder="Email" autofocus>
+                <span asp-validation-for="AppUserLoginModel.Email" class="text-danger"></span>
 
-                <span class="pull-right">
-                    <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
+                <input type="password" class="form-control" asp-for="AppUserLoginModel.Password" placeholder="Password">
+                <span asp-validation-for="AppUserLoginModel.Password" class="text-danger"></span>
+
+                <button class="btn btn-round  btn-login btn-block" type="submit">Giriş Yap</button>
+                <span>
+                   <button class="btn btn-round  btn-login btn-block"> <a style="color:white;" asp-action="Register" asp-controller="AppUsers">Kayıt Ol</a></button>
                 </span>
-
-                <button class="btn btn-lg btn-login btn-block" type="submit">Giriş Yap</button>
             </div>
 
             <!-- Modal -->
@@ -81,9 +82,10 @@
 
 
     <!-- js placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="~/OutherTools/FlatAdmin/js/jquery.js"></script>
+    <script src="~/OutherTools/FlatAdmin/js/bootstrap.min.js"></script>
 
 
 </body>
 </html>
+

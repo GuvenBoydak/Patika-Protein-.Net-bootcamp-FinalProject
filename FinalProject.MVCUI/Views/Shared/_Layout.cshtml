@@ -23,11 +23,6 @@
     <link href="~/OutherTools/FlatAdmin/css/style.css" rel="stylesheet">
     <link href="~/OutherTools/FlatAdmin/css/style-responsive.css" rel="stylesheet" />
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.js"></script>
-      <script src="js/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
@@ -44,9 +39,6 @@
             <div class="top-nav ">
                 <!--search & user info start-->
                 <ul class="nav pull-right top-menu">
-                    <li>
-                        <input type="text" class="form-control search" placeholder="Search">
-                    </li>
                     <!-- user login dropdown start-->
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" asp-action="Index" asp-controller="AppUsers">
@@ -56,7 +48,7 @@
                         </a>
                         <ul class="dropdown-menu extended logout">
                             <div class="log-arrow-up"></div>
-                            <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
+                            <li><a href="/AppUsers/LogOut"><i class="icon-key"></i> Log Out</a></li>
                         </ul>
                     </li>
                     <!-- user login dropdown end -->
@@ -82,35 +74,7 @@
                           <i class="icon-shopping-cart"></i>
                           <span>Ürünler</span>
                       </a>
-                  </li>
-
-                  <li>
-                      <a class="active" asp-action="Index" asp-controller="Categories">
-                          <i class="icon-reorder"></i>
-                          <span>Kategoriler</span>
-                      </a>
-                  </li>
-
-                  <li>
-                      <a class="active"  asp-action="Index" asp-controller="Offers">
-                          <i class="icon-group"></i>
-                          <span>Teklifler</span>
-                      </a>
-                  </li>
-
-                  <li>
-                      <a class="active"  asp-action="Index" asp-controller="Colors">
-                          <i class=" icon-magic"></i>
-                          <span>Renkler</span>
-                      </a>
-                  </li>
-
-                  <li>
-                      <a class="active"  asp-action="Index" asp-controller="Brands">
-                          <i class="icon-star-half-empty"></i>
-                          <span>Markalar</span>
-                      </a>
-                  </li>
+                  </li>       
               </ul>
               <!-- sidebar menu end-->
           </div>

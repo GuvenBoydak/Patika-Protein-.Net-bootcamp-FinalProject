@@ -1,4 +1,5 @@
 ﻿@model AppUserVM
+
 @{
     ViewData["Title"] = "UpdateProfile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,18 +29,22 @@
                 <div class="form-group">
                     <label> Kullanıcı ismi</label>
                     <input type="text" asp-for="AppUser.FirstName" class="form-control" />
+                <span asp-validation-for="AppUser.FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Kullanıcı Soyismi</label>
                     <input type="text" asp-for="AppUser.LastName" class="form-control" />
+                <span asp-validation-for="AppUser.LastName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Kullanıcı Telefon numarası</label>
                     <input type="text" asp-for="AppUser.PhoneNumber" class="form-control" />
+                <span asp-validation-for="AppUser.PhoneNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label> Kullanıcı Email</label>
                     <input type="email" asp-for="AppUser.Email" class="form-control" />
+                <span asp-validation-for="AppUser.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary">Güncelle</button>
@@ -48,4 +53,3 @@
         </div>
     </div>
 </div>
-

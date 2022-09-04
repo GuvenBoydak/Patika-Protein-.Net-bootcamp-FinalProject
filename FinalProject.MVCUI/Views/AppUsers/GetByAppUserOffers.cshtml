@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
     <div class="row">
         <div class="profile-nav col-lg-3">
             <partial name="~/Views/Shared/PartialViews/_UserPartial.cshtml">
@@ -25,7 +24,7 @@
                         @{
                             int id = 0;
                         }
-                        @foreach (Offer item in Model.Offers)
+                        @foreach (OfferModel item in Model.Offers)
                         {
                             <tr>
                                 @{
@@ -43,7 +42,7 @@
                                     <td>Teklif Kabul <strong>Edilmemiş</strong></td>
                                 }
                                 <td>
-                                    @foreach (Product product in Model.Products)
+                                    @foreach (ProductModel product in Model.Products)
                                     {
                                         if (product.ID == item.ProductID)
                                             @product.Name
@@ -62,4 +61,5 @@
         </div>
 
     </div>
+
 
