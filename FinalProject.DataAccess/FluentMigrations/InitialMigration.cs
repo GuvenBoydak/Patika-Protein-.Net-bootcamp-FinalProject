@@ -103,6 +103,7 @@ namespace FinalProject.DataAccess
 
             //AppUserRole
             Create.Table("AppUserRoles")
+                .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("AppUserID").AsInt32().Nullable()
                 .WithColumn("RoleID").AsInt32().Nullable()
                 .WithColumn("CreatedDate").AsDate().NotNullable()

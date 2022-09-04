@@ -76,7 +76,7 @@ namespace FinalProject.Api
 
             _colorService.Add(color);
 
-            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Ekeleme İşlemi Başarılı"));
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204,"Ekleme İşlemi Başarılı"));
         }
 
         [HttpPut]

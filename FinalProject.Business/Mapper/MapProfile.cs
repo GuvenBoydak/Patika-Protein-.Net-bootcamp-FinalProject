@@ -53,7 +53,19 @@ namespace FinalProject.Business
             CreateMap<AppUser, AppUserDto>().ReverseMap();
             CreateMap<AppUser, AppUserUpdateDto>().ReverseMap();
             CreateMap<AppUser, AppUserWithOffersDto>().ReverseMap();
-            
+
+            CreateMap<AppUserRole, AppUserRoleDto>().ReverseMap();
+            CreateMap<AppUserRole, AppUserRoleListDto>().ReverseMap();
+            CreateMap<AppUserRole, AppUserRoleAddDto>().ReverseMap();
+            CreateMap<AppUserRole, AppUserRoleUpdateDto>().ReverseMap();
+
+            CreateMap<Role, RoleUpdateDto>().ReverseMap();
+            CreateMap<Role, RoleAddDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<Role, RoleListDto>().ReverseMap();
+
+
+
 
         }
     }

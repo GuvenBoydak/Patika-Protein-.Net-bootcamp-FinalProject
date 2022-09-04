@@ -26,16 +26,22 @@ namespace FinalProject.Business
         {
             AppUser user = await _userRepository.GetByEmailAsync(entity.Email);
 
-            AppUserRole appUserRole = new AppUserRole()
+            List<AppUserRole> appUserRoles = await _appUserRoleRepository.GetAppUserID(user.ID);
+
+            if (appUserRoles.Count==0)//Her roken yaratma işleminde AppUserRole eklemek için kontrol yapıyoruz.
             {
-                AppUserID = user.ID,
-                RoleID = 2
-            };
-            _appUserRoleRepository.Add(appUserRole);
+                AppUserRole appUserRole = new AppUserRole()
+                {
+                    AppUserID = user.ID,
+                    RoleID = 2
+                };
+
+                _appUserRoleRepository.Add(appUserRole);
+            }
 
             List<Role> roles = await _userRepository.GetRoles(user);
 
-            AccessToken accessToken = _tokenHelper.CreateToken(user,roles);
+            AccessToken accessToken = _tokenHelper.CreateToken(user, roles);
             return accessToken;
         }
 
@@ -62,7 +68,7 @@ namespace FinalProject.Business
         /// <param name="id">Kullanıcı id bilgisi</param>
         public async Task<List<Product>> GetAppUserProductsAsync(int id)
         {
-          return  await _userRepository.GetAppUserProductsAsync(id);
+            return await _userRepository.GetAppUserProductsAsync(id);
         }
 
 
@@ -72,7 +78,7 @@ namespace FinalProject.Business
         /// <param name="code">kullanıcı aktivasyon kodu bilgisi</param>
         public async Task<AppUser> GetByActivationCode(Guid code)
         {
-           AppUser appUser = await _userRepository.GetByActivationCode(code);
+            AppUser appUser = await _userRepository.GetByActivationCode(code);
 
             if (appUser.IsLock == true)//Kullanıcı hesabındakı kilidi kaldırıyoruz.
             {
@@ -81,7 +87,7 @@ namespace FinalProject.Business
             }
             else if (appUser.Active == false)//Kullanıcıyı activasyonunu tamamlıyoruz.
                 appUser.Active = true;
-           await UpdateAsync(appUser);
+            await UpdateAsync(appUser);
 
             return appUser;
         }
