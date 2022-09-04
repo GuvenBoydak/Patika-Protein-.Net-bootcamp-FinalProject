@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Profile";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <body>
@@ -16,26 +16,26 @@
                     <h1>Profil Detayları</h1>
                     <div class="row">
                         <div class="bio-row">
-                            <p><span>UserName </span>: @Model.AppUserModel.UserName</p>
+                            <p><span>UserName </span>: @Model.AppUser.UserName</p>
                         </div>
                         <div class="bio-row">
-                            <p><span>İsim </span>: @Model.AppUserModel.FirstName</p>
+                            <p><span>İsim </span>: @Model.AppUser.FirstName</p>
                         </div>
                         <div class="bio-row">
-                            <p><span>Soyisim </span>:  @Model.AppUserModel.LastName</p>
+                            <p><span>Soyisim </span>:  @Model.AppUser.LastName</p>
                         </div>
                         <div class="bio-row">
-                            <p><span>Telefon </span>:  @Model.AppUserModel.PhoneNumber</p>
+                            <p><span>Telefon </span>:  @Model.AppUser.PhoneNumber</p>
                         </div>
                         <div class="bio-row">
-                            <p><span>Email </span>:  @Model.AppUserModel.Email</p>
+                            <p><span>Email </span>:  @Model.AppUser.Email</p>
                         </div>
                         <div class="bio-row">
-                            <p><span>Son Giriş </span>:  @Model.AppUserModel.LastActivty</p>
+                            <p><span>Son Giriş </span>:  @Model.AppUser.LastActivty</p>
                         </div>
                         <div class="bio-row">
-                            <a class="btn btn-warning" asp-action="UpdateProfile" asp-controller="AppUsers" asp-route-id="@Model.AppUserModel.ID">Güncelle</a>
-                            <a class="btn btn-danger" asp-action="ChangePassword" asp-controller="AppUsers" asp-route-id="@Model.AppUserModel.ID">Şifre Degiştir</a>
+                            <a class="btn btn-warning" asp-action="UpdateProfile" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID">Güncelle</a>
+                            <a class="btn btn-danger" asp-action="ChangePassword" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID">Şifre Degiştir</a>
                         </div>
 
                     </div>

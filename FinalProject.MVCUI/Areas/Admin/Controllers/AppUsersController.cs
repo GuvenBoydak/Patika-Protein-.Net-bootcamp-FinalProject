@@ -35,7 +35,7 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                AppUserModel = await _appUserApiService.GetByEmailAsync(token, email),
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email),
                 Categories = await _categoryApiService.GetActiveAsync(token),
                 Brands = await _brandApiService.GetActiveAsync(token),
                 Colors = await _colorApiService.GetActiveAsync(token),
@@ -128,7 +128,7 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
             {
                 Offers = await _offerApiService.GetByOffersProductIDAsync(token, id),
                 Products =await _productApiService.GetActiveProductsAsync(token),
-                AppUserModel =await _appUserApiService.GetByEmailAsync(token, email),
+                AppUser =await _appUserApiService.GetByEmailAsync(token, email),
             };
 
             return View(vM);
@@ -142,7 +142,7 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                AppUserModel = await _appUserApiService.GetByEmailAsync(token, email)
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email)
             };
 
             return View(vM);
@@ -155,7 +155,7 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                AppUserModel = await _appUserApiService.GetByIDAsync(token, id)
+                AppUser = await _appUserApiService.GetByIDAsync(token, id)
             };
 
             TempData["ID"] = id;
@@ -163,13 +163,13 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(AppUserModel appUserModel)
+        public async Task<IActionResult> UpdateProfile(AppUserModel AppUser)
         {
-            if ((int)TempData["ID"] == appUserModel.ID)
+            if ((int)TempData["ID"] == AppUser.ID)
             {
                 string token = HttpContext.Session.GetString("token");
 
-                bool result = await _appUserApiService.UpdateAsync(token, appUserModel);
+                bool result = await _appUserApiService.UpdateAsync(token, AppUser);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız.";
@@ -222,7 +222,7 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
             {
                 Offers = await _offerApiService.GetByAppUserOffersAsync(token, id),
                 Products = await _productApiService.GetActiveProductsAsync(token),
-                AppUserModel = await _appUserApiService.GetByEmailAsync(token, email)
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email)
             };
 
             return View(vM);

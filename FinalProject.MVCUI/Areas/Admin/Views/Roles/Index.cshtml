@@ -1,0 +1,55 @@
+﻿@model RoleVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.FailDelete != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.FailDelete
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <section class="panel">
+                <header class="panel-heading">
+                    Rol Eklemek için <a asp-action="Add" class="btn btn-outline-success">Tıklayınız</a>
+                </header>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Rol ismi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int id = 0;
+                        }
+                        @foreach (RoleModel item in Model.Roles)
+                        {
+                            <tr>
+                                @{
+                                    id++;
+                                }
+                                <td>@id</td>
+                                <td>@item.Name</td>
+                                <td>
+                                    <a asp-action="Update" asp-route-id="@item.ID" class="btn btn-warning">Güncelle</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger">Sil</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+    </div>
+</div>
+
+

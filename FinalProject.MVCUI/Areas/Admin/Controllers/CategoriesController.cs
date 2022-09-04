@@ -33,11 +33,11 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(CategoryModel categoryModel)
+        public async Task<IActionResult> Add(CategoryModel category)
         {
             string token = HttpContext.Session.GetString("token");
 
-            bool result = await _categoryApiService.AddAsync(token, categoryModel);
+            bool result = await _categoryApiService.AddAsync(token, category);
             if (!result)
             {
                 ViewBag.FailAdd = "Ekleme İşlemi Başarsız.";
@@ -62,13 +62,13 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(CategoryModel categoryModel)
+        public async Task<IActionResult> Update(CategoryModel category)
         {
             string token = HttpContext.Session.GetString("token");
 
-            if ((int)TempData["ID"] == categoryModel.ID)
+            if ((int)TempData["ID"] == category.ID)
             {
-                bool result = await _categoryApiService.UpdateAsync(token, categoryModel);
+                bool result = await _categoryApiService.UpdateAsync(token, category);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme İşlemi Başarsız.";

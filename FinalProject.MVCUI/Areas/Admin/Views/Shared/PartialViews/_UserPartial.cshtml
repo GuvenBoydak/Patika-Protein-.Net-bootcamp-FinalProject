@@ -5,13 +5,13 @@
                     <a href="#">
                         <img src="~/OutherTools/FlatAdmin/img/profile-avatar.jpg" alt="">
                     </a>
-                    <h1>@Model.AppUserModel.UserName</h1>
-                    <p>@Model.AppUserModel.Email</p>
+                    <h1>@Model.AppUser.UserName</h1>
+                    <p>@Model.AppUser.Email</p>
                 </div>
 
                 <ul class="nav nav-pills nav-stacked">
                     <li class="active"><a asp-action="Index" asp-controller="AppUsers"> <i class="icon-user"></i>Ürünlerim</a></li>
-                    <li><a asp-action="GetByAppUserOffers" asp-controller="AppUsers" asp-route-id="@Model.AppUserModel.ID"> <i class="icon-calendar"></i> Yaptıgım Teklifler </a></li>
+                    <li><a asp-action="GetByAppUserOffers" asp-controller="AppUsers" asp-route-id="@Model.AppUser.ID"> <i class="icon-calendar"></i> Yaptıgım Teklifler </a></li>
                     <li><a asp-action="Profile" asp-controller="AppUsers"> <i class="icon-edit"></i> Profil Bilgilerim</a></li>
                 </ul>
             </section>

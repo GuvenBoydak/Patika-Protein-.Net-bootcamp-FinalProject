@@ -1,0 +1,39 @@
+﻿@model AppUserRoleVM
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+    @if(ViewBag.FailUpdate!=null)
+    {
+          <div class="alert alert-danger">
+                @ViewBag.FailUpdate
+            </div>
+    }
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <form asp-action="Update" asp-controller="AppUserRoles" method="post">
+                <input type="hidden" asp-for="AppUserRole.ID"/>
+                <div class="form-group">
+                    <label> Kullanıcı</label>
+                    <select asp-for="AppUserRole.AppUserID" asp-items="@(new SelectList(Model.AppUsers,"ID","UserName"))" class="form-control">
+                        <option selected="selected" value="0">Lütfen Seçiniz</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label> Rol</label>
+                    <select asp-for="AppUserRole.RoleID" asp-items="@(new SelectList(Model.Roles,"ID","Name"))" class="form-control">
+                        <option selected="selected" value="0">Lütfen Seçiniz</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

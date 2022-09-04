@@ -98,13 +98,13 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ProductModel productModel, IFormFile file)
+        public async Task<IActionResult> Update(ProductModel product, IFormFile file)
         {
             string token = HttpContext.Session.GetString("token");
 
-            if ((int)TempData["ID"] == productModel.ID)
+            if ((int)TempData["ID"] == product.ID)
             {
-                await _productApiService.UpdateAsync(productModel, file, token);
+                await _productApiService.UpdateAsync(product, file, token);
 
                 return RedirectToAction("Index");
             }

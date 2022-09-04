@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
-    [Authorize()]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class BrandsController : Controller
     {
@@ -36,11 +36,11 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(BrandModel brandModel)
+        public async Task<IActionResult> Add(BrandModel brand)
         {
             string token = HttpContext.Session.GetString("token");
 
-            bool result = await _brandApiService.AddAsync(token, brandModel);
+            bool result = await _brandApiService.AddAsync(token, brand);
             if (!result)
             {
                 ViewBag.FailAdd = "Ekleme işlemi Başarısız.";
@@ -66,13 +66,13 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(BrandModel brandModel)
+        public async Task<IActionResult> Update(BrandModel brand)
         {
             string token = HttpContext.Session.GetString("token");
 
-            if ((int)TempData["ID"] == brandModel.ID)
+            if ((int)TempData["ID"] == brand.ID)
             {
-                bool result = await _brandApiService.UpdateAsync(token, brandModel);
+                bool result = await _brandApiService.UpdateAsync(token, brand);
 
                 if (!result)
                 {

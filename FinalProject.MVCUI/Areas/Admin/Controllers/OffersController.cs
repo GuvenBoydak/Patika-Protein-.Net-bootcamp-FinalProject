@@ -32,15 +32,15 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(OfferModel offerModel, string process)
+        public async Task<IActionResult> Add(OfferModel color, string process)
         {
             string token = HttpContext.Session.GetString("token");
 
-            ProductModel product = await _productApiService.GetByIDAsync(offerModel.ProductID, token);
+            ProductModel product = await _productApiService.GetByIDAsync(color.ProductID, token);
 
             if (process == "MakeOffer" && product.IsOfferable == true)
             {
-                bool result = await _offerApiService.AddAsync(token,offerModel);
+                bool result = await _offerApiService.AddAsync(token, color);
                 if (!result)
                 {
                     ViewBag.FailAdd = "Teklif Ekleme işlemi başarısız.";
@@ -49,9 +49,9 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
             }
             else if (process == "BuyProduct" && product.IsSold == false)
             {
-                offerModel.IsApproved = true;
+                color.IsApproved = true;
 
-                bool result = await _offerApiService.BuyProductAsync(token, offerModel);
+                bool result = await _offerApiService.BuyProductAsync(token, color);
                 if (!result)
                 {
                     ViewBag.FailBuyProduct = "Satın Alma işlemi başarısız.";
@@ -77,12 +77,12 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Update(OfferModel offerModel)
+        public async Task<IActionResult> Update(OfferModel color)
         {
             string token = HttpContext.Session.GetString("token");
-            if ((int)TempData["ID"] == offerModel.ID)
+            if ((int)TempData["ID"] == color.ID)
             {
-                bool result = await _offerApiService.UpdateAsync(token, offerModel);
+                bool result = await _offerApiService.UpdateAsync(token, color);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme işlemi başarısız.";

@@ -1,28 +1,28 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ColorsController : Controller
+    public class RolesController : Controller
     {
-        private readonly ColorApiService _colorApiService;
+        private readonly RoleApiService _roleApiService;
 
-        public ColorsController(ColorApiService colorApiService)
+        public RolesController(RoleApiService roleApiService)
         {
-            _colorApiService = colorApiService;
+            _roleApiService = roleApiService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             string token = HttpContext.Session.GetString("token");
 
-            ColorVM vM = new ColorVM
+            RoleVM vm = new RoleVM
             {
-                Colors = await _colorApiService.GetActiveAsync(token)
+                Roles = await _roleApiService.GetActiveAsync(token)
             };
 
-            return View(vM);
+            return View(vm);
         }
 
         [HttpGet]
@@ -32,18 +32,16 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ColorModel color)
+        public async Task<IActionResult> Add(RoleModel Role)
         {
             string token = HttpContext.Session.GetString("token");
 
-            bool result = await _colorApiService.AddAsync(token, color);
-
+            bool result = await _roleApiService.AddAsync(token, Role);
             if (!result)
             {
-                ViewBag.FailAdd = "Ekleme İşlemi Başarısız";
+                ViewBag.FailAdd = "Ekleme işlemi Başarısız.";
                 return View();
             }
-
             return RedirectToAction("Index");
         }
 
@@ -52,9 +50,9 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            ColorVM vM = new ColorVM
+            RoleVM vM = new RoleVM
             {
-                Color =await _colorApiService.GetByIDAsync(token, id)
+                Role = await _roleApiService.GetByIDAsync(token,id)
             };
 
             TempData["ID"] = id;
@@ -62,38 +60,37 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ColorModel color)
+        public async Task<IActionResult> Update(RoleModel role)
         {
-            if ((int)TempData["ID"] == color.ID)
+            string token = HttpContext.Session.GetString("token");
+
+            if ((int)TempData["ID"] == role.ID)
             {
-                string token = HttpContext.Session.GetString("token");
-
-                bool result = await _colorApiService.UpdateAsync(token, color);
-
+                bool result = await _roleApiService.UpdateAsync(token, role);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız";
                     return View();
                 }
                 return RedirectToAction("Index");
-            }
+            };
 
             ViewBag.Fail = "Girilen ID Yanlış";
             return View();
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             string token = HttpContext.Session.GetString("token");
 
-            bool result = await _colorApiService.DeleteAsync(token, id);
-
+            bool result = await _roleApiService.DeleteAsync(token, id);
             if (!result)
                 ViewBag.FailDelete = "Silme İşlemi Başarısız";
 
             return RedirectToAction("Index");
         }
+
+
     }
 }

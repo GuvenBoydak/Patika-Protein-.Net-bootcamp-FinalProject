@@ -1,7 +1,7 @@
 ﻿@model AppUserVM
 @{
     ViewData["Title"] = "GetByProductsOffer";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -50,7 +50,7 @@
                                 {
                                     <td>Teklif Kabul <strong>Edilmemiş</strong></td>
                                 }
-                                <td>@Model.AppUserModel.UserName</td>
+                                <td>@Model.AppUser.UserName</td>
                                 <td>
                                     @foreach (ProductModel product in Model.Products)
                                     {
