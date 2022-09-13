@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
+
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Area("Admin")]
     public class OffersController : Controller
     {
@@ -32,15 +35,15 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(OfferModel color, string process)
+        public async Task<IActionResult> Add(OfferModel offer, string process)
         {
             string token = HttpContext.Session.GetString("token");
 
-            ProductModel product = await _productApiService.GetByIDAsync(color.ProductID, token);
+            ProductModel product = await _productApiService.GetByIDAsync(offer.ProductID, token);
 
             if (process == "MakeOffer" && product.IsOfferable == true)
             {
-                bool result = await _offerApiService.AddAsync(token, color);
+                bool result = await _offerApiService.AddAsync(token, offer);
                 if (!result)
                 {
                     ViewBag.FailAdd = "Teklif Ekleme işlemi başarısız.";
@@ -49,9 +52,10 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
             }
             else if (process == "BuyProduct" && product.IsSold == false)
             {
-                color.IsApproved = true;
+                offer.IsApproved = true;
+                offer.Price = product.UnitPrice;
 
-                bool result = await _offerApiService.BuyProductAsync(token, color);
+                bool result = await _offerApiService.BuyProductAsync(token, offer);
                 if (!result)
                 {
                     ViewBag.FailBuyProduct = "Satın Alma işlemi başarısız.";
@@ -77,12 +81,12 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Update(OfferModel color)
+        public async Task<IActionResult> Update(OfferModel offer)
         {
             string token = HttpContext.Session.GetString("token");
-            if ((int)TempData["ID"] == color.ID)
+            if ((int)TempData["ID"] == offer.ID)
             {
-                bool result = await _offerApiService.UpdateAsync(token, color);
+                bool result = await _offerApiService.UpdateAsync(token, offer);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme işlemi başarısız.";

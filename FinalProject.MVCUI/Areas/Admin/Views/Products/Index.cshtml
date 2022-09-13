@@ -14,7 +14,7 @@
         <div class="btn-group ">
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kategoriler</button>
             <ul role="menu" class="dropdown-menu">
-                <li><a href="/products/Index"><strong>Tüm Ürünler</strong> </a></li>
+                <li><a href="/Admin/Products"><strong>Tüm Ürünler</strong> </a></li>
                 @foreach (CategoryModel item in Model.Categories)
                 {
                     <li><a asp-action="Index" asp-route-id="@item.ID">@item.Name</a></li>

@@ -135,7 +135,7 @@ namespace FinalProject.Api
 
             AccessToken token =await _appUserService.CreateAccessToken(appUser);
 
-            //ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
+            ProducerService.Producer(appUser);//RabbitMq ile activasyon linki gönderiyruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Kayıt Başarılı Token oluşturuldu"));
         }
@@ -150,7 +150,7 @@ namespace FinalProject.Api
 
             AccessToken token = await _appUserService.CreateAccessToken(appUser);
 
-           //await _fireAndForgetJob.SendMailJobAsync(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
+            _fireAndForgetJob.SendMailJob(appUser);//Hangfire ile Hoşgeldin mesajı yolluyoruz.
 
             return CreateActionResult(CustomResponseDto<AccessToken>.Success(200, token, "Giriş Başarılı Token olışturuldu"));
         }

@@ -50,7 +50,14 @@
                                 {
                                     <td>Teklif Kabul <strong>Edilmemiş</strong></td>
                                 }
-                                <td>@Model.AppUser.UserName</td>
+                                 <td> @foreach (AppUserModel user in Model.AppUsers)
+                                    {
+                                        if (user.ID == item.AppUserID)
+                                            @user.UserName
+                                        ;
+                                    }
+                                 </td>
+                               
                                 <td>
                                     @foreach (ProductModel product in Model.Products)
                                     {

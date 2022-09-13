@@ -1,11 +1,16 @@
+using AutoMapper;
 using FinalProject.MVCUI;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+//Fluent Validation
+builder.Services.AddControllersWithViews().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductAddModelValidator>());
 
-
+//Session
 builder.Services.AddSession(x =>
 {
     x.IdleTimeout = TimeSpan.FromMinutes(20);
@@ -13,14 +18,65 @@ builder.Services.AddSession(x =>
     x.Cookie.IsEssential = true;
 });
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddHttpContextAccessor();
 
+
+//Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(x =>
+            {
+                x.LoginPath = "/AppUsers/Login/";
+                x.AccessDeniedPath= "/AppUsers/Index/";
+            });
+
+
+builder.Services.AddScoped<IFileHelper, FileHelperManager>();
+
+builder.Services.AddHttpClient<ProductApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+builder.Services.AddHttpClient<CategoryApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+builder.Services.AddHttpClient<ColorApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+builder.Services.AddHttpClient<BrandApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+builder.Services.AddHttpClient<OfferApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
 
 builder.Services.AddHttpClient<AppUserApiService>(opt =>
 {
     opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
 });
+
+builder.Services.AddHttpClient<AppUserRoleApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+builder.Services.AddHttpClient<RoleApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
+
+//AutoMapper
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new MapProfile());
+});
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 var app = builder.Build();
 
@@ -32,17 +88,27 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+
 app.UseSession();
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+         name: "areas",
+    pattern: "{area}/{controller=Products}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+         name: "default",
     pattern: "{controller=AppUsers}/{action=Login}/{id?}");
+});
 
 app.Run();

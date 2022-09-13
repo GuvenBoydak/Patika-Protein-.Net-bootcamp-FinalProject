@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <form asp-action="Add" asp-controller="offers" method="post">
+        <form asp-action="Add" asp-controller="offers" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="Offer.ProductID" value="@Model.Product.ID" />
             <h4 class="pro-d-title">
                 @Model.Product.Name
@@ -44,15 +44,24 @@
             <p>
                 @Model.Product.Description
             </p>
+
             <div class="product_meta">
                 <span class="posted_in"> <strong>Kategori:</strong> <a rel="tag" href="#">@Model.Category.Name</a></span>
             </div>
+
             <div class="m-bot15"> <strong>Fiyat : </strong> <span class="pro-price"> ₺@Model.Product.UnitPrice</span></div>
+
             <div class="form-group">
-                <select asp-for="Offer.Price" asp-items="@Model.PriceList" class="form-control input-sm" style="color: black;">
+                <select id="SelectedPrice" onchange="CheckSelected(this);" asp-for="Offer.Price" asp-items="@Model.PriceList" class="form-control input-sm" style="color: black;">
                     <option value="0" selected>Lütfen seçiniz</option>
                 </select>
             </div>
+
+            <div id="Input-Price" class="form-group">
+                <input onchange="InputPrice(this);" type="number" asp-for="Offer.Price" class="form-control" />
+            </div>
+
+
             <p>
                 @if (Model.Product.AppUserID == Model.AppUser.ID)
                 {
@@ -68,6 +77,24 @@
         </form>
     </div>
 </div>
+<script>
+
+    function CheckSelected(that) {
+        if (that.value != null) {
+            document.getElementById("Input-Price").style.display = "none";
+        } else {
+            document.getElementById("Input-Price").style.display = "block";
+        }
+    }
+
+    function InputPrice(that) {
+        if (that.value != null) {
+            document.getElementById("SelectedPrice").style.display = "none";
+        } else {
+            document.getElementById("SelectedPrice").style.display = "block";
+        }
+    }
+</script>
 
 
 

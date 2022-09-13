@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Area("Admin")]
     public class BrandsController : Controller
     {

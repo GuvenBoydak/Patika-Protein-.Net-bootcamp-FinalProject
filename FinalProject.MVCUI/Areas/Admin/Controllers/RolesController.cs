@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     [Area("Admin")]
     public class RolesController : Controller
     {

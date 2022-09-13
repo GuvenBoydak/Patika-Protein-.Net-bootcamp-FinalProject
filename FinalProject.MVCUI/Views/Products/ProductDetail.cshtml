@@ -49,9 +49,13 @@
             </div>
             <div class="m-bot15"> <strong>Fiyat : </strong> <span class="pro-price"> ₺@Model.Product.UnitPrice</span></div>
             <div class="form-group">
-                <select asp-for="Offer.Price" asp-items="@Model.PriceList" class="form-control input-sm" style="color: black;">
+                <select id="SelectedPrice" onchange="CheckSelected(this);" asp-for="Offer.Price" asp-items="@Model.PriceList" class="form-control input-sm" style="color: black;">
                     <option value="0" selected>Lütfen seçiniz</option>
                 </select>
+
+                <div id="Input-Price" class="form-group">
+                <input onchange="InputPrice(this);" type="number" asp-for="Offer.Price" class="form-control" />
+            </div>
             </div>
             <p>
                 @if (Model.Product.AppUserID == Model.AppUser.ID)
@@ -68,6 +72,24 @@
         </form>
     </div>
 </div>
+<script>
+
+    function CheckSelected(that) {
+        if (that.value != null) {
+            document.getElementById("Input-Price").style.display = "none";
+        } else {
+            document.getElementById("Input-Price").style.display = "block";
+        }
+    }
+
+    function InputPrice(that) {
+        if (that.value != null) {
+            document.getElementById("SelectedPrice").style.display = "none";
+        } else {
+            document.getElementById("SelectedPrice").style.display = "block";
+        }
+    }
+</script>
 
 
 

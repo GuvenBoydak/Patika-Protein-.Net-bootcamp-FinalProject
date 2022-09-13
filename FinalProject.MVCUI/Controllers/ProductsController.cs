@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FinalProject.DTO;
-using FinalProject.Entities;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -14,12 +12,9 @@ namespace FinalProject.MVCUI.Controllers
         private readonly CategoryApiService _categoryApiService;
         private readonly AppUserApiService _appUserApiService;
 
-        private readonly IMapper _mapper;
-
-        public ProductsController(ProductApiService productApiService, IMapper mapper, CategoryApiService categoryApiService, BrandApiService brandApiService, ColorApiService colorApiService, AppUserApiService appUserApiService)
+        public ProductsController(ProductApiService productApiService, CategoryApiService categoryApiService, BrandApiService brandApiService, ColorApiService colorApiService, AppUserApiService appUserApiService)
         {
             _productApiService = productApiService;
-            _mapper = mapper;
             _categoryApiService = categoryApiService;
             _brandApiService = brandApiService;
             _colorApiService = colorApiService;
@@ -30,13 +25,12 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            List<ProductListDto> products = await _productApiService.GetActiveProductsAsync(token);
-            List<CategoryListDto> categories = await _categoryApiService.GetActiveAsync(token);
+            List<ProductModel> products = await _productApiService.GetActiveProductsAsync(token);
 
-            ProductsVM vM = new ProductsVM
+            ProductVM vM = new ProductVM
             {
-                Products = _mapper.Map<List<ProductListDto>, List<Product>>(id != null ? products.Where(x => x.CategoryID == id).ToList() : products),
-                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(categories),
+                Products = id != null ? products.Where(x => x.CategoryID == id).ToList() : products,
+                Categories = await _categoryApiService.GetActiveAsync(token)
             };
 
             return View(vM);
@@ -48,14 +42,14 @@ namespace FinalProject.MVCUI.Controllers
             string token = HttpContext.Session.GetString("token");
             string userEmail = HttpContext.Session.GetString("User");
 
-            ProductDto product = await _productApiService.GetByIDAsync(id, token);
+            ProductModel product = await _productApiService.GetByIDAsync(id, token);
 
-            ProductsVM vM = new ProductsVM
+            ProductVM vM = new ProductVM
             {
                 PriceList = PriceList(await _productApiService.GetByIDAsync(id, token)),
-                Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token)),
+                Product = await _productApiService.GetByIDAsync(id, token),
                 Category = await _categoryApiService.GetByIDAsync(product.CategoryID, token),
-                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByEmailAsync(token, userEmail))
+                AppUser = await _appUserApiService.GetByEmailAsync(token, userEmail)
             };
 
             return View(vM);
@@ -66,21 +60,21 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            ProductsVM vM = new ProductsVM()
+            ProductVM vM = new ProductVM
             {
-                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(await _categoryApiService.GetActiveAsync(token)),
-                Brands = _mapper.Map<List<BrandListDto>, List<Brand>>(await _brandApiService.GetActiveAsync(token)),
-                Colors = _mapper.Map<List<ColorListDto>, List<Color>>(await _colorApiService.GetActiveAsync(token))
+                Categories =await _categoryApiService.GetActiveAsync(token),
+                Brands =await _brandApiService.GetActiveAsync(token),
+                Colors =await _colorApiService.GetActiveAsync(token)
             };
             return View(vM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ProductAddWitFileDto productAddWitFileDto)
+        public async Task<IActionResult> Add(ProductAddWithFileModel productAddWithFileModel)
         {
             string token = HttpContext.Session.GetString("token");
 
-            await _productApiService.AddAsync(productAddWitFileDto, token);
+            await _productApiService.AddAsync(productAddWithFileModel, token);
 
             return RedirectToAction("Index");
         }
@@ -90,12 +84,12 @@ namespace FinalProject.MVCUI.Controllers
         {
             string token = HttpContext.Session.GetString("token");
 
-            ProductsVM vM = new ProductsVM()
+            ProductVM vM = new ProductVM
             {
-                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(await _categoryApiService.GetActiveAsync(token)),
-                Brands = _mapper.Map<List<BrandListDto>, List<Brand>>(await _brandApiService.GetActiveAsync(token)),
-                Colors = _mapper.Map<List<ColorListDto>, List<Color>>(await _colorApiService.GetActiveAsync(token)),
-                Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token))
+                Categories = await _categoryApiService.GetActiveAsync(token),
+                Brands = await _brandApiService.GetActiveAsync(token),
+                Colors = await _colorApiService.GetActiveAsync(token),
+                Product =await _productApiService.GetByIDAsync(id, token)
             };
 
             TempData["ID"] = id;
@@ -103,15 +97,13 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Product product, IFormFile file)
+        public async Task<IActionResult> Update(ProductModel productModel, IFormFile file)
         {
             string token = HttpContext.Session.GetString("token");
 
-            if ((int)TempData["ID"] == product.ID)
+            if ((int)TempData["ID"] == productModel.ID)
             {
-                ProductUpdateDto productUpdateDto = _mapper.Map<Product, ProductUpdateDto>(product);
-
-                await _productApiService.UpdateAsync(productUpdateDto, file, token);
+                await _productApiService.UpdateAsync(productModel, file, token);
 
                 return RedirectToAction("Index");
             }
@@ -130,9 +122,9 @@ namespace FinalProject.MVCUI.Controllers
             if (!result)
             {
                 ViewBag.FailDelete = "Ürün silme İşlmemi Başarısız.";
-                ProductsVM vM = new ProductsVM
+                ProductVM vM = new ProductVM
                 {
-                    Product = _mapper.Map<ProductDto, Product>(await _productApiService.GetByIDAsync(id, token))
+                    Product =await _productApiService.GetByIDAsync(id, token)
                 };
                 return RedirectToAction("ProductDetail", "Products", vM);
             }
@@ -140,7 +132,7 @@ namespace FinalProject.MVCUI.Controllers
             return RedirectToAction("Index");
         }
 
-        private List<SelectListItem> PriceList(ProductDto product)
+        private List<SelectListItem> PriceList(ProductModel product)
         {
             List<SelectListItem> priceList = new List<SelectListItem>();
             for (int i = 10; i <= 100; i += 10)

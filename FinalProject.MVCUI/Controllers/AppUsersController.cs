@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using FinalProject.Base;
-using FinalProject.DTO;
-using FinalProject.Entities;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace FinalProject.MVCUI.Controllers
 {
+
     public class AppUsersController : Controller
     {
         private readonly AppUserApiService _appUserApiService;
@@ -15,13 +15,11 @@ namespace FinalProject.MVCUI.Controllers
         private readonly ColorApiService _colorApiService;
         private readonly CategoryApiService _categoryApiService;
         private readonly ProductApiService _productApiService;
-        private readonly IMapper _mapper;
 
 
-        public AppUsersController(AppUserApiService appUserApiService, IMapper mapper, OfferApiService offerApiService, BrandApiService brandApiService, ColorApiService colorApiService, CategoryApiService categoryApiService, ProductApiService productApiService)
+        public AppUsersController(AppUserApiService appUserApiService, OfferApiService offerApiService, BrandApiService brandApiService, ColorApiService colorApiService, CategoryApiService categoryApiService, ProductApiService productApiService)
         {
             _appUserApiService = appUserApiService;
-            _mapper = mapper;
             _offerApiService = offerApiService;
             _brandApiService = brandApiService;
             _colorApiService = colorApiService;
@@ -37,11 +35,11 @@ namespace FinalProject.MVCUI.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByEmailAsync(token, email)),
-                Categories = _mapper.Map<List<CategoryListDto>, List<Category>>(await _categoryApiService.GetActiveAsync(token)),
-                Brands = _mapper.Map<List<BrandListDto>, List<Brand>>(await _brandApiService.GetActiveAsync(token)),
-                Colors = _mapper.Map<List<ColorListDto>, List<Color>>(await _colorApiService.GetActiveAsync(token)),
-                Products = _mapper.Map<List<AppUserProductsDto>, List<Product>>(await _appUserApiService.GetAppUserProductsAsync(token))
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email),
+                Categories = await _categoryApiService.GetActiveAsync(token),
+                Brands = await _brandApiService.GetActiveAsync(token),
+                Colors = await _colorApiService.GetActiveAsync(token),
+                Products = await _appUserApiService.GetAppUserProductsAsync(token)
             };
             return View(vM);
         }
@@ -53,21 +51,49 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(AppUserLoginDto appUserLoginDto)
+        public async Task<IActionResult> Login(AppUserLoginModel appUserLoginModel)
         {
-            string token =await _appUserApiService.LoginAsync(appUserLoginDto);
+            HttpResponseMessage result = await _appUserApiService.LoginAsync(appUserLoginModel);
 
-            if (token == "")
+            CustomResponseModel<AccessToken> response = await DeserialezeToken(result);
+
+            if (response.StatusCode != 200)
             {
-                ViewBag.FailPassword = "Hatalı Şifre Girildi.";
+                ViewBag.FailPassword = response.Error.FirstOrDefault();
                 return View();
             }
 
-            HttpContext.Session.SetString("token", DeserialezeToken(token));
+            AppUserModel appUser = await _appUserApiService.GetByEmailAsync(response.Data.Token, appUserLoginModel.Email);
 
-            HttpContext.Session.SetString("User", appUserLoginDto.Email);
+            List<Role> roles = await _appUserApiService.GetRolesAsync(response.Data.Token, appUser.ID);
 
-            return RedirectToAction("Index","Products");
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name,appUser.UserName),
+                new Claim(ClaimTypes.Email,appUser.Email)
+            };
+
+            foreach (Role item in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, item.Name));
+            }
+
+            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+            HttpContext.Session.SetString("token", response.Data.Token);
+
+            HttpContext.Session.SetString("User", appUserLoginModel.Email);
+
+            foreach (Role item in roles)
+            {
+                if(item.Name=="SuperAdmin" || item.Name=="Admin")
+                    return RedirectToAction("AppUsers","Admin");
+            }
+
+            ViewBag.UserName = appUser.UserName;
+            return RedirectToAction("Index", "Products");
         }
 
         [HttpGet]
@@ -77,16 +103,25 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(AppUserRegisterDto appUserRegisterDto)
+        public async Task<IActionResult> Register(AppUserRegisterModel appUserRegisterModel)
         {
-           string token= await _appUserApiService.RegisterAsync(appUserRegisterDto);
+            HttpResponseMessage result = await _appUserApiService.RegisterAsync(appUserRegisterModel);
 
-            if (token == "")
+            CustomResponseModel<AccessToken> response = await DeserialezeToken(result);
+
+            if (response.StatusCode != 200)
             {
-                ViewBag.FailRegister = "Hatalı Şifre Girildi.";
+                ViewBag.FailRegister = response.Error.FirstOrDefault();
                 return View();
             }
 
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public IActionResult LogOut()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
 
@@ -98,15 +133,15 @@ namespace FinalProject.MVCUI.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                Offers = _mapper.Map<List<ProductOffersListDto>, List<Offer>>(await _offerApiService.GetByOffersProductIDAsync(token, id)),
-                Products = _mapper.Map<List<ProductListDto>, List<Product>>(await _productApiService.GetActiveProductsAsync(token)),
-                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByEmailAsync(token, email)),
+                Offers = await _offerApiService.GetByOffersProductIDAsync(token, id),
+                Products =await _productApiService.GetActiveProductsAsync(token),
+                AppUsers = await _appUserApiService.GetActiveAsync(token)
             };
-     
-            return View(vM);           
+
+            return View(vM);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> Profile()
         {
             string email = HttpContext.Session.GetString("User");
@@ -114,20 +149,20 @@ namespace FinalProject.MVCUI.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByEmailAsync(token, email))
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email)
             };
 
             return View(vM);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> UpdateProfile(int id)
         {
             string token = HttpContext.Session.GetString("token");
 
             AppUserVM vM = new AppUserVM
             {
-                AppUser = _mapper.Map<AppUserDto, AppUser>(await _appUserApiService.GetByIDAsync(token, id))
+                AppUser = await _appUserApiService.GetByIDAsync(token, id)
             };
 
             TempData["ID"] = id;
@@ -135,15 +170,14 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(AppUser appUser)
+        public async Task<IActionResult> UpdateProfile(AppUserModel appUserModel)
         {
-            if ((int)TempData["ID"] == appUser.ID)
+            if ((int)TempData["ID"] == appUserModel.ID)
             {
                 string token = HttpContext.Session.GetString("token");
-                AppUserUpdateDto appUserUpdateDto = _mapper.Map<AppUser, AppUserUpdateDto>(appUser);
 
-              bool result=  await _appUserApiService.UpdateAsync(token,appUserUpdateDto);
-                if(!result)
+                bool result = await _appUserApiService.UpdateAsync(token, appUserModel);
+                if (!result)
                 {
                     ViewBag.FailUpdate = "Güncelleme İşlemi Başarısız.";
                     return View();
@@ -164,13 +198,13 @@ namespace FinalProject.MVCUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(AppUserPasswordUpdateDto appUserPasswordUpdateDto)
+        public async Task<IActionResult> ChangePassword(AppUserPasswordUpdateModel appUserPasswordUpdateModel)
         {
-            if ((int)TempData["ID"] == appUserPasswordUpdateDto.ID)
+            if ((int)TempData["ID"] == appUserPasswordUpdateModel.ID)
             {
                 string token = HttpContext.Session.GetString("token");
 
-                bool result = await _appUserApiService.ChangePasswordAsync(token, appUserPasswordUpdateDto);
+                bool result = await _appUserApiService.ChangePasswordAsync(token, appUserPasswordUpdateModel);
                 if (!result)
                 {
                     ViewBag.FailUpdate = "Şifre Güncelleme işlemi Başarısız. ";
@@ -193,30 +227,28 @@ namespace FinalProject.MVCUI.Controllers
 
             AppUserVM vM = new AppUserVM
             {
-                Offers = _mapper.Map<List<OfferListDto>, List<Offer>>(await _offerApiService.GetByAppUserOffersAsync(token, id)),
-                Products= _mapper.Map<List<ProductListDto>,List<Product>>(await _productApiService.GetActiveProductsAsync(token)),
-                AppUser=_mapper.Map<AppUserDto,AppUser>(await _appUserApiService.GetByEmailAsync(token,email))
+                Offers = await _offerApiService.GetByAppUserOffersAsync(token, id),
+                Products = await _productApiService.GetActiveProductsAsync(token),
+                AppUser = await _appUserApiService.GetByEmailAsync(token, email)
             };
 
             return View(vM);
         }
 
-
-
         [NonAction]
-        private string DeserialezeToken(string json)
+        private async Task<CustomResponseModel<AccessToken>> DeserialezeToken(HttpResponseMessage json)
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
 
-            CustomResponseDto<AccessToken> result = JsonSerializer.Deserialize<CustomResponseDto<AccessToken>>(json, options);
+            string jsonResult = await json.Content.ReadAsStringAsync();
 
-            return result.Data.Token;
+            CustomResponseModel<AccessToken> result = JsonSerializer.Deserialize<CustomResponseModel<AccessToken>>(jsonResult, options);
+            result.StatusCode = (int)json.StatusCode;
+
+            return result;
         }
     }
-
-
-
 }

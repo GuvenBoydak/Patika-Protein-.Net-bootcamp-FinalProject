@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Area("Admin")]
     public class CategoriesController : Controller
     {

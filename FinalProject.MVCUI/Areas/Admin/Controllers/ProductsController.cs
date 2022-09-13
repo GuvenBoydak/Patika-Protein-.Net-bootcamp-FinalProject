@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Area("Admin")]
     public class ProductsController : Controller
     {

@@ -3,6 +3,7 @@
     public class AppUserVM
     {
         public AppUserModel AppUser { get; set; }
+        public List<AppUserModel> AppUsers { get; set; }
 
         public AppUserPasswordUpdateModel AppUserPasswordUpdateModel { get; set; }
 

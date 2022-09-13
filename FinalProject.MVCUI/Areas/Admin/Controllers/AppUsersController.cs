@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace FinalProject.MVCUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Area("Admin")]
     public class AppUsersController : Controller
     {
@@ -127,8 +129,8 @@ namespace FinalProject.MVCUI.Areas.Admin.Controllers
             AppUserVM vM = new AppUserVM
             {
                 Offers = await _offerApiService.GetByOffersProductIDAsync(token, id),
-                Products =await _productApiService.GetActiveProductsAsync(token),
-                AppUser =await _appUserApiService.GetByEmailAsync(token, email),
+                Products = await _productApiService.GetActiveProductsAsync(token),
+                AppUsers = await _appUserApiService.GetActiveAsync(token)
             };
 
             return View(vM);
