@@ -14,6 +14,7 @@
 - AutoMapper
 - XUnit Test with Mock
 - Generic Repository pattern
+- MVC UI 
 
 ### Postman Api dökümantastonu için [Tıklayınız](https://documenter.getpostman.com/view/15763755/VUqpuHvg) 
 
@@ -24,12 +25,21 @@
 - Kullanıcı girdigi şifre kontrol ediliyor 3 kez yanlış girilen şifrelerde Hesap Bloke ediliyor. Ardındna kullanıcının mail adresine Guid ile code gönderilip bloke işlemini kaldırılmasını saglıyoruz.
 - Kullanıcı istedigi zaman şifresini degiştirip yeni bir şifre alabiliyor.
 - Kulanıcıların aktif, pasif veya veri tabanındaki tüm kayıtlarını listeliyoruz.
-### Ürün işlemleri
+- Kullanıcıların Rol bazlı yetkilerine göre işlemler.
+- Admin Areasinde Rol ekleme silme güncelleme,Renk, Kategori, Marka ekleme silme güncelleme.
+- Member olan Rollerde Ürün ekleme, Günceleme, Silme, Teklif verme, Teklif Onaylama, Günceleme, Silme işlemeri yapılabiliyor.
+
+![Üyeİşlemleri](New_Project.gif)
+ 
+### Ürün, Kategori, Marka, Renk işlemleri
 - Kullanıcılar satıcakları ürünleri Kategori, Renk, Marka, Kullanım durumu gibi özelliklerle ekleyebiliyor.
 - Kulanıcılar bir ürüne sadece 1 resim yükleyebliyor ve resim boyutu maksimum 400kb olabiliyor. 
 - Kullanıcının ürünlerini veri tabanından çekip listeliyebilir.
-- Ürünleri aktif, pasif veya tüm ürünleri listeliyoruz.
-- Ürünleri belirtilen sayı kadar sayfa sayfa listeliyoruz.
+- Ürünleri,Kategorileri, Markaları, Renkleri aktif, pasif veya tümünü listeliyoruz.
+- Ürünleri,Kategorileri, Markaları, Renkler belirtilen sayı kadar sayfa sayfa listeliyoruz.
+
+![Ürümİşlemleri](New_Project(1).gif)
+
 ### Teklif işlemleri
 - Kullanıcı teklif vericegi ürünün isOfferable alanı kontrol edilip teklif verebilmesini saglıyoruz.
 - Kullanıcının yaptıgı teklifleri listeliyoruz.
@@ -37,14 +47,13 @@
 - Kullanıcının ürünlerine gelen teklifleri listeliyoruz.
 - Kullanıcı istedigi ürüne teklif vermeden direk satın alabiliyor. Satın aldıktan sonra bu ürüne yapılan teklifleri siliyoruz.
 - Kullanıcı gelen teklife göre Onaylama işlemi gerçekleştiriyor. Ardındad teklifi onaylanan ürünün bilgilerini günceleyip bu ürüne yapılan teklifleri siliyoruz.
-### Kategori işlemleri
-- Belirtilen kategoriye göre ürünleri listeliyoruz.
-- Kategorileri aktif, pasif veya tüm ürünleri listeliyoruz.
+
+![Teklifİşlemleri](New_Project(2).gif)
  <hr>
  
 # Database Diagram
-![Diagram](https://i.hizliresim.com/iw387vc.png)
- 
+![Diagram](https://i.hizliresim.com/9usqd66.png)
+
  <hr>
  
  ## 
