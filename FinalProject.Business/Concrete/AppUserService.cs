@@ -30,13 +30,24 @@ namespace FinalProject.Business
 
             if (appUserRoles.Count==0)//Her roken yaratma işleminde AppUserRole eklemek için kontrol yapıyoruz.
             {
-                AppUserRole appUserRole = new AppUserRole()
+                if (user.Email!="gvn.boydak@gmail.com")//Admin Rol Atama
                 {
-                    AppUserID = user.ID,
-                    RoleID = 2
-                };
-
-                _appUserRoleRepository.Add(appUserRole);
+                    AppUserRole appUserRoleAdmin = new AppUserRole()
+                    {
+                        AppUserID = user.ID,
+                        RoleID = 2
+                    };
+                    _appUserRoleRepository.Add(appUserRoleAdmin);
+                }
+                else
+                {
+                    AppUserRole appUserRole = new AppUserRole()
+                    {
+                        AppUserID = user.ID,
+                        RoleID = 1
+                    };
+                    _appUserRoleRepository.Add(appUserRole);
+                }
             }
 
             List<Role> roles = await _userRepository.GetRoles(user);

@@ -103,7 +103,7 @@ namespace FinalProject.DataAccess
 
             //AppUserRole
             Create.Table("AppUserRoles")
-                .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("ID").AsInt32().NotNullable().Identity()
                 .WithColumn("AppUserID").AsInt32().Nullable()
                 .WithColumn("RoleID").AsInt32().Nullable()
                 .WithColumn("CreatedDate").AsDate().NotNullable()
@@ -147,15 +147,17 @@ namespace FinalProject.DataAccess
                 .ToTable("AppUsers").PrimaryColumn("ID");
 
             //Role - AppUserRole Relational
-            Create.ForeignKey("Role_AppUser_CompositKey")
+            Create.ForeignKey("FK_Role_AppUser_")
             .FromTable("AppUserRoles").ForeignColumn("RoleID")
                 .ToTable("Roles").PrimaryColumn("ID");
 
             //AppUser - AppUserRole Relational
-            Create.ForeignKey("AppUser_AppUser_CompositKey")
+            Create.ForeignKey("FK_AppUser_AppUser")
             .FromTable("AppUserRoles").ForeignColumn("AppUserID")
             .ToTable("AppUsers").PrimaryColumn("ID");
 
+            //AppUserID-RoleID Composit Key Primary key
+            Create.PrimaryKey("AppUserRoles_RoleID_AppUserID_CompositKey").OnTable("AppUserRoles").Columns("AppUserID", "RoleID");
             #endregion
         }
     }
